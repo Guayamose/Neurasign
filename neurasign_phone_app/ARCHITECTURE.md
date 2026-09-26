@@ -25,7 +25,7 @@ The wearable needs to reach its phone, and the phone needs an Internet connectio
 
 Implement independent adapters behind a shared contract. Prefer direct phone access. An optional health-store or manufacturer-cloud connector can add coverage where permitted, but is a distinct route with its own delay and dependencies. A phone cannot extract measurements that the device or platform does not expose.
 
-The following are researched access routes, **not a list of devices supported by NEURASIGN**. The standard BLE heart-rate adapter is implemented against an injected transport and tested with recorded packets; its native transport now uses react-native-ble-plx. Other connectors are unimplemented. All routes remain untested on hardware.
+The following are researched access routes, **not a list of devices supported by NEURASIGN**. Standard BLE HR/RR, thermometer and pulse oximeter decoders plus an experimental direct Polar PMD connector are implemented against the shared transport; the native transport uses react-native-ble-plx. The official Polar SDK is not bundled. Other routes below are unimplemented. All routes remain untested on hardware. See the [implemented connector matrix](docs/wearable-connectivity.md).
 
 | Route | Potential coverage | Boundary to preserve |
 | --- | --- | --- |
@@ -143,4 +143,4 @@ Use an encrypted, bounded local queue tied to the enrollment. Preserve IDs and t
 3. **Minimal gateway:** implement enrollment, secure storage, permissions, the adapter interface, a standard BLE heart-rate connector and offline upload. Use recorded fixtures only for explicitly labeled development tests; they establish parser/transport behavior, not hardware support.
 4. **Hardware validation and expansion:** validate a real wrist wearable and phone through disconnect, lock/background, restart, offline recovery, pause and revocation. Add vendor SDKs and optional health-store paths one at a time, publishing only the tested model/metric combinations as supported.
 
-Implemented: the company model, metric contract and minimal native gateway described above. Remaining validation/expansion: physical wearable/phone tests, an iOS build on macOS, release signing, battery/background certification, and additional manufacturer/health-store adapters. Google Cloud deployment is intentionally deferred to the future hackathon account.
+Implemented: the company model, metric contract, native gateway, concurrent BLE connectors and raw sample-block transport. The server catalog includes raw waveforms, intervals and movement axes alongside the original metrics; sample blocks are not reduced to derived scores. Remaining validation/expansion: physical wearable/phone tests, an iOS build on macOS, release signing, battery/background certification, EDA and additional manufacturer/health-store adapters. Google Cloud deployment is intentionally deferred to the future hackathon account.

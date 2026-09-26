@@ -30,7 +30,7 @@ adb install -r artifacts/neurasign-link-local.apk
 1. Open the web dashboard → **People** → create a team → add an employee.
 2. Choose **Connect phone**.
 3. Scan with NEURASIGN Link, or expand **Use a connection link** and paste it in the app.
-4. Confirm company and employee. Find a wearable broadcasting the Bluetooth Heart Rate Service.
+4. Confirm company and employee. Select a nearby wearable; the app discovers its services and lists supported channels and connection warnings.
 5. Keep the wearable nearby. Confirm incoming measurements in **Team overview**.
 
 The QR server must be the intended company origin; the app displays it before consent. The bootstrap token is used once. A lost response can be recovered with **Retry connection** using the exact locally persisted claim. The persistent gateway credential never appears in a URL or on the screen.
@@ -49,7 +49,7 @@ The QR server must be the intended company origin; the app displays it before co
 
 `../tests/` covers QR parsing, idempotent retries, enrollment recovery, offline privacy actions and capture/queue separation using explicit test transports. The server's `scripts/onboarding_smoke.py` covers browser QR generation, actual Firebase/Firestore, company/team permissions, labeled recording ingestion, charts and revocation. Android emulator acceptance uses the actual native application and local API. Recorded inputs establish transport semantics, not physical wearable compatibility.
 
-Only standard BLE heart rate is implemented. Proprietary devices require a documented vendor adapter. No wearable, battery-duration or physical locked-screen test has been performed. iOS runtime behavior remains unvalidated until an Apple build/device is available.
+Standard BLE heart rate/RR, thermometer and pulse oximeter connectors and an experimental Polar PMD connector are implemented. See [exact stream support](../docs/wearable-connectivity.md). Other proprietary devices still require a documented vendor adapter. No wearable, battery-duration or physical locked-screen test has been performed. iOS runtime behavior remains unvalidated until an Apple build/device is available.
 
 ## Acceptance commands
 

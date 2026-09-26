@@ -1,6 +1,6 @@
 # Wearable-independent telemetry
 
-Implemented: capability registration, independent observations, server-side unit normalization, persistent history, per-signal freshness and a catalog-driven dashboard. The phone directory contains a portable TypeScript gateway core and standard BLE heart-rate adapter using an injected native transport. The native app now implements BLE bindings, QR enrollment, secure credentials and encrypted queue storage. Physical-device validation remains outstanding.
+Implemented: capability registration, independent observations, raw sample blocks, server-side unit normalization, persistent history, per-signal freshness and a catalog-driven dashboard. The phone directory contains a portable TypeScript gateway core with concurrent standard BLE and experimental Polar PMD connectors. The native app implements BLE bindings, QR enrollment, secure credentials and encrypted queue storage. See the [connector matrix](../../neurasign_phone_app/docs/wearable-connectivity.md). Physical-device validation remains outstanding.
 
 The server owns metric definitions, conversion, validation, storage and presentation metadata. The phone decodes the device protocol, labels quantities accurately, preserves timestamps and sends original values/units. Neither tenant authorization nor analytical decisions depend on manufacturer/model strings.
 
@@ -44,7 +44,7 @@ Send `Authorization: Bearer DEVICE_CREDENTIAL` and JSON:
 
 Use the returned `source.id` in uploads. Repeating the same registration returns the same ID. Re-registration can update `availability` between `available`, `unsupported` and `permission_required`. Metric semantics, units, method, adapter version and source metadata are immutable; changed semantics require a new `client_source_id` so incompatible data never share a series. A gateway supports up to five logical sources in this pilot. Different methods/periods for the same metric use different logical sources. The same device may therefore have separate live and overnight-summary sources.
 
-`sample` means a point measurement with no aggregation interval. `window` requires `interval_seconds` from 1–300; `summary` accepts periods up to seven days. HRV, movement variability and steps require a period. The server recognizes ten initial metrics; see `/metrics` for the authoritative list. New semantic quantities must be defined centrally rather than disguised as an existing metric. Model and manufacturer are optional metadata.
+`sample` means a point measurement with no aggregation interval; a raw block groups several point samples without averaging them. `window` requires `interval_seconds` from 1–300; `summary` accepts periods up to seven days. HRV, movement variability and steps require a period. The server recognizes 32 metrics, including ECG, BVP/PPG, RR/PPI, acceleration axes, gyroscope, magnetometer and separate temperature quantities; see `/metrics` for the authoritative list. Catalog support does not establish that a live connector exists for each quantity. Model and manufacturer are optional metadata.
 
 `timestamp_basis` records whether the timestamp came from the device, phone receipt, or a source record. Standard BLE heart-rate notifications use phone receipt time because that payload has no measurement timestamp. The adapter must not present a synchronization receipt time as the original measurement time for historical records.
 
@@ -76,6 +76,14 @@ Current initial metric freshness is 60 seconds from **measurement time**. Summar
 
 Recording credentials label all their observations as recorded input. A recording transport is rejected for a wearable credential. As with the existing API, a source label is not physical hardware attestation.
 
+## Raw sample blocks
+
+An observation may additionally contain `samples`, `sample_offsets_ms` and an optional decimal-string `device_timestamp_ns`. The existing scalar fields remain required: `value` equals the final sample and `measured_at` is its time anchor. Offsets are ordered, finite milliseconds relative to that anchor, end at zero, and cover at most ten seconds. A block holds 1–512 samples; samples and offsets must have identical lengths. Every value is validated and normalized, with the input array retained in history. Only `sample` capabilities accept raw blocks.
+
+The clock basis belongs to the capability. Current BLE connectors use phone receipt time; Polar retains the original 64-bit device timestamp separately and reconstructs within-packet offsets from the negotiated sample rate. This is not device/phone clock synchronization. BLE RR and Polar PPI preserve interval order at receipt time where individual beat wall-clock timestamps are unavailable.
+
+The complete block must fall within allowed capture periods; a block crossing a team assignment must be split. The latest dashboard snapshot contains the last scalar, count and duration, while the history endpoint returns the arrays for waveform plotting. Retrying old scalar v2 observations preserves their existing content hashes. The gateway batches by both count and UTF-8 byte size (100,000 bytes, below the API limit); loss of an acknowledgment never changes IDs or samples.
+
 ## Storage, lifecycle and verification
 
 New documents live under the existing organization boundary: `sources/{source}`, `signal_state/{member}` and `members/{member}/observations/{observation}`. Measurements expire after 30 days and disappear from responses immediately after expiry. The prepared cloud deployment adds TTL policies for observations/state and the `observations` composite index on `series_id` ascending + `timestamp` descending. Confirm the index is ready when deploying to the future project. No cloud resources were created for this work.
@@ -98,3 +106,5 @@ npm test
 ```
 
 With the local Docker stack running and phone core built, run `.venv/bin/python scripts/telemetry_smoke.py` from the server directory. It exercises the TypeScript gateway, actual Auth/Firestore emulators, API and desktop/mobile browser. It creates its own test workspace and explicitly labeled recorded fixtures; it does not establish physical wearable compatibility.
+
+Run `.venv/bin/python scripts/raw_signals_smoke.py` with the local UNIVERSE download present to exercise actual HR, optical beat intervals, EDA, skin temperature and three acceleration axes through that same path. Values/cadence are preserved, historical times are explicitly remapped for the local recording test, and source timestamps remain in provenance. It checks exact arrays, duplicate retries, tenant isolation, sample counts in browser charts, pause and deletion. It never substitutes generated physiology when files are missing.

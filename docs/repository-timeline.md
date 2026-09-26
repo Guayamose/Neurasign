@@ -15,7 +15,18 @@ The initial GitHub import groups the existing local implementation into eight co
 
 The phone application is a wearable gateway. Company access control, measurement normalization and presentation belong to the server/dashboard. Demo workload, fatigue and readiness scores are unvalidated heuristics; the unsupported “deep work” classification is absent from the imported implementation. Company workspaces show received measurements without inventing cognitive scores.
 
-No Google Cloud resources are provisioned by this import. Physical wearable compatibility and an actual iOS build still require validation. The native connector currently supports the standard Bluetooth Heart Rate Service; other protocols require additional adapters.
+No Google Cloud resources are provisioned by this import. Physical wearable compatibility and an actual iOS build still require validation. At initial import, the native connector supported the standard Bluetooth Heart Rate Service.
+
+## Multi-signal acquisition follow-up
+
+| Order | Commit | Contents |
+| --- | --- | --- |
+| 9 | `feat(telemetry): preserve raw signal blocks end to end` | Raw channel catalog, bounded sample arrays/timing, canonical units, full-block access checks and byte-bounded gateway retries. |
+| 10 | `feat(gateway): collect concurrent BLE and Polar sensor streams` | GATT discovery, standard HR/RR/temperature/oxygen, experimental PMD decoders and negotiation, native channel status and protocol tests. |
+| 11 | `feat(dashboard): plot raw samples and verify UNIVERSE transport` | Sample-level charts and real recorded UNIVERSE acceptance through gateway, Auth/Firestore, API and browser. |
+| 12 | `docs(wearables): document connector scope and verification` | Exact implemented formats, remaining adapters/hardware gaps, reproducible checks and updated setup/verification. |
+
+These changes address measurement acquisition and transport. Demo interpretations remain unchanged. [Connector status](../neurasign_phone_app/docs/wearable-connectivity.md) distinguishes implementation, recording tests and outstanding hardware validation.
 
 ## Local files kept out of Git
 

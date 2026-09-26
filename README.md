@@ -22,7 +22,7 @@ See [server setup and verification](neurasign_server_dashboard/README.md). Root 
 
 Existing provider credentials remain in `neurasign_server_dashboard/.env`; they are excluded from builds and cloud uploads. Do not copy them into the phone app or browser.
 
-The connection is **wearable → Bluetooth → NEURASIGN Link → Internet → authenticated API → team dashboard**. The [native app](neurasign_phone_app/mobile/README.md) scans a company QR, connects a standard Bluetooth heart-rate sensor, stores unsent observations in SQLCipher and supports pause/disconnect. No physical wearable has been validated; manufacturer-specific adapters remain future work.
+The connection is **wearable → Bluetooth → NEURASIGN Link → Internet → authenticated API → team dashboard**. The [native app](neurasign_phone_app/mobile/README.md) scans a company QR, discovers supported measurement services, collects multiple signals, stores unsent observations in SQLCipher and supports pause/disconnect. Implemented connectors include standard heart rate/beat intervals, thermometer, pulse oximeter and experimental Polar PMD raw streams. The server retains complete sample blocks. See the [exact connector scope and validation limits](neurasign_phone_app/docs/wearable-connectivity.md); no physical wearable has been validated.
 
 The dashboard now separates employee profiles from login accounts. Owners create teams and assign manager permissions. Each phone connects to one employee/company through a single-use QR, with no employee dashboard login. See the [onboarding contract](neurasign_server_dashboard/docs/phone-onboarding.md) and [telemetry contract](neurasign_server_dashboard/docs/telemetry.md).
 

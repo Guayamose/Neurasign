@@ -1,5 +1,24 @@
 # Verification — 2026-09-26
 
+## Multi-signal expansion
+
+| Check | Result |
+| --- | --- |
+| Complete server suite | 123 passed; includes full-block sharing/team boundaries, unit conversion, raw history and scalar-v2 retry compatibility |
+| Gateway + controller + protocol suite | 24 passed; includes HR/RR, thermometer, oximeter, Polar frames/deltas/settings, concurrent subscriptions and byte-bounded retries |
+| Native TypeScript / Expo lint | Passed |
+| Generated contracts | Match server schemas |
+| Next.js production build / local containers | Passed; API and dashboard rebuilt |
+| Real UNIVERSE raw integration | Seven channels through gateway core, Auth/Firestore, API and browser: HR, optical intervals, EDA, temperature, acceleration X/Y/Z |
+| Raw integration assertions | Exact samples/offsets/provenance; lost-response duplicates; separate-company rejection; graph sample counts; mobile layout; pause/deletion |
+| Android default APK | Rebuilt with multi-signal acquisition and embedded catalog; HTTPS required; development signing |
+
+Raw integration command: `../../neurasign_server_dashboard/.venv/bin/python ../../neurasign_server_dashboard/scripts/raw_signals_smoke.py` from this directory, with Docker running, phone core built and UNIVERSE files downloaded. Screenshot: `../../neurasign_server_dashboard/artifacts/raw-signals.png`.
+
+This expansion does not add a physical-device validation claim. The native emulator lifecycle results below are from the earlier onboarding build; they were not rerun against a physical sensor. See [connector scope and gaps](../docs/wearable-connectivity.md). The local HTTP APK and earlier Android screenshots below belong to that earlier build unless rebuilt explicitly.
+
+## Earlier onboarding baseline
+
 Completed locally without using a Google Cloud account:
 
 | Check | Result |

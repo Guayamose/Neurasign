@@ -7,10 +7,12 @@ Wearable → native adapter → encrypted phone queue → authenticated API → 
 ```
 
 - [`mobile/`](mobile/README.md): React Native / Expo native application for Android and iOS, camera QR scanning, BLE discovery/notifications, secure credentials, SQLCipher queue and connection controls.
-- `src/`: portable adapter/measurement contract, standard Heart Rate Service parser, enrollment parser and authenticated upload client.
+- `src/`: portable measurement contract, standard BLE and Polar PMD decoders, concurrent stream collection, enrollment parser and authenticated upload client.
 - `contracts/`: schemas generated from the server; `npm test` checks protocol and native-controller behavior with injected OS transports.
 
-**Implemented connection:** Bluetooth Heart Rate Service (`0x180D`), independent of brand names. It sends heart rate in bpm with the phone's receipt timestamp. It parses optional RR intervals but does not invent or upload HRV. No physical wearable has been tested. Manufacturer SDKs, HealthKit, Health Connect and proprietary Bluetooth protocols are not implemented.
+**Implemented connectors:** standard Bluetooth heart rate plus every supplied RR interval, Health Thermometer, Pulse Oximeter, and experimental Polar PMD streams (ECG, PPG, PPI, acceleration, gyroscope, magnetometer, temperature and pressure where exposed in supported formats). Discovery inspects actual GATT services and runs available channels concurrently. Raw sample arrays and timing survive the queue, API and history. No HRV or other interpretation is computed by these connectors.
+
+Read the [connectivity matrix](docs/wearable-connectivity.md) for exact formats, time semantics and gaps. Protocol tests have passed; no physical model has been validated. An EDA live connector, Garmin/vendor SDKs, HealthKit and Health Connect remain unimplemented. UNIVERSE recording replay validates data transport, not Empatica Bluetooth compatibility.
 
 The server stores employees independently of dashboard accounts. Owners create teams and assign managers; managers only access their granted teams. A five-minute, single-use QR connects a phone to one employee/company. No Firebase login is needed on the phone. See the [onboarding API](../neurasign_server_dashboard/docs/phone-onboarding.md).
 

@@ -13,13 +13,19 @@ export const pmdChannels: Record<number, [string, string][]> = {
   0: [['electrocardiogram', 'µV']],
   1: ['1', '2', '3', 'ambient'].map(channel => [`ppg_${channel}`, 'a.u.']),
   2: ['x', 'y', 'z'].map(axis => [`acceleration_${axis}`, 'g']),
-  3: [['ppi_interval', 'ms'], ['ppi_error', 'ms'], ['ppi_flags', 'bitmask']],
+  3: [['ppi_interval', 'ms'], ['ppi_error', 'ms'], ['ppi_flags', 'bitmask'], ['heart_rate', 'bpm']],
   5: ['x', 'y', 'z'].map(axis => [`angular_velocity_${axis}`, '°/s']),
   6: ['x', 'y', 'z'].map(axis => [`magnetic_field_${axis}`, 'gauss']),
   7: [['skin_temperature', '°C']],
   11: [['barometric_pressure', 'hPa']],
   12: [['sensor_temperature', '°C']],
 };
+const opticalChannels = (count: number): [string, string][] => count === 4 ? pmdChannels[1]! : [
+  ...Array.from({ length: count - 1 }, (_, i): [string, string] => [`ppg_${i + 1}`, 'a.u.']), ['ppg_raw_flags', 'bitmask'],
+];
+const streamChannels = (type: number, settings: PmdSettings): [string, string][] => type === 1 ? opticalChannels(settings.get(4)?.[0] ?? 4) :
+  type === 0 ? [...pmdChannels[0]!, ['ecg_adc_1', 'a.u.'], ['ecg_adc_2', 'a.u.'], ['ecg_raw_flags', 'bitmask']] :
+  type === 6 ? [...pmdChannels[6]!, ['magnetic_calibration', 'code']] : pmdChannels[type]!;
 
 export function parseSettings(bytes: Uint8Array): PmdSettings {
   const reader = new Bytes(bytes), settings: PmdSettings = new Map();
@@ -39,8 +45,9 @@ export function chooseSettings(type: number, offered: PmdSettings): PmdSettings 
     if (key === 5) { selected.set(key, [options[0]!]); continue; }
     let choice = Math.max(...options);
     if (key === 4) {
-      const channels = pmdChannels[type]!.length;
-      if (!options.includes(channels)) throw new Error(`Polar channel layout ${options.join('/')} requires another decoder.`);
+      const supported = type === 1 ? [25, 21, 17, 4, 3] : type === 0 ? [1, 2] : type === 6 ? [4, 3] : [pmdChannels[type]!.length];
+      const channels = supported.find(count => options.includes(count));
+      if (channels === undefined) throw new Error(`Polar channel layout ${options.join('/')} requires another decoder.`);
       choice = channels;
     }
     selected.set(key, [choice]);
@@ -62,7 +69,7 @@ export function serializeSettings(settings: PmdSettings): Uint8Array {
 
 /** Signed delta blocks, LSB first. Float blocks encode deltas of IEEE754 bit patterns. */
 export function decodeDelta(bytes: Uint8Array, channels: number, resolution: number): number[][] {
-  if (![8, 16, 24, 32].includes(resolution) || channels < 1 || channels > 4) throw new Error('Unsupported Polar delta format.');
+  if (![8, 16, 24, 32].includes(resolution) || channels < 1 || channels > 25) throw new Error('Unsupported Polar delta format.');
   const reader = new Bytes(bytes), values = Array.from({ length: channels }, () => reader.int(resolution / 8));
   const rows = [[...values]];
   while (reader.offset < bytes.length) {
@@ -93,16 +100,41 @@ export function decodePmd(packet: Packet, settings: PmdSettings): Measurement[] 
   const payload = packet.bytes.slice(reader.offset);
   if (type === 3) {
     if (format || compressed || !payload.length || payload.length % 6) throw new Error('Unsupported Polar PPI frame.');
-    const body = new Bytes(payload), values: number[][] = [[], [], []];
+    const body = new Bytes(payload), values: number[][] = [[], [], [], []];
     while (body.offset < payload.length) {
-      body.uint(1); // HR is delivered separately by the Heart Rate Service.
+      const pulse = body.uint(1); if (pulse > 0) values[3]!.push(pulse);
       values[0]!.push(body.uint(2)); values[1]!.push(body.uint(2)); values[2]!.push(body.uint(1));
     }
     // Retain interval, error and flags together, including zero/unavailable intervals.
-    return pmdChannels[type]!.map(([metric, unit], index) => block(metric, unit, values[index]!, packet.receivedAt, undefined, deviceTime));
+    return pmdChannels[type]!.flatMap(([metric, unit], index) => values[index]!.length ? [block(metric, unit, values[index]!, packet.receivedAt, undefined, deviceTime)] : []);
   }
   const rate = settings.get(0)?.[0], factor = settings.get(5)?.[0] ?? 1;
   if (!rate || !Number.isFinite(rate) || rate <= 0) throw new Error('Missing Polar sample rate.');
+  if (type === 1 && format === 0 && (settings.get(4)?.[0] ?? 4) !== 4) throw new Error('Polar optical layout changed after negotiation.');
+  if (type === 0 && !compressed && format >= 1 && format <= 3) {
+    const size = format === 3 ? 7 : 3;
+    if (!payload.length || payload.length % size) throw new Error('Truncated Polar ECG frame.');
+    const body = new Bytes(payload), electrical: number[][] = format === 3 ? [[], [], []] : [[], []];
+    while (body.offset < payload.length) {
+      if (format === 3) { electrical[0]!.push(body.int(3)); electrical[1]!.push(body.int(3)); electrical[2]!.push(body.uint(1)); }
+      else { const raw = body.uint(3); electrical[0]!.push(raw & (format === 1 ? 0x3fff : 0x3ffff)); electrical[1]!.push(raw); }
+    }
+    const channels: [string, string][] = format === 3 ? [['ecg_adc_1', 'a.u.'], ['ecg_adc_2', 'a.u.'], ['ecg_raw_flags', 'bitmask']] : [['electrocardiogram', 'µV'], ['ecg_raw_flags', 'bitmask']];
+    const offsets = electrical[0]!.map((_, i) => (i - electrical[0]!.length + 1) * 1000 / rate);
+    return channels.map(([metric, unit], i) => block(metric, unit, electrical[i]!, packet.receivedAt, offsets, deviceTime));
+  }
+  if (type === 1 && compressed && [7, 8, 10, 13].includes(format)) {
+    const count = ({ 7: 17, 8: 25, 10: 21, 13: 3 } as Record<number, number>)[format]!;
+    if ((settings.get(4)?.[0] ?? count) !== count) throw new Error('Polar optical layout changed after negotiation.');
+    const rows = decodeDelta(payload, count, 24), offsets = rows.map((_, i) => (i - rows.length + 1) * 1000 / rate);
+    return opticalChannels(count).map(([metric, unit], i) => block(metric, unit,
+      rows.map(row => i === count - 1 ? row[i]! & 0xffffff : row[i]! * factor), packet.receivedAt, offsets, deviceTime));
+  }
+  if (type === 6 && compressed && format === 1) {
+    const rows = decodeDelta(payload, 4, 16), offsets = rows.map((_, i) => (i - rows.length + 1) * 1000 / rate);
+    return streamChannels(type, settings).map(([metric, unit], i) => block(metric, unit,
+      rows.map(row => i === 3 ? row[i]! : row[i]! * factor / 1000), packet.receivedAt, offsets, deviceTime));
+  }
   const channels = pmdChannels[type]!.length;
   const floating = [7, 11, 12].includes(type) || type === 5 && format === 1;
   let width: number;
@@ -174,7 +206,7 @@ export async function startPolar(connection: GattConnection, signal: AbortSignal
   const iterator = connection.notifications(PMD_SERVICE, PMD_DATA, signal)[Symbol.asyncIterator]();
   let pending = iterator.next(); void pending.catch(() => {});
   const active = new Map<number, PmdSettings>(), capabilities: Capability[] = [];
-  for (const [typeString, channels] of Object.entries(pmdChannels)) {
+  for (const typeString of Object.keys(pmdChannels)) {
     const type = Number(typeString);
     if (!(feature[1 + Math.floor(type / 8)]! & (1 << (type % 8)))) continue;
     try {
@@ -182,7 +214,7 @@ export async function startPolar(connection: GattConnection, signal: AbortSignal
       const result = parseSettings(await control.command(2, type, serializeSettings(settings)));
       if (result.has(5)) settings.set(5, result.get(5)!);
       active.set(type, settings);
-      for (const [metric, unit] of channels) capabilities.push(capability(metric, unit, `polar-pmd-v1:${type}:${JSON.stringify([...settings])}`));
+      for (const [metric, unit] of streamChannels(type, settings)) capabilities.push(capability(metric, unit, `polar-pmd-v2:${type}:${JSON.stringify([...settings])}`));
     } catch (error) { warnings.push(error instanceof Error ? error.message : `Polar stream ${type} unavailable.`); }
   }
   if (!active.size) throw new Error(warnings.join(' ') || 'No supported Polar streams were available.');

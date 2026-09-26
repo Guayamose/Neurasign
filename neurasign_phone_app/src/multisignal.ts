@@ -38,15 +38,17 @@ export async function connectWearable(transport: GattTransport, candidate: Candi
       }
     }
     if (has(HEART_RATE_SERVICE, HEART_RATE_MEASUREMENT)) {
-      await add('ble-heart-rate', 'Heart & beat intervals', [capability('heart_rate', 'bpm', 'ble-heart-rate'), capability('rr_interval', 'ms', 'ble-heart-rate-rr')], read(HEART_RATE_SERVICE, HEART_RATE_MEASUREMENT, heartMeasurements));
+      await add('ble-heart-rate', 'Heart & beat intervals', [capability('heart_rate', 'bpm', 'ble-heart-rate'), capability('rr_interval', 'ms', 'ble-heart-rate-rr'), capability('heart_rate_contact', 'code', 'ble-heart-rate-contact'), capability('energy_expended', 'kJ', 'ble-heart-rate-energy-counter')], read(HEART_RATE_SERVICE, HEART_RATE_MEASUREMENT, heartMeasurements));
     }
     if (has(THERMOMETER_SERVICE, TEMPERATURE_MEASUREMENT)) {
-      await add('ble-thermometer', 'Temperature', [capability('body_temperature', '°C', 'ble-health-thermometer')], read(THERMOMETER_SERVICE, TEMPERATURE_MEASUREMENT, temperatureMeasurements));
+      await add('ble-thermometer', 'Temperature', [capability('body_temperature', '°C', 'ble-health-thermometer'), capability('body_temperature_site', 'code', 'ble-health-thermometer-site')], read(THERMOMETER_SERVICE, TEMPERATURE_MEASUREMENT, temperatureMeasurements));
     }
     if (has(OXIMETER_SERVICE, OXIMETER_CONTINUOUS) || has(OXIMETER_SERVICE, OXIMETER_SPOT)) {
       const spot = !has(OXIMETER_SERVICE, OXIMETER_CONTINUOUS), characteristic = spot ? OXIMETER_SPOT : OXIMETER_CONTINUOUS;
       const method = spot ? 'ble-oximeter-spot' : 'ble-oximeter-continuous';
-      await add('ble-oximeter', 'Oxygen & pulse', [capability('oxygen_saturation', '%', method), capability('heart_rate', 'bpm', method)], read(OXIMETER_SERVICE, characteristic, packet => oxygenMeasurements(packet, spot)));
+      const channels = [capability('oxygen_saturation', '%', method), capability('heart_rate', 'bpm', method), capability('pulse_amplitude_index', '%', method), capability('oximeter_measurement_status', 'bitmask', method), capability('oximeter_sensor_status', 'bitmask', method)];
+      if (!spot) for (const speed of ['fast', 'slow']) channels.push(capability(`oxygen_saturation_${speed}`, '%', method), capability(`pulse_rate_${speed}`, 'bpm', method));
+      await add('ble-oximeter', 'Oxygen & pulse', channels, read(OXIMETER_SERVICE, characteristic, packet => oxygenMeasurements(packet, spot)));
     }
     if (has(PMD_SERVICE, PMD_CONTROL) && has(PMD_SERVICE, PMD_DATA)) {
       const polarLife = new AbortController(), stopPolar = () => polarLife.abort();

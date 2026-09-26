@@ -1,0 +1,17 @@
+{
+  "provenance": "Example incident evidence for NEURASIGN. No production system is connected. Model analysis is generated live from this input.",
+  "incident": {"id": "inc-042", "service": "checkout-api", "title": "Production database incident", "symptom": "Checkout requests time out after deployment v2.8.1"},
+  "logs": [
+    {"time": "14:02:03", "event": "deployment", "version": "v2.8.1", "detail": "Transaction scope now includes payment-provider network request"},
+    {"time": "14:03:10", "event": "connection_pool_timeout", "count": 147, "detail": "50 of 50 connections busy; waiting requests exceed 2 seconds"},
+    {"time": "14:03:12", "event": "slow_transaction", "count": 23, "detail": "Transaction duration p95 increased from 85 ms to 1900 ms"},
+    {"time": "14:03:20", "event": "replica_health", "lag_ms": 0, "detail": "Replication healthy; no database restart observed"}
+  ],
+  "changes": [
+    {"version": "v2.8.0", "detail": "Payment-provider request occurs outside the database transaction"},
+    {"version": "v2.8.1", "detail": "Payment-provider request moved inside the transaction; no schema migration"}
+  ],
+  "telemetry_before": {"checkout_p95_ms": 2300, "connection_timeouts": 147, "pool_busy": 50, "pool_limit": 50, "replica_lag_ms": 0, "integrity_checks_passed": true},
+  "telemetry_after": {"scenario": "Recorded example after rollback to v2.8.0, available only after the reviewer accepts the plan", "checkout_p95_ms": 182, "connection_timeouts": 0, "pool_busy": 14, "pool_limit": 50, "replica_lag_ms": 0, "integrity_checks_passed": true},
+  "success_criteria": {"checkout_p95_ms_max": 250, "connection_timeouts_max": 0, "integrity_checks_must_pass": true}
+}

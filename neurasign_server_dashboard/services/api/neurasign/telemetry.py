@@ -6,8 +6,9 @@ same series. The existing window ingestion contract remains supported.
 """
 from datetime import datetime, timezone
 import json
+import math
 import time
-from typing import Literal
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, Header, HTTPException, Query
 from pydantic import Field, field_validator, model_validator
@@ -46,6 +47,30 @@ METRICS = {
         meaning='Steps counted during the reported interval. Counts from overlapping sources are not added together.', units={'count': (1, 0)}),
 }
 
+# Raw channels remain separate from derived metrics. Limits are transport bounds.
+def raw_metric(name, unit, meaning, minimum, maximum, units=None, digits=3):
+    return dict(name=name, unit=unit, digits=digits, minimum=minimum, maximum=maximum,
+                freshness_seconds=60, meaning=meaning, units=units or {unit: (1, 0)})
+
+
+METRICS.update({
+    'rr_interval': raw_metric('Beat interval · RR', 'ms', 'Individual beat interval reported by the heart-rate sensor. This is not an HRV score.', 1, 65535, {'ms': (1, 0), 's': (1000, 0)}, 1),
+    'ppi_interval': raw_metric('Pulse interval · PPI', 'ms', 'Raw interval between optical pulse peaks; check the accompanying PPI sensor flags. Zero denotes unavailable. This is not an HRV score.', 0, 65535, digits=1),
+    'ppi_error': raw_metric('PPI error estimate', 'ms', 'Error estimate supplied by the optical sensor for its pulse interval.', 0, 65535, digits=1),
+    'ppi_flags': raw_metric('PPI sensor flags', 'bitmask', 'Polar PPI flags: bit 0 invalid interval; bit 1 contact detected; bit 2 contact detection unsupported.', 0, 7, digits=0),
+    'electrocardiogram': raw_metric('ECG', 'µV', 'Raw electrical cardiac waveform. No rhythm classification is performed.', -20000000, 20000000, {'µV': (1, 0), 'mV': (1000, 0)}),
+    'blood_volume_pulse': raw_metric('Blood volume pulse', 'a.u.', 'Optical pulse waveform in source-specific arbitrary units. Values from different sensors are not interchangeable.', -2147483648, 2147483647),
+    'body_temperature': raw_metric('Body temperature', '°C', 'Temperature reported by a health thermometer. It is not automatically classified as skin or core temperature.', -50, 100, {'°C': (1, 0), '°F': (5 / 9, -160 / 9)}, 2),
+    'sensor_temperature': raw_metric('Sensor temperature', '°C', 'Temperature stream with unspecified measurement location. Do not equate this with skin temperature.', -100, 200, digits=2),
+    'barometric_pressure': raw_metric('Barometric pressure', 'hPa', 'Atmospheric pressure reported by the sensor. This is not blood pressure.', 0, 20000, digits=2),
+})
+for axis in ('x', 'y', 'z'):
+    METRICS[f'acceleration_{axis}'] = raw_metric(f'Acceleration · {axis.upper()}', 'g', 'Raw acceleration along the sensor axis, including gravity.', -1000, 1000, {'g': (1, 0), 'mg': (.001, 0), 'm/s²': (1 / 9.80665, 0)})
+    METRICS[f'angular_velocity_{axis}'] = raw_metric(f'Angular velocity · {axis.upper()}', '°/s', 'Raw gyroscope measurement along the sensor axis.', -100000, 100000)
+    METRICS[f'magnetic_field_{axis}'] = raw_metric(f'Magnetic field · {axis.upper()}', 'gauss', 'Raw magnetic field along the sensor axis.', -100000, 100000)
+for channel in ('1', '2', '3', 'ambient'):
+    METRICS[f'ppg_{channel}'] = raw_metric(f'PPG · {channel}', 'a.u.', 'Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.', -2147483648, 2147483647)
+
 
 def metric_definition(metric, unit=None):
     definition = METRICS.get(metric)
@@ -64,7 +89,7 @@ class Capability(Strict):
     unit: str = Field(min_length=1, max_length=20)
     delivery_mode: Literal['stream', 'sync']
     measurement_kind: Literal['sample', 'window', 'summary']
-    method: str = Field(min_length=1, max_length=100)
+    method: str = Field(min_length=1, max_length=256)
     timestamp_basis: Literal['device', 'phone_receipt', 'source_record'] = 'device'
     # A fixed period is part of a series' identity, not a brand-specific field.
     interval_seconds: int | None = Field(None, ge=1, le=7 * 86400)
@@ -99,7 +124,7 @@ class SourceInput(Strict):
     manufacturer: str | None = Field(None, max_length=80)
     model: str | None = Field(None, max_length=80)
     firmware: str | None = Field(None, max_length=80)
-    capabilities: list[Capability] = Field(min_length=1, max_length=20)
+    capabilities: list[Capability] = Field(min_length=1, max_length=64)
 
     @model_validator(mode='after')
     def unique_metrics(self):
@@ -117,6 +142,9 @@ class Observation(Strict):
     unit: str = Field(min_length=1, max_length=20)
     measured_at: datetime
     source_record_id: str | None = Field(None, min_length=1, max_length=120)
+    samples: list[Annotated[float, Field(strict=True, allow_inf_nan=False)]] | None = Field(None, min_length=1, max_length=512)
+    sample_offsets_ms: list[Annotated[float, Field(strict=True, allow_inf_nan=False)]] | None = Field(None, min_length=1, max_length=512)
+    device_timestamp_ns: str | None = Field(None, pattern=r'^\d{1,20}$')
 
     @field_validator('measured_at')
     @classmethod
@@ -132,8 +160,24 @@ class Observation(Strict):
         value = self.value * scale + offset
         if not definition['minimum'] <= value <= definition['maximum'] or definition.get('positive') and value == 0:
             raise ValueError('Measurement is outside the accepted transport range.')
-        if self.metric == 'steps' and value != int(value):
-            raise ValueError('Step counts must be whole numbers.')
+        if self.metric in ('steps', 'ppi_flags') and value != int(value):
+            raise ValueError('Counts and bitmasks must be whole numbers.')
+        if (self.samples is None) != (self.sample_offsets_ms is None):
+            raise ValueError('Samples and offsets must be provided together.')
+        if self.samples is not None:
+            offsets = self.sample_offsets_ms
+            if len(self.samples) != len(offsets) or offsets[-1] != 0 or offsets[0] < -10000:
+                raise ValueError('A sample block must end at measured_at and cover at most 10 seconds.')
+            if any(not math.isfinite(item) or item > 0 for item in offsets) or any(a > b for a, b in zip(offsets, offsets[1:])):
+                raise ValueError('Sample offsets must be finite, ordered and non-positive.')
+            if self.samples[-1] != self.value:
+                raise ValueError('The scalar value must equal the last sample.')
+            for sample in self.samples:
+                converted = sample * scale + offset
+                if not definition['minimum'] <= converted <= definition['maximum'] or definition.get('positive') and converted == 0:
+                    raise ValueError('A raw sample is outside the accepted transport range.')
+                if self.metric == 'ppi_flags' and converted != int(converted):
+                    raise ValueError('Bitmasks must be whole numbers.')
         return self
 
 
@@ -194,7 +238,8 @@ def public_source(value):
 def observations(body: ObservationBatch, store: Store, authorization: str | None = Header(None)):
     now = time.time()
     for observation in body.observations:
-        if not now - 7 * 86400 <= observation.measured_at.timestamp() <= now + 5:
+        first = observation.measured_at.timestamp() + ((observation.sample_offsets_ms or [0])[0] / 1000)
+        if not now - 7 * 86400 <= first <= observation.measured_at.timestamp() <= now + 5:
             raise HTTPException(422, 'Measurement time must be within the past 7 days and no more than 5 seconds ahead.')
 
     def write(tx):
@@ -217,8 +262,19 @@ def observations(body: ObservationBatch, store: Store, authorization: str | None
             capability = next((item for item in source['capabilities'] if item['metric'] == observation.metric), None)
             if not capability or capability['availability'] != 'available' or capability['unit'] != observation.unit:
                 raise HTTPException(422, 'Measurement does not match the registered source capability.')
-            capture_allowed(person, observation.measured_at.timestamp(), capability['interval_seconds'])
+            duration = -(observation.sample_offsets_ms or [0])[0] / 1000
+            if observation.samples is not None and capability['measurement_kind'] != 'sample':
+                raise HTTPException(422, 'Raw sample blocks require a point-sample capability.')
+            timestamp = observation.measured_at.timestamp()
+            capture_allowed(person, timestamp, duration or capability['interval_seconds'])
+            # A block must not span a team boundary and disclose the old team's data.
+            if any(timestamp - duration < assignment['from'] <= timestamp for assignment in person.get('assignments', [])):
+                raise HTTPException(422, 'Split raw sample blocks at team changes.')
             payload = observation.model_dump(mode='json')
+            # Preserve the content hashes of previously accepted v2 scalar observations.
+            for key in ('samples', 'sample_offsets_ms', 'device_timestamp_ns'):
+                if payload[key] is None:
+                    del payload[key]
             content_hash = digest(json.dumps(payload, sort_keys=True, separators=(',', ':'), allow_nan=False))
             sample_id = digest(f'{device_id}:{observation.id}')
             path = f'{employee_data_path(org, person)}/observations/{sample_id}'
@@ -239,10 +295,15 @@ def observations(body: ObservationBatch, store: Store, authorization: str | None
                      'team_id': team_at(person, timestamp), 'device_id': device_id, 'source': source['source'], 'source_name': source['name'],
                      'adapter': source['adapter'], 'expires_at': timestamp + RETENTION_DAYS * 86400,
                      'content_hash': content_hash}
+            if observation.samples is not None:
+                value.update(samples=[sample * scale + offset for sample in observation.samples],
+                             input_samples=observation.samples, sample_count=len(observation.samples),
+                             sample_duration_ms=duration * 1000)
             tx.put(path, value)
             previous = state['latest'].get(series_id)
             if previous is None or (timestamp, sample_id) > (previous['timestamp'], previous['id']):
-                state['latest'][series_id] = value
+                state['latest'][series_id] = {key: item for key, item in value.items()
+                                             if key not in ('samples', 'input_samples', 'sample_offsets_ms')}
             accepted += 1
         if accepted:
             state['expires_at'] = max(row['expires_at'] for row in state['latest'].values())

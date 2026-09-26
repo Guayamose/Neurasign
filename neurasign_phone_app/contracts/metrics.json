@@ -142,6 +142,301 @@
       "accepted_units": [
         "count"
       ]
+    },
+    {
+      "name": "Beat interval · RR",
+      "unit": "ms",
+      "digits": 1,
+      "minimum": 1,
+      "maximum": 65535,
+      "freshness_seconds": 60,
+      "meaning": "Individual beat interval reported by the heart-rate sensor. This is not an HRV score.",
+      "id": "rr_interval",
+      "accepted_units": [
+        "ms",
+        "s"
+      ]
+    },
+    {
+      "name": "Pulse interval · PPI",
+      "unit": "ms",
+      "digits": 1,
+      "minimum": 0,
+      "maximum": 65535,
+      "freshness_seconds": 60,
+      "meaning": "Raw interval between optical pulse peaks; check the accompanying PPI sensor flags. Zero denotes unavailable. This is not an HRV score.",
+      "id": "ppi_interval",
+      "accepted_units": [
+        "ms"
+      ]
+    },
+    {
+      "name": "PPI error estimate",
+      "unit": "ms",
+      "digits": 1,
+      "minimum": 0,
+      "maximum": 65535,
+      "freshness_seconds": 60,
+      "meaning": "Error estimate supplied by the optical sensor for its pulse interval.",
+      "id": "ppi_error",
+      "accepted_units": [
+        "ms"
+      ]
+    },
+    {
+      "name": "PPI sensor flags",
+      "unit": "bitmask",
+      "digits": 0,
+      "minimum": 0,
+      "maximum": 7,
+      "freshness_seconds": 60,
+      "meaning": "Polar PPI flags: bit 0 invalid interval; bit 1 contact detected; bit 2 contact detection unsupported.",
+      "id": "ppi_flags",
+      "accepted_units": [
+        "bitmask"
+      ]
+    },
+    {
+      "name": "ECG",
+      "unit": "µV",
+      "digits": 3,
+      "minimum": -20000000,
+      "maximum": 20000000,
+      "freshness_seconds": 60,
+      "meaning": "Raw electrical cardiac waveform. No rhythm classification is performed.",
+      "id": "electrocardiogram",
+      "accepted_units": [
+        "µV",
+        "mV"
+      ]
+    },
+    {
+      "name": "Blood volume pulse",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Optical pulse waveform in source-specific arbitrary units. Values from different sensors are not interchangeable.",
+      "id": "blood_volume_pulse",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "Body temperature",
+      "unit": "°C",
+      "digits": 2,
+      "minimum": -50,
+      "maximum": 100,
+      "freshness_seconds": 60,
+      "meaning": "Temperature reported by a health thermometer. It is not automatically classified as skin or core temperature.",
+      "id": "body_temperature",
+      "accepted_units": [
+        "°C",
+        "°F"
+      ]
+    },
+    {
+      "name": "Sensor temperature",
+      "unit": "°C",
+      "digits": 2,
+      "minimum": -100,
+      "maximum": 200,
+      "freshness_seconds": 60,
+      "meaning": "Temperature stream with unspecified measurement location. Do not equate this with skin temperature.",
+      "id": "sensor_temperature",
+      "accepted_units": [
+        "°C"
+      ]
+    },
+    {
+      "name": "Barometric pressure",
+      "unit": "hPa",
+      "digits": 2,
+      "minimum": 0,
+      "maximum": 20000,
+      "freshness_seconds": 60,
+      "meaning": "Atmospheric pressure reported by the sensor. This is not blood pressure.",
+      "id": "barometric_pressure",
+      "accepted_units": [
+        "hPa"
+      ]
+    },
+    {
+      "name": "Acceleration · X",
+      "unit": "g",
+      "digits": 3,
+      "minimum": -1000,
+      "maximum": 1000,
+      "freshness_seconds": 60,
+      "meaning": "Raw acceleration along the sensor axis, including gravity.",
+      "id": "acceleration_x",
+      "accepted_units": [
+        "g",
+        "mg",
+        "m/s²"
+      ]
+    },
+    {
+      "name": "Angular velocity · X",
+      "unit": "°/s",
+      "digits": 3,
+      "minimum": -100000,
+      "maximum": 100000,
+      "freshness_seconds": 60,
+      "meaning": "Raw gyroscope measurement along the sensor axis.",
+      "id": "angular_velocity_x",
+      "accepted_units": [
+        "°/s"
+      ]
+    },
+    {
+      "name": "Magnetic field · X",
+      "unit": "gauss",
+      "digits": 3,
+      "minimum": -100000,
+      "maximum": 100000,
+      "freshness_seconds": 60,
+      "meaning": "Raw magnetic field along the sensor axis.",
+      "id": "magnetic_field_x",
+      "accepted_units": [
+        "gauss"
+      ]
+    },
+    {
+      "name": "Acceleration · Y",
+      "unit": "g",
+      "digits": 3,
+      "minimum": -1000,
+      "maximum": 1000,
+      "freshness_seconds": 60,
+      "meaning": "Raw acceleration along the sensor axis, including gravity.",
+      "id": "acceleration_y",
+      "accepted_units": [
+        "g",
+        "mg",
+        "m/s²"
+      ]
+    },
+    {
+      "name": "Angular velocity · Y",
+      "unit": "°/s",
+      "digits": 3,
+      "minimum": -100000,
+      "maximum": 100000,
+      "freshness_seconds": 60,
+      "meaning": "Raw gyroscope measurement along the sensor axis.",
+      "id": "angular_velocity_y",
+      "accepted_units": [
+        "°/s"
+      ]
+    },
+    {
+      "name": "Magnetic field · Y",
+      "unit": "gauss",
+      "digits": 3,
+      "minimum": -100000,
+      "maximum": 100000,
+      "freshness_seconds": 60,
+      "meaning": "Raw magnetic field along the sensor axis.",
+      "id": "magnetic_field_y",
+      "accepted_units": [
+        "gauss"
+      ]
+    },
+    {
+      "name": "Acceleration · Z",
+      "unit": "g",
+      "digits": 3,
+      "minimum": -1000,
+      "maximum": 1000,
+      "freshness_seconds": 60,
+      "meaning": "Raw acceleration along the sensor axis, including gravity.",
+      "id": "acceleration_z",
+      "accepted_units": [
+        "g",
+        "mg",
+        "m/s²"
+      ]
+    },
+    {
+      "name": "Angular velocity · Z",
+      "unit": "°/s",
+      "digits": 3,
+      "minimum": -100000,
+      "maximum": 100000,
+      "freshness_seconds": 60,
+      "meaning": "Raw gyroscope measurement along the sensor axis.",
+      "id": "angular_velocity_z",
+      "accepted_units": [
+        "°/s"
+      ]
+    },
+    {
+      "name": "Magnetic field · Z",
+      "unit": "gauss",
+      "digits": 3,
+      "minimum": -100000,
+      "maximum": 100000,
+      "freshness_seconds": 60,
+      "meaning": "Raw magnetic field along the sensor axis.",
+      "id": "magnetic_field_z",
+      "accepted_units": [
+        "gauss"
+      ]
+    },
+    {
+      "name": "PPG · 1",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_1",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 2",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_2",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 3",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_3",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · ambient",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_ambient",
+      "accepted_units": [
+        "a.u."
+      ]
     }
   ]
 }

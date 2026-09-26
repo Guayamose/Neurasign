@@ -27,6 +27,14 @@ export type Measurement = {
   unit: string;
   measured_at: string;
   source_record_id?: string | null;
+  /** Lossless block of one channel, ending at measured_at. value is its last sample.
+   * Offsets are milliseconds relative to measured_at, ordered, non-positive,
+   * and end at zero. Irregular intervals need no invented sampling frequency.
+   */
+  samples?: number[];
+  sample_offsets_ms?: number[];
+  /** Original Polar device clock; the wall-clock timestamp can remain phone_receipt. */
+  device_timestamp_ns?: string;
 };
 
 export type Observation = Measurement & { id: string; source_id: string };

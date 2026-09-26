@@ -124,3 +124,36 @@ test("gateway requires HTTPS and an isolated local-development override", () => 
   }
   assert.doesNotThrow(() => new GatewaySession(options(new TestQueue(), fetch, { apiOrigin: "http://localhost:3000", allowLocalHttp: true })));
 });
+
+test("raw blocks respect the byte budget and retain every sample across lost responses", async () => {
+  const queue = new TestQueue(), payloads = [], stored = new Map();
+  let loseResponse = true;
+  const session = new GatewaySession(options(queue, async (url, init) => {
+    if (url.endsWith('/sources')) return json({ source: { id: sourceId } });
+    assert.ok(Buffer.byteLength(init.body, 'utf8') <= 100000);
+    payloads.push(init.body);
+    const rows = JSON.parse(init.body).observations;
+    let duplicates = 0;
+    for (const row of rows) {
+      if (stored.has(row.id)) { assert.deepEqual(row, stored.get(row.id)); duplicates++; }
+      else stored.set(row.id, row);
+    }
+    if (loseResponse) { loseResponse = false; throw new Error('Response lost'); }
+    return json({ accepted: rows.length - duplicates, duplicates });
+  }));
+  await session.registerSource(descriptor);
+  const samples = Array.from({ length: 512 }, (_, i) => Math.sin(i) * 100);
+  const sample_offsets_ms = samples.map((_, i) => (i - 511) * 10);
+  for (let index = 0; index < 60; index++) await session.capture(sourceId, {
+    ...measurement, metric: 'electrocardiogram', unit: 'µV', samples, sample_offsets_ms,
+    value: samples.at(-1), device_timestamp_ns: '18446744073709551615',
+  });
+  await assert.rejects(session.flush(), /Response lost/);
+  assert.equal(queue.size, 60);
+  const firstBatch = await session.flush();
+  assert.ok(firstBatch > 0 && firstBatch < 60);
+  assert.equal(payloads[0], payloads[1]);
+  while (queue.size) await session.flush();
+  assert.equal(stored.size, 60);
+  for (const row of stored.values()) { assert.deepEqual(row.samples, samples); assert.deepEqual(row.sample_offsets_ms, sample_offsets_ms); }
+});

@@ -1,5 +1,7 @@
 import type { Measurement, Observation, ObservationBatch, SourceDescriptor } from "./contract.js";
 
+const bytesInJson = (text: string) => { let size = 0; for (const character of text) { const code = character.codePointAt(0)!; size += code < 128 ? 1 : code < 2048 ? 2 : code < 65536 ? 3 : 4; } return size; };
+
 /** Native implementation must encrypt at rest and persist before resolving.
  * Namespace every operation by enrollment, including after a company switch.
  * Acknowledge by ID, not queue position: capture may continue during an upload.
@@ -68,6 +70,11 @@ export class GatewaySession {
     if (this.stopped) return;
     if (!this.sourceIds.has(sourceId)) throw new Error("Register the source in this session before collecting measurements.");
     if (!Number.isFinite(measurement.value) || !Number.isFinite(Date.parse(measurement.measured_at))) throw new Error("Invalid measurement.");
+    if (measurement.samples || measurement.sample_offsets_ms) {
+      const samples = measurement.samples, offsets = measurement.sample_offsets_ms;
+      if (!samples?.length || samples.length > 512 || samples.some(value => !Number.isFinite(value)) || !offsets || offsets.length !== samples.length ||
+          samples.at(-1) !== measurement.value || offsets.at(-1) !== 0 || offsets[0]! < -10000 || offsets.some((time, index) => !Number.isFinite(time) || time > 0 || index > 0 && time < offsets[index - 1]!)) throw new Error('Invalid sample block.');
+    }
     const id = this.options.newId();
     if (!/^[A-Za-z0-9_-]{8,80}$/.test(id)) throw new Error("Generate a stable UUID or equivalent observation ID.");
     await this.options.queue.append(this.options.enrollmentId, { ...measurement, source_id: sourceId, id });
@@ -77,7 +84,17 @@ export class GatewaySession {
     return this.pendingFlush;
   }
   private async flushBatch(): Promise<number> {
-    const rows = await this.options.queue.peek(this.options.enrollmentId, 60);
+    const available = await this.options.queue.peek(this.options.enrollmentId, 60);
+    const rows: Observation[] = [];
+    let bytes = 64;
+    for (const row of available) {
+      const size = bytesInJson(JSON.stringify(row)) + 1;
+      if (bytes + size > 100000) {
+        if (!rows.length) throw new Error('A queued sample block exceeds the upload limit.');
+        break;
+      }
+      rows.push(row); bytes += size;
+    }
     if (!rows.length) return 0;
     const payload: ObservationBatch = { schema_version: 2, observations: rows };
     const result = await this.request("/observations", payload);

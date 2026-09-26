@@ -47,6 +47,53 @@
           ],
           "default": null,
           "title": "Source Record Id"
+        },
+        "samples": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 512,
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Samples"
+        },
+        "sample_offsets_ms": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 512,
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sample Offsets Ms"
+        },
+        "device_timestamp_ns": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{1,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Device Timestamp Ns"
         }
       },
       "required": [

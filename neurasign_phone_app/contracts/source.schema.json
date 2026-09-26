@@ -55,7 +55,7 @@
           "type": "string"
         },
         "method": {
-          "maxLength": 100,
+          "maxLength": 256,
           "minLength": 1,
           "title": "Method",
           "type": "string"
@@ -176,7 +176,7 @@
       "items": {
         "$ref": "#/$defs/Capability"
       },
-      "maxItems": 20,
+      "maxItems": 64,
       "minItems": 1,
       "title": "Capabilities",
       "type": "array"

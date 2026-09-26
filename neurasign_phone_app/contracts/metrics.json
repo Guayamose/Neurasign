@@ -426,6 +426,279 @@
       ]
     },
     {
+      "name": "PPG · 4",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_4",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 5",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_5",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 6",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_6",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 7",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_7",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 8",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_8",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 9",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_9",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 10",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_10",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 11",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_11",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 12",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_12",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 13",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_13",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 14",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_14",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 15",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_15",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 16",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_16",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 17",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_17",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 18",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_18",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 19",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_19",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 20",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_20",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 21",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_21",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 22",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_22",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 23",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_23",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · 24",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.",
+      "id": "ppg_24",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
       "name": "PPG · ambient",
       "unit": "a.u.",
       "digits": 3,
@@ -436,6 +709,404 @@
       "id": "ppg_ambient",
       "accepted_units": [
         "a.u."
+      ]
+    },
+    {
+      "name": "PPG · GREEN",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical channel at the named LED wavelength. Arbitrary sensor units are not interchangeable across sources.",
+      "id": "ppg_green",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · RED",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical channel at the named LED wavelength. Arbitrary sensor units are not interchangeable across sources.",
+      "id": "ppg_red",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "PPG · IR",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "freshness_seconds": 60,
+      "meaning": "Raw optical channel at the named LED wavelength. Arbitrary sensor units are not interchangeable across sources.",
+      "id": "ppg_ir",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "Pulse interval quality",
+      "unit": "code",
+      "digits": 0,
+      "minimum": -1,
+      "maximum": 0,
+      "freshness_seconds": 60,
+      "meaning": "Samsung optical interval status: 0 normal, -1 error. This is separate from Polar PPI flags.",
+      "integer": true,
+      "category": "quality",
+      "id": "ppi_status",
+      "accepted_units": [
+        "code"
+      ]
+    },
+    {
+      "name": "Heart rate quality",
+      "unit": "code",
+      "digits": 0,
+      "minimum": -999,
+      "maximum": 1,
+      "freshness_seconds": 60,
+      "meaning": "Samsung heart rate status: 1 successful; 0 measuring; negative values identify movement, contact or sensor errors.",
+      "integer": true,
+      "category": "quality",
+      "id": "heart_rate_status",
+      "accepted_units": [
+        "code"
+      ]
+    },
+    {
+      "name": "EDA quality",
+      "unit": "code",
+      "digits": 0,
+      "minimum": -10,
+      "maximum": 0,
+      "freshness_seconds": 60,
+      "meaning": "Samsung EDA status: 0 normal, -5 detached, -10 low signal quality.",
+      "integer": true,
+      "category": "quality",
+      "id": "eda_status",
+      "accepted_units": [
+        "code"
+      ]
+    },
+    {
+      "name": "Temperature quality",
+      "unit": "code",
+      "digits": 0,
+      "minimum": -1,
+      "maximum": 0,
+      "freshness_seconds": 60,
+      "meaning": "Samsung temperature status: 0 normal, -1 error.",
+      "integer": true,
+      "category": "quality",
+      "id": "skin_temperature_status",
+      "accepted_units": [
+        "code"
+      ]
+    },
+    {
+      "name": "ECG electrode contact",
+      "unit": "code",
+      "digits": 0,
+      "minimum": 0,
+      "maximum": 255,
+      "freshness_seconds": 60,
+      "meaning": "Samsung ECG lead-off code: 0 indicates electrode contact; other values indicate no contact.",
+      "integer": true,
+      "category": "quality",
+      "id": "ecg_contact",
+      "accepted_units": [
+        "code"
+      ]
+    },
+    {
+      "name": "Oxygen measurement status",
+      "unit": "code",
+      "digits": 0,
+      "minimum": -6,
+      "maximum": 2,
+      "freshness_seconds": 60,
+      "meaning": "Samsung SpO2 status: 2 complete, 0 calculating, negative values identify timeout, movement or low quality.",
+      "integer": true,
+      "category": "quality",
+      "id": "oxygen_status",
+      "accepted_units": [
+        "code"
+      ]
+    },
+    {
+      "name": "Green PPG quality",
+      "unit": "code",
+      "digits": 0,
+      "minimum": -1,
+      "maximum": 0,
+      "freshness_seconds": 60,
+      "meaning": "Samsung optical channel status: 0 normal, -1 unavailable or blocked.",
+      "integer": true,
+      "category": "quality",
+      "id": "ppg_green_status",
+      "accepted_units": [
+        "code"
+      ]
+    },
+    {
+      "name": "Infrared PPG quality",
+      "unit": "code",
+      "digits": 0,
+      "minimum": -1,
+      "maximum": 0,
+      "freshness_seconds": 60,
+      "meaning": "Samsung optical channel status: 0 normal, -1 unavailable or blocked.",
+      "integer": true,
+      "category": "quality",
+      "id": "ppg_ir_status",
+      "accepted_units": [
+        "code"
+      ]
+    },
+    {
+      "name": "Red PPG quality",
+      "unit": "code",
+      "digits": 0,
+      "minimum": -1,
+      "maximum": 0,
+      "freshness_seconds": 60,
+      "meaning": "Samsung optical channel status: 0 normal, -1 unavailable or blocked.",
+      "integer": true,
+      "category": "quality",
+      "id": "ppg_red_status",
+      "accepted_units": [
+        "code"
+      ]
+    },
+    {
+      "name": "Heart sensor contact",
+      "unit": "code",
+      "digits": 0,
+      "minimum": 0,
+      "maximum": 1,
+      "freshness_seconds": 60,
+      "meaning": "Bluetooth heart sensor contact: 1 detected, 0 not detected. Only reported when the device supports contact detection.",
+      "integer": true,
+      "category": "quality",
+      "id": "heart_rate_contact",
+      "accepted_units": [
+        "code"
+      ]
+    },
+    {
+      "name": "Thermometer site",
+      "unit": "code",
+      "digits": 0,
+      "minimum": 1,
+      "maximum": 9,
+      "freshness_seconds": 60,
+      "meaning": "Bluetooth thermometer location code: 1 armpit, 2 body, 3 ear, 4 finger, 5 gastrointestinal, 6 mouth, 7 rectum, 8 toe, 9 eardrum.",
+      "integer": true,
+      "category": "quality",
+      "id": "body_temperature_site",
+      "accepted_units": [
+        "code"
+      ]
+    },
+    {
+      "name": "Magnetometer calibration",
+      "unit": "code",
+      "digits": 0,
+      "minimum": 0,
+      "maximum": 3,
+      "freshness_seconds": 60,
+      "meaning": "Polar calibration quality code: 0 unknown, 1 poor, 2 OK, 3 good.",
+      "integer": true,
+      "category": "quality",
+      "id": "magnetic_calibration",
+      "accepted_units": [
+        "code"
+      ]
+    },
+    {
+      "name": "Oximeter measurement flags",
+      "unit": "bitmask",
+      "digits": 0,
+      "minimum": 0,
+      "maximum": 65535,
+      "freshness_seconds": 60,
+      "meaning": "Raw device status bits. Consult the source protocol; this is not a physiological score.",
+      "integer": true,
+      "category": "quality",
+      "id": "oximeter_measurement_status",
+      "accepted_units": [
+        "bitmask"
+      ]
+    },
+    {
+      "name": "Oximeter sensor flags",
+      "unit": "bitmask",
+      "digits": 0,
+      "minimum": 0,
+      "maximum": 16777215,
+      "freshness_seconds": 60,
+      "meaning": "Raw device status bits. Consult the source protocol; this is not a physiological score.",
+      "integer": true,
+      "category": "quality",
+      "id": "oximeter_sensor_status",
+      "accepted_units": [
+        "bitmask"
+      ]
+    },
+    {
+      "name": "ECG raw status",
+      "unit": "bitmask",
+      "digits": 0,
+      "minimum": 0,
+      "maximum": 16777215,
+      "freshness_seconds": 60,
+      "meaning": "Raw device status bits. Consult the source protocol; this is not a physiological score.",
+      "integer": true,
+      "category": "quality",
+      "id": "ecg_raw_flags",
+      "accepted_units": [
+        "bitmask"
+      ]
+    },
+    {
+      "name": "PPG raw status",
+      "unit": "bitmask",
+      "digits": 0,
+      "minimum": 0,
+      "maximum": 16777215,
+      "freshness_seconds": 60,
+      "meaning": "Raw device status bits. Consult the source protocol; this is not a physiological score.",
+      "integer": true,
+      "category": "quality",
+      "id": "ppg_raw_flags",
+      "accepted_units": [
+        "bitmask"
+      ]
+    },
+    {
+      "name": "ECG packet sequence",
+      "unit": "count",
+      "digits": 0,
+      "minimum": 0,
+      "maximum": 255,
+      "freshness_seconds": 60,
+      "meaning": "Samsung ECG sequence counter, wrapping at 255. It is not a beat count.",
+      "integer": true,
+      "category": "quality",
+      "id": "ecg_sequence",
+      "accepted_units": [
+        "count"
+      ]
+    },
+    {
+      "name": "ECG ADC · 1",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -8388608,
+      "maximum": 8388607,
+      "freshness_seconds": 60,
+      "meaning": "Unscaled electrical sensor channel from Polar frame 3. It must not be treated as microvolts without a documented conversion.",
+      "id": "ecg_adc_1",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "ECG ADC · 2",
+      "unit": "a.u.",
+      "digits": 3,
+      "minimum": -8388608,
+      "maximum": 8388607,
+      "freshness_seconds": 60,
+      "meaning": "Unscaled electrical sensor channel from Polar frame 3. It must not be treated as microvolts without a documented conversion.",
+      "id": "ecg_adc_2",
+      "accepted_units": [
+        "a.u."
+      ]
+    },
+    {
+      "name": "Sensor energy counter",
+      "unit": "kJ",
+      "digits": 0,
+      "minimum": 0,
+      "maximum": 65535,
+      "freshness_seconds": 60,
+      "meaning": "Cumulative energy reported by the heart-rate sensor. It may reset; do not sum successive readings.",
+      "id": "energy_expended",
+      "accepted_units": [
+        "kJ"
+      ]
+    },
+    {
+      "name": "Pulse amplitude index",
+      "unit": "%",
+      "digits": 3,
+      "minimum": 0,
+      "maximum": 1000000,
+      "freshness_seconds": 60,
+      "meaning": "Perfusion-related amplitude index reported by the oximeter. It is not oxygen saturation.",
+      "id": "pulse_amplitude_index",
+      "accepted_units": [
+        "%"
+      ]
+    },
+    {
+      "name": "Oxygen saturation · fast",
+      "unit": "%",
+      "digits": 3,
+      "minimum": 0,
+      "maximum": 100,
+      "freshness_seconds": 60,
+      "meaning": "Device fast estimate from the pulse oximeter. Smoothing differs from the normal estimate.",
+      "id": "oxygen_saturation_fast",
+      "accepted_units": [
+        "%"
+      ]
+    },
+    {
+      "name": "Pulse rate · fast",
+      "unit": "bpm",
+      "digits": 3,
+      "minimum": 0,
+      "maximum": 300,
+      "freshness_seconds": 60,
+      "meaning": "Device fast pulse estimate. Kept separate from normal pulse because its smoothing differs.",
+      "id": "pulse_rate_fast",
+      "accepted_units": [
+        "bpm"
+      ]
+    },
+    {
+      "name": "Oxygen saturation · slow",
+      "unit": "%",
+      "digits": 3,
+      "minimum": 0,
+      "maximum": 100,
+      "freshness_seconds": 60,
+      "meaning": "Device slow estimate from the pulse oximeter. Smoothing differs from the normal estimate.",
+      "id": "oxygen_saturation_slow",
+      "accepted_units": [
+        "%"
+      ]
+    },
+    {
+      "name": "Pulse rate · slow",
+      "unit": "bpm",
+      "digits": 3,
+      "minimum": 0,
+      "maximum": 300,
+      "freshness_seconds": 60,
+      "meaning": "Device slow pulse estimate. Kept separate from normal pulse because its smoothing differs.",
+      "id": "pulse_rate_slow",
+      "accepted_units": [
+        "bpm"
       ]
     }
   ]

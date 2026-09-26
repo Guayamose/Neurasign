@@ -68,8 +68,42 @@ for axis in ('x', 'y', 'z'):
     METRICS[f'acceleration_{axis}'] = raw_metric(f'Acceleration · {axis.upper()}', 'g', 'Raw acceleration along the sensor axis, including gravity.', -1000, 1000, {'g': (1, 0), 'mg': (.001, 0), 'm/s²': (1 / 9.80665, 0)})
     METRICS[f'angular_velocity_{axis}'] = raw_metric(f'Angular velocity · {axis.upper()}', '°/s', 'Raw gyroscope measurement along the sensor axis.', -100000, 100000)
     METRICS[f'magnetic_field_{axis}'] = raw_metric(f'Magnetic field · {axis.upper()}', 'gauss', 'Raw magnetic field along the sensor axis.', -100000, 100000)
-for channel in ('1', '2', '3', 'ambient'):
+for channel in (*map(str, range(1, 25)), 'ambient'):
     METRICS[f'ppg_{channel}'] = raw_metric(f'PPG · {channel}', 'a.u.', 'Raw optical sensor channel in source-specific units. No oxygen saturation or HRV is inferred.', -2147483648, 2147483647)
+
+for color in ('green', 'red', 'ir'):
+    METRICS[f'ppg_{color}'] = raw_metric(f'PPG · {color.upper()}', 'a.u.', 'Raw optical channel at the named LED wavelength. Arbitrary sensor units are not interchangeable across sources.', -2147483648, 2147483647)
+
+for metric, name, meaning, minimum, maximum in (
+    ('ppi_status', 'Pulse interval quality', 'Samsung optical interval status: 0 normal, -1 error. This is separate from Polar PPI flags.', -1, 0),
+    ('heart_rate_status', 'Heart rate quality', 'Samsung heart rate status: 1 successful; 0 measuring; negative values identify movement, contact or sensor errors.', -999, 1),
+    ('eda_status', 'EDA quality', 'Samsung EDA status: 0 normal, -5 detached, -10 low signal quality.', -10, 0),
+    ('skin_temperature_status', 'Temperature quality', 'Samsung temperature status: 0 normal, -1 error.', -1, 0),
+    ('ecg_contact', 'ECG electrode contact', 'Samsung ECG lead-off code: 0 indicates electrode contact; other values indicate no contact.', 0, 255),
+    ('oxygen_status', 'Oxygen measurement status', 'Samsung SpO2 status: 2 complete, 0 calculating, negative values identify timeout, movement or low quality.', -6, 2),
+    ('ppg_green_status', 'Green PPG quality', 'Samsung optical channel status: 0 normal, -1 unavailable or blocked.', -1, 0),
+    ('ppg_ir_status', 'Infrared PPG quality', 'Samsung optical channel status: 0 normal, -1 unavailable or blocked.', -1, 0),
+    ('ppg_red_status', 'Red PPG quality', 'Samsung optical channel status: 0 normal, -1 unavailable or blocked.', -1, 0),
+    ('heart_rate_contact', 'Heart sensor contact', 'Bluetooth heart sensor contact: 1 detected, 0 not detected. Only reported when the device supports contact detection.', 0, 1),
+    ('body_temperature_site', 'Thermometer site', 'Bluetooth thermometer location code: 1 armpit, 2 body, 3 ear, 4 finger, 5 gastrointestinal, 6 mouth, 7 rectum, 8 toe, 9 eardrum.', 1, 9),
+    ('magnetic_calibration', 'Magnetometer calibration', 'Polar calibration quality code: 0 unknown, 1 poor, 2 OK, 3 good.', 0, 3),
+):
+    METRICS[metric] = {**raw_metric(name, 'code', meaning, minimum, maximum, digits=0), 'integer': True, 'category': 'quality'}
+for metric, name, maximum in (
+    ('oximeter_measurement_status', 'Oximeter measurement flags', 65535),
+    ('oximeter_sensor_status', 'Oximeter sensor flags', 16777215),
+    ('ecg_raw_flags', 'ECG raw status', 16777215),
+    ('ppg_raw_flags', 'PPG raw status', 16777215),
+):
+    METRICS[metric] = {**raw_metric(name, 'bitmask', 'Raw device status bits. Consult the source protocol; this is not a physiological score.', 0, maximum, digits=0), 'integer': True, 'category': 'quality'}
+METRICS['ecg_sequence'] = {**raw_metric('ECG packet sequence', 'count', 'Samsung ECG sequence counter, wrapping at 255. It is not a beat count.', 0, 255, digits=0), 'integer': True, 'category': 'quality'}
+for channel in (1, 2):
+    METRICS[f'ecg_adc_{channel}'] = raw_metric(f'ECG ADC · {channel}', 'a.u.', 'Unscaled electrical sensor channel from Polar frame 3. It must not be treated as microvolts without a documented conversion.', -8388608, 8388607)
+METRICS['energy_expended'] = raw_metric('Sensor energy counter', 'kJ', 'Cumulative energy reported by the heart-rate sensor. It may reset; do not sum successive readings.', 0, 65535, digits=0)
+METRICS['pulse_amplitude_index'] = raw_metric('Pulse amplitude index', '%', 'Perfusion-related amplitude index reported by the oximeter. It is not oxygen saturation.', 0, 1000000)
+for speed in ('fast', 'slow'):
+    METRICS[f'oxygen_saturation_{speed}'] = raw_metric(f'Oxygen saturation · {speed}', '%', f'Device {speed} estimate from the pulse oximeter. Smoothing differs from the normal estimate.', 0, 100)
+    METRICS[f'pulse_rate_{speed}'] = raw_metric(f'Pulse rate · {speed}', 'bpm', f'Device {speed} pulse estimate. Kept separate from normal pulse because its smoothing differs.', 0, 300)
 
 
 def metric_definition(metric, unit=None):
@@ -160,7 +194,7 @@ class Observation(Strict):
         value = self.value * scale + offset
         if not definition['minimum'] <= value <= definition['maximum'] or definition.get('positive') and value == 0:
             raise ValueError('Measurement is outside the accepted transport range.')
-        if self.metric in ('steps', 'ppi_flags') and value != int(value):
+        if (self.metric in ('steps', 'ppi_flags') or definition.get('integer')) and value != int(value):
             raise ValueError('Counts and bitmasks must be whole numbers.')
         if (self.samples is None) != (self.sample_offsets_ms is None):
             raise ValueError('Samples and offsets must be provided together.')
@@ -176,7 +210,7 @@ class Observation(Strict):
                 converted = sample * scale + offset
                 if not definition['minimum'] <= converted <= definition['maximum'] or definition.get('positive') and converted == 0:
                     raise ValueError('A raw sample is outside the accepted transport range.')
-                if self.metric == 'ppi_flags' and converted != int(converted):
+                if (self.metric == 'ppi_flags' or definition.get('integer')) and converted != int(converted):
                     raise ValueError('Bitmasks must be whole numbers.')
         return self
 
@@ -220,8 +254,13 @@ def register_source(body: SourceInput, store: Store, authorization: str | None =
             tx.put(path, existing)
             return {'source': public_source(existing)}
         source_ids = device.get('source_ids', [])
-        if len(source_ids) >= 5:
-            raise HTTPException(409, 'This gateway has reached its five-source limit.')
+        if len(source_ids) >= 16:
+            raise HTTPException(409, 'This gateway has reached its 16-source limit.')
+        # Multiple protocols/SDKs can share a phone. Bound cached channel state
+        # independently from the number of logical sources.
+        channel_count = sum(len(tx.get(f'organizations/{org}/sources/{key}')['capabilities']) for key in source_ids)
+        if channel_count + len(body.capabilities) > 96:
+            raise HTTPException(409, 'This gateway has reached its 96-channel limit.')
         value = {**payload, 'id': source_id, 'device_id': device_id, 'member_id': person['id'],
                  'source': device['source'], 'content_hash': content_hash, 'created_at': time.time()}
         tx.put(path, value)

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { CircleHelp, Clock3, Radio } from "lucide-react";
 import { Chart } from "./monitoring-dashboard";
 
-export type MetricDefinition = { id: string; name: string; unit: string; digits: number; meaning: string; freshness_seconds: number };
+export type MetricDefinition = { id: string; name: string; unit: string; digits: number; meaning: string; freshness_seconds: number; category?: "quality" };
 type Observation = { id: string; value: number; timestamp: number; received_at: number; method: string; interval_seconds: number | null; samples?: number[]; sample_offsets_ms?: number[]; sample_count?: number; sample_duration_ms?: number };
 export type Signal = {
   series_id: string; metric: string; source_id: string; source_name: string; source: "wearable" | "recording";
@@ -19,14 +19,15 @@ const measuredTime = (value: number) => new Date(value * 1000).toLocaleString("e
 const periodLabel = (seconds: number | null) => !seconds ? "Point measurement" : seconds >= 3600 ? `${seconds / 3600}-hour period` : `${seconds}-second period`;
 
 export function SignalTiles({ signals, catalog }: { signals: Signal[]; catalog: MetricDefinition[] }) {
-  return <div className="co-signal-tiles">{signals.slice(0, 4).map(signal => {
+  const primary = signals.filter(signal => catalog.find(metric => metric.id === signal.metric)?.category !== "quality").slice(0, 4);
+  return <div className="co-signal-tiles">{primary.map(signal => {
     const definition = catalog.find(metric => metric.id === signal.metric);
     return <div key={signal.series_id} className={`co-signal-tile ${signal.status}`} title={`${definition?.meaning ?? signal.metric} Source: ${signal.source_name}`}>
       <small>{definition?.name ?? signal.metric}</small>
       <strong>{valueLabel(signal.latest?.value, definition?.digits ?? 1)}<em>{signal.unit}</em></strong>
       <span>{signal.status === "current" ? <Radio size={10} /> : <Clock3 size={10} />}{statusLabel[signal.status]}{signal.source === "recording" && " · Recording"}</span>
     </div>;
-  })}{signals.length > 4 && <small className="co-more-signals">+{signals.length - 4} in signal detail</small>}</div>;
+  })}{signals.length > primary.length && <small className="co-more-signals">+{signals.length - primary.length} in signal detail</small>}</div>;
 }
 
 export function SignalExplorer({ personId, name, org, signals, catalog, revision, api }: {

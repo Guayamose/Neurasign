@@ -4,7 +4,7 @@ import time
 
 import pytest
 
-from neurasign.telemetry import Observation
+from neurasign.telemetry import Observation, METRICS
 from neurasign.workspace import digest
 from neurasign.company_access import employee, save_employee
 from test_telemetry import telemetry, source, capability, row, upload, signals, history
@@ -86,3 +86,27 @@ def test_all_universe_channel_classes_coexist_without_scores(telemetry):
     assert {signal['metric'] for signal in signals(client, org)} == {metric for metric, _, _ in channels}
     assert all(signal['latest']['sample_count'] == 2 for signal in signals(client, org))
     assert not {'fatigue', 'workload', 'deep_work'} & {signal['metric'] for signal in signals(client, org)}
+
+
+def test_multiple_protocols_share_a_gateway_with_bounded_channel_storage(telemetry):
+    client, store, org, connection = telemetry
+    raw = [capability(metric, value['unit']) for metric, value in METRICS.items()
+           if metric not in ('hrv_rmssd', 'hrv_sdnn', 'acceleration_magnitude_std', 'steps')]
+    for index in range(6):
+        assert source(client, connection, raw[index * 12:index * 12 + 12], client_source_id=f'protocol-{index:04}').status_code == 201
+    remaining = 96 - 72
+    assert source(client, connection, raw[:remaining], client_source_id='another-protocol').status_code == 201
+    response = source(client, connection, client_source_id='overflow-protocol')
+    assert response.status_code == 409 and '96-channel' in response.json()['detail']
+
+
+def test_quality_codes_remain_distinct_from_measurements_and_reject_fractional_flags(telemetry):
+    client, store, org, connection = telemetry
+    source_id = source(client, connection, [capability('ppg_green', 'a.u.'), capability('eda_status', 'code'), capability('ecg_sequence', 'count')]).json()['source']['id']
+    values = [('ppg_green', 'a.u.', -120), ('eda_status', 'code', -10), ('ecg_sequence', 'count', 255)]
+    readings = [{**row(source_id, metric, value, unit, id=f'quality-{index:04}'), 'samples': [value, value], 'sample_offsets_ms': [-20, 0]} for index, (metric, unit, value) in enumerate(values)]
+    assert upload(client, connection, *readings).status_code == 200
+    assert {item['metric']: item['latest']['value'] for item in signals(client, org)} == {'ppg_green': -120, 'eda_status': -10, 'ecg_sequence': 255}
+    assert METRICS['eda_status']['category'] == 'quality'
+    assert upload(client, connection, {**readings[1], 'id': 'fractional-status', 'samples': [-9.5, -10]}).status_code == 422
+    assert upload(client, connection, row(source_id, 'ecg_sequence', 1.5, 'count', id='fractional-counter')).status_code == 422

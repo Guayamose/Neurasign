@@ -1,0 +1,4 @@
+name: neurasign
+
+include:
+  - path: ./neurasign_server_dashboard/compose.yaml

@@ -1,0 +1,12 @@
+.env
+.env.*
+.venv
+**/node_modules
+**/.next
+**/__pycache__
+.git
+artifacts
+data/universe
+var
+.firebase
+**/*-debug.log

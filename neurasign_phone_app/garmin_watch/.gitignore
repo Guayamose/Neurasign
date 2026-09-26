@@ -1,0 +1,5 @@
+build/
+*.prg
+*.iq
+*.debug.xml
+*.mir

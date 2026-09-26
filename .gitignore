@@ -5,6 +5,7 @@
 # Credentials, signing material and machine-specific tool settings.
 *.pem
 *.key
+*.der
 *.p8
 *.p12
 *.pfx

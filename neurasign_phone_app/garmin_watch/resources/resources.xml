@@ -1,0 +1,4 @@
+<resources>
+  <strings><string id="AppName">NEURASIGN Link</string></strings>
+  <drawables><bitmap id="LauncherIcon" filename="icon.svg"/></drawables>
+</resources>

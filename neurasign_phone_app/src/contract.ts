@@ -7,6 +7,7 @@ export type Capability = {
   method: string;
   timestamp_basis?: "device" | "phone_receipt" | "source_record";
   interval_seconds?: number | null;
+  interval_variable?: boolean;
   availability?: "available" | "unsupported" | "permission_required";
 };
 
@@ -27,6 +28,7 @@ export type Measurement = {
   unit: string;
   measured_at: string;
   source_record_id?: string | null;
+  interval_seconds?: number | null;
   /** Lossless block of one channel, ending at measured_at. value is its last sample.
    * Offsets are milliseconds relative to measured_at, ordered, non-positive,
    * and end at zero. Irregular intervals need no invented sampling frequency.
@@ -40,7 +42,7 @@ export type Measurement = {
 export type Observation = Measurement & { id: string; source_id: string };
 export type ObservationBatch = { schema_version: 2; observations: Observation[] };
 
-export type Candidate = { id: string; name: string; services: string[]; route?: 'ble' | 'wear_os' };
+export type Candidate = { id: string; name: string; services: string[]; route?: 'ble' | 'wear_os' | 'garmin' | 'apple_watch' | 'healthkit' | 'cloud' };
 export type ConnectedSource = {
   descriptor: SourceDescriptor;
   measurements: AsyncIterable<Measurement>;

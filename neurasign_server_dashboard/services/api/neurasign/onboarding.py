@@ -122,6 +122,8 @@ def remove_employee(org: str, person_id: str, user: User, store: Store):
         actor = member(tx, org, user, manage=True)
         person = require_employee(tx, org, actor, person_id, manage=True)
         for device_id in person['device_ids']:
+            for provider in ('whoop', 'fitbit'):
+                tx.delete('vendor_connections/'+digest(device_id+':'+provider))
             for path in (f'device_keys/{device_id}', f'organizations/{org}/devices/{device_id}'):
                 record = tx.get(path)
                 if record:
@@ -232,7 +234,9 @@ def gateway_status(store: Store, authorization: str | None = Header(None)):
         device_id, org, person, device = device_access(tx, authorization, require_sharing=False)
         company = tx.get(f'organizations/{org}')
         return {'gateway_id': device_id, 'company': company['name'], 'employee': person['name'],
-                'sharing': person['sharing'] and device.get('sharing', True), 'last_received_at': device['last_received_at']}
+                'sharing': person['sharing'] and device.get('sharing', True), 'last_received_at': device['last_received_at'],
+                'paused_intervals': person.get('paused_intervals', []),
+                'team_boundaries': [assignment['from'] for assignment in person.get('assignments', [])]}
     return store.atomic(read)
 
 
@@ -255,6 +259,8 @@ def disconnect_gateway(store: Store, authorization: str | None = Header(None)):
         device_id, org, person, device = device_access(tx, authorization, require_sharing=False)
         key = tx.get(f'device_keys/{device_id}')
         tx.put(f'device_keys/{device_id}', {**key, 'revoked': True})
+        for provider in ('whoop', 'fitbit'):
+            tx.delete('vendor_connections/'+digest(device_id+':'+provider))
         tx.put(f'organizations/{org}/devices/{device_id}', {**device, 'revoked': True, 'sharing': False})
         remaining = [key for key in person['device_ids'] if key != device_id]
         save_employee(tx, org, {**(set_sharing(person, False) if not remaining else person), 'device_ids': remaining})

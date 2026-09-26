@@ -46,3 +46,14 @@ def test_rejects_emulator_production_target(tmp_path):
     args[1] = 'demo-neurasign'
     with pytest.raises(SystemExit):
         arguments([*args, '--apply'])
+
+
+def test_wearable_oauth_plan_references_secrets_without_values(tmp_path):
+    args = arguments([*options(tmp_path), '--integrations-origin', 'https://neurasign.example', '--integrations-key-secret', 'vendor-encryption', '--whoop-client-id', 'public-whoop-id', '--whoop-client-secret', 'whoop-oauth'])
+    service, _ = manifests(args)
+    values = service['spec']['template']['spec']['containers'][1]['env']
+    key = next(item for item in values if item['name'] == 'INTEGRATIONS_ENCRYPTION_KEY')
+    assert key['valueFrom']['secretKeyRef'] == {'name':'vendor-encryption','key':'latest'}
+    assert 'value' not in key
+    with pytest.raises(SystemExit):
+        arguments([*options(tmp_path), '--whoop-client-id', 'public-whoop-id'])

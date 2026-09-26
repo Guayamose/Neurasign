@@ -41,9 +41,9 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
       body,
       cache: "no-store",
       redirect: "error",
-      signal: AbortSignal.timeout(25000),
+      signal: AbortSignal.timeout(path[0] === "gateway" && path[1] === "integrations" && path[3] === "sync" ? 55000 : 25000),
     });
-    return new Response(upstream.body, { status: upstream.status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" } });
+    return new Response(upstream.body, { status: upstream.status, headers: { "Content-Type": upstream.headers.get("content-type") ?? "application/json", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer", ...(upstream.headers.get("content-security-policy") ? { "Content-Security-Policy": upstream.headers.get("content-security-policy")! } : {}) } });
   } catch {
     return Response.json({ detail: "The workspace service is temporarily unavailable. Please retry." }, { status: 503 });
   }

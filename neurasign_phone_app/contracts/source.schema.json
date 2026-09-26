@@ -93,6 +93,11 @@
           ],
           "title": "Availability",
           "type": "string"
+        },
+        "interval_variable": {
+          "default": false,
+          "title": "Interval Variable",
+          "type": "boolean"
         }
       },
       "required": [

@@ -60,6 +60,7 @@ METRICS.update({
     'ppi_flags': raw_metric('PPI sensor flags', 'bitmask', 'Polar PPI flags: bit 0 invalid interval; bit 1 contact detected; bit 2 contact detection unsupported.', 0, 7, digits=0),
     'electrocardiogram': raw_metric('ECG', 'µV', 'Raw electrical cardiac waveform. No rhythm classification is performed.', -20000000, 20000000, {'µV': (1, 0), 'mV': (1000, 0)}),
     'blood_volume_pulse': raw_metric('Blood volume pulse', 'a.u.', 'Optical pulse waveform in source-specific arbitrary units. Values from different sensors are not interchangeable.', -2147483648, 2147483647),
+    'core_body_temperature': raw_metric('Core body temperature', '°C', 'Temperature explicitly identified by the source as core body temperature.', 0, 100, {'°C': (1, 0), '°F': (5 / 9, -160 / 9)}, 2),
     'body_temperature': raw_metric('Body temperature', '°C', 'Temperature reported by a health thermometer. It is not automatically classified as skin or core temperature.', -50, 100, {'°C': (1, 0), '°F': (5 / 9, -160 / 9)}, 2),
     'sensor_temperature': raw_metric('Sensor temperature', '°C', 'Temperature stream with unspecified measurement location. Do not equate this with skin temperature.', -100, 200, digits=2),
     'barometric_pressure': raw_metric('Barometric pressure', 'hPa', 'Atmospheric pressure reported by the sensor. This is not blood pressure.', 0, 20000, digits=2),
@@ -128,13 +129,16 @@ class Capability(Strict):
     # A fixed period is part of a series' identity, not a brand-specific field.
     interval_seconds: int | None = Field(None, ge=1, le=7 * 86400)
     availability: Literal['available', 'unsupported', 'permission_required'] = 'available'
+    interval_variable: bool = False
 
     @model_validator(mode='after')
     def semantics(self):
         metric_definition(self.metric, self.unit)
         if self.measurement_kind == 'sample' and self.interval_seconds is not None:
             raise ValueError('A point sample has no aggregation interval.')
-        if self.measurement_kind != 'sample' and self.interval_seconds is None:
+        if self.interval_variable and (self.measurement_kind != 'summary' or self.interval_seconds is not None):
+            raise ValueError('Variable periods require a summary with its period on each observation.')
+        if self.measurement_kind != 'sample' and self.interval_seconds is None and not self.interval_variable:
             raise ValueError('Windows and summaries require their measurement interval.')
         if self.measurement_kind == 'window' and self.interval_seconds > 300:
             raise ValueError('Use summary for measurement intervals longer than five minutes.')
@@ -176,6 +180,7 @@ class Observation(Strict):
     unit: str = Field(min_length=1, max_length=20)
     measured_at: datetime
     source_record_id: str | None = Field(None, min_length=1, max_length=120)
+    interval_seconds: int | None = Field(None, ge=1, le=7 * 86400)
     samples: list[Annotated[float, Field(strict=True, allow_inf_nan=False)]] | None = Field(None, min_length=1, max_length=512)
     sample_offsets_ms: list[Annotated[float, Field(strict=True, allow_inf_nan=False)]] | None = Field(None, min_length=1, max_length=512)
     device_timestamp_ns: str | None = Field(None, pattern=r'^\d{1,20}$')
@@ -236,6 +241,9 @@ def sources(store: Store, authorization: str | None = Header(None)):
 @router.post('/gateway/sources', status_code=201)
 def register_source(body: SourceInput, store: Store, authorization: str | None = Header(None)):
     payload = body.model_dump(mode='json')
+    for cap in payload['capabilities']:
+        if not cap['interval_variable']:
+            del cap['interval_variable']  # Preserve hashes for existing scalar/raw sources.
     def create(tx):
         device_id, org, person, device = device_access(tx, authorization)
         if body.transport == 'recording' and device['source'] != 'recording':
@@ -275,6 +283,10 @@ def public_source(value):
 
 @router.post('/observations')
 def observations(body: ObservationBatch, store: Store, authorization: str | None = Header(None)):
+    return ingest_observations(body, store, authorization)
+
+
+def ingest_observations(body, store, authorization, guard=None):
     now = time.time()
     for observation in body.observations:
         first = observation.measured_at.timestamp() + ((observation.sample_offsets_ms or [0])[0] / 1000)
@@ -282,6 +294,8 @@ def observations(body: ObservationBatch, store: Store, authorization: str | None
             raise HTTPException(422, 'Measurement time must be within the past 7 days and no more than 5 seconds ahead.')
 
     def write(tx):
+        if guard:
+            guard(tx)
         device_id, org, person, device = device_access(tx, authorization)
         minute = int(now // 60)
         requests = device.get('request_count', 0) if device.get('request_minute') == minute else 0
@@ -301,17 +315,24 @@ def observations(body: ObservationBatch, store: Store, authorization: str | None
             capability = next((item for item in source['capabilities'] if item['metric'] == observation.metric), None)
             if not capability or capability['availability'] != 'available' or capability['unit'] != observation.unit:
                 raise HTTPException(422, 'Measurement does not match the registered source capability.')
+            interval = capability['interval_seconds']
+            if capability.get('interval_variable'):
+                if observation.interval_seconds is None:
+                    raise HTTPException(422, 'This summary requires its original measurement period.')
+                interval = observation.interval_seconds
+            elif observation.interval_seconds is not None:
+                raise HTTPException(422, 'This source has a fixed measurement period.')
             duration = -(observation.sample_offsets_ms or [0])[0] / 1000
             if observation.samples is not None and capability['measurement_kind'] != 'sample':
                 raise HTTPException(422, 'Raw sample blocks require a point-sample capability.')
             timestamp = observation.measured_at.timestamp()
-            capture_allowed(person, timestamp, duration or capability['interval_seconds'])
+            capture_allowed(person, timestamp, duration or interval)
             # A block must not span a team boundary and disclose the old team's data.
-            if any(timestamp - duration < assignment['from'] <= timestamp for assignment in person.get('assignments', [])):
-                raise HTTPException(422, 'Split raw sample blocks at team changes.')
+            if any(timestamp - (duration or interval or 0) < assignment['from'] <= timestamp for assignment in person.get('assignments', [])):
+                raise HTTPException(422, 'Measurements must not span team changes.')
             payload = observation.model_dump(mode='json')
             # Preserve the content hashes of previously accepted v2 scalar observations.
-            for key in ('samples', 'sample_offsets_ms', 'device_timestamp_ns'):
+            for key in ('samples', 'sample_offsets_ms', 'device_timestamp_ns', 'interval_seconds'):
                 if payload[key] is None:
                     del payload[key]
             content_hash = digest(json.dumps(payload, sort_keys=True, separators=(',', ':'), allow_nan=False))
@@ -327,7 +348,7 @@ def observations(body: ObservationBatch, store: Store, authorization: str | None
             scale, offset = definition['units'][observation.unit]
             timestamp = observation.measured_at.timestamp()
             series_id = digest(f'{source["id"]}:{observation.metric}')
-            value = {**payload, **capability, 'id': sample_id, 'series_id': series_id,
+            value = {**payload, **capability, 'interval_seconds': interval, 'id': sample_id, 'series_id': series_id,
                      'value': observation.value * scale + offset, 'unit': definition['unit'],
                      'input_value': observation.value, 'input_unit': observation.unit,
                      'timestamp': timestamp, 'measured_at': timestamp, 'received_at': now,
@@ -340,7 +361,7 @@ def observations(body: ObservationBatch, store: Store, authorization: str | None
                              sample_duration_ms=duration * 1000)
             tx.put(path, value)
             previous = state['latest'].get(series_id)
-            if previous is None or (timestamp, sample_id) > (previous['timestamp'], previous['id']):
+            if previous is None or (timestamp, now, sample_id) > (previous['timestamp'], previous['received_at'], previous['id']):
                 state['latest'][series_id] = {key: item for key, item in value.items()
                                              if key not in ('samples', 'input_samples', 'sample_offsets_ms')}
             accepted += 1

@@ -22,6 +22,7 @@ from .orchestration import WorkflowOrchestrator  # noqa: E402
 from .identity import production, validate_environment  # noqa: E402
 from .workspace import router as workspace_router  # noqa: E402
 from .telemetry import router as telemetry_router  # noqa: E402
+from .integrations import router as integrations_router
 from .onboarding import router as onboarding_router  # noqa: E402
 
 
@@ -146,6 +147,7 @@ app.add_middleware(CORSMiddleware,
 app.include_router(workspace_router)
 app.include_router(telemetry_router)
 app.include_router(onboarding_router)
+app.include_router(integrations_router)
 
 
 @app.middleware('http')

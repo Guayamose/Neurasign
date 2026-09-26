@@ -224,6 +224,20 @@
       ]
     },
     {
+      "name": "Core body temperature",
+      "unit": "°C",
+      "digits": 2,
+      "minimum": 0,
+      "maximum": 100,
+      "freshness_seconds": 60,
+      "meaning": "Temperature explicitly identified by the source as core body temperature.",
+      "id": "core_body_temperature",
+      "accepted_units": [
+        "°C",
+        "°F"
+      ]
+    },
+    {
       "name": "Body temperature",
       "unit": "°C",
       "digits": 2,

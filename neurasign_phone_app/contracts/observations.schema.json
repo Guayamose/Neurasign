@@ -48,6 +48,20 @@
           "default": null,
           "title": "Source Record Id"
         },
+        "interval_seconds": {
+          "anyOf": [
+            {
+              "maximum": 604800,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Interval Seconds"
+        },
         "samples": {
           "anyOf": [
             {

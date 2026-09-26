@@ -16,7 +16,7 @@ export type Signal = {
 const statusLabel = { current: "Current", delayed: "Delayed", summary: "Summary", waiting: "Waiting", unsupported: "Unavailable", permission_required: "Permission needed", paused: "Paused" };
 const valueLabel = (value: number | undefined, digits: number) => value === undefined ? "—" : value.toLocaleString("en-US", { maximumFractionDigits: digits });
 const measuredTime = (value: number) => new Date(value * 1000).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" });
-const periodLabel = (seconds: number | null) => !seconds ? "Point measurement" : seconds >= 3600 ? `${seconds / 3600}-hour period` : `${seconds}-second period`;
+const periodLabel = (seconds: number | null) => !seconds ? "Point measurement" : seconds >= 3600 ? `${Number((seconds / 3600).toFixed(2))}-hour period` : `${seconds}-second period`;
 
 export function SignalTiles({ signals, catalog }: { signals: Signal[]; catalog: MetricDefinition[] }) {
   const primary = signals.filter(signal => catalog.find(metric => metric.id === signal.metric)?.category !== "quality").slice(0, 4);
@@ -25,7 +25,7 @@ export function SignalTiles({ signals, catalog }: { signals: Signal[]; catalog: 
     return <div key={signal.series_id} className={`co-signal-tile ${signal.status}`} title={`${definition?.meaning ?? signal.metric} Source: ${signal.source_name}`}>
       <small>{definition?.name ?? signal.metric}</small>
       <strong>{valueLabel(signal.latest?.value, definition?.digits ?? 1)}<em>{signal.unit}</em></strong>
-      <span>{signal.status === "current" ? <Radio size={10} /> : <Clock3 size={10} />}{statusLabel[signal.status]}{signal.source === "recording" && " · Recording"}</span>
+      <span>{signal.status === "current" ? <Radio size={10} /> : <Clock3 size={10} />}{statusLabel[signal.status]}{signal.delivery_mode === "sync" && " · Synced"}{signal.source === "recording" && " · Recording"}</span>
     </div>;
   })}{signals.length > primary.length && <small className="co-more-signals">+{signals.length - primary.length} in signal detail</small>}</div>;
 }
@@ -65,8 +65,8 @@ export function SignalExplorer({ personId, name, org, signals, catalog, revision
     <div className="co-metric-tabs">{signals.map(item => <button key={item.series_id} className={item.series_id === signal.series_id ? "active" : ""} aria-pressed={item.series_id === signal.series_id} onClick={() => setSelected(item.series_id)}>
       {catalog.find(metric => metric.id === item.metric)?.name ?? item.metric}<small>{item.source_name}{item.measurement_kind === "summary" ? " · Summary" : ""}</small>
     </button>)}</div>
-    <div className="co-chart-value"><strong>{valueLabel(signal.latest?.value, definition?.digits ?? 1)}</strong><span>{signal.unit}</span><details><summary><CircleHelp size={14} />About this metric</summary><p>{definition?.meaning}<br />{periodLabel(signal.interval_seconds)} · {signal.method}</p></details></div>
+    <div className="co-chart-value"><strong>{valueLabel(signal.latest?.value, definition?.digits ?? 1)}</strong><span>{signal.unit}</span><details><summary><CircleHelp size={14} />About this metric</summary><p>{definition?.meaning}<br />{periodLabel(signal.latest?.interval_seconds ?? signal.interval_seconds)} · {signal.method}</p></details></div>
     {history?.scope === scope && history.error && visible ? <p className="co-history-error" role="status">History is temporarily unavailable.</p> : <Chart live timeCaption="Measured time" unit={signal.unit} series={[{ label: definition?.name ?? signal.metric, color: "#789765", points }]} />}
-    <footer className="co-panel-foot"><span>{signal.source === "recording" ? "DEMO RECORDING · " : ""}{signal.source_name} · {periodLabel(signal.interval_seconds)}</span><span>{signal.latest ? `Measured ${measuredTime(signal.latest.timestamp)}` : statusLabel[signal.status]}</span></footer>
+    <footer className="co-panel-foot"><span>{signal.source === "recording" ? "DEMO RECORDING · " : ""}{signal.source_name} · {periodLabel(signal.latest?.interval_seconds ?? signal.interval_seconds)}</span><span>{signal.latest ? `Measured ${measuredTime(signal.latest.timestamp)}` : statusLabel[signal.status]}</span></footer>
   </section>;
 }

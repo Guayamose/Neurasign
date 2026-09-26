@@ -25,12 +25,31 @@ def arguments(argv=None):
     parser.add_argument('--region', default='europe-west1')
     parser.add_argument('--tag', default=datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S'))
     parser.add_argument('--output', type=Path, default=ROOT / 'var/deploy')
+    parser.add_argument('--integrations-origin', help='Public HTTPS origin registered for wearable OAuth callbacks.')
+    parser.add_argument('--integrations-key-secret', help='Existing Secret Manager secret containing a Fernet key.')
+    parser.add_argument('--whoop-client-id')
+    parser.add_argument('--whoop-client-secret', help='Existing Secret Manager secret name; never a secret value.')
+    parser.add_argument('--google-health-client-id')
+    parser.add_argument('--google-health-client-secret', help='Existing Secret Manager secret name; never a secret value.')
     parser.add_argument('--apply', action='store_true', help='Create/update billable resources and deploy. Without this flag everything is offline.')
     args = parser.parse_args(argv)
     checks = {'project': r'[a-z][a-z0-9-]{4,28}[a-z0-9]', 'account': r'[^\s@]+@[^\s@]+\.[^\s@]+', 'region': r'[a-z]+-[a-z]+[0-9]+', 'tag': r'[A-Za-z0-9][A-Za-z0-9_.-]{0,63}', 'firebase_api_key': r'[A-Za-z0-9_-]{8,128}'}
     for key, pattern in checks.items():
         if not re.fullmatch(pattern, getattr(args, key)):
             parser.error(f'Invalid {key.replace("_", "-")}.')
+    selected = bool(args.whoop_client_id or args.google_health_client_id)
+    for provider in ('whoop', 'google_health'):
+        if bool(getattr(args, provider+'_client_id')) != bool(getattr(args, provider+'_client_secret')):
+            parser.error('Each wearable provider needs a client ID and a Secret Manager secret name.')
+    if any((selected, args.integrations_origin, args.integrations_key_secret)) and not (selected and args.integrations_origin and args.integrations_key_secret):
+        parser.error('Wearable OAuth requires a provider, HTTPS callback origin and encryption-key secret.')
+    for name in ('integrations_key_secret', 'whoop_client_secret', 'google_health_client_secret'):
+        if getattr(args, name) and not re.fullmatch(r'[A-Za-z0-9_-]{1,255}', getattr(args, name)):
+            parser.error('Use a Secret Manager secret name, never a secret value.')
+    if args.integrations_origin:
+        origin = urllib.parse.urlparse(args.integrations_origin)
+        if origin.scheme != 'https' or not origin.netloc or origin.username or origin.path or origin.query or origin.fragment:
+            parser.error('Wearable callback origin must be HTTPS without a path or credentials.')
     if args.project.startswith('demo-') and args.apply:
         parser.error('A demo emulator project cannot be deployed.')
     args.output = args.output.resolve()
@@ -63,6 +82,16 @@ def manifests(args):
                           'livenessProbe': {'httpGet': {'path': '/api/health', 'port': 8000}, 'periodSeconds': 30, 'failureThreshold': 3}},
                      ]}}, 'traffic': [{'latestRevision': True, 'percent': 100}]},
     }
+    if args.integrations_origin:
+        api_env = service['spec']['template']['spec']['containers'][1]['env']
+        api_env.extend(env({'INTEGRATIONS_PUBLIC_ORIGIN': args.integrations_origin}))
+        names = {'INTEGRATIONS_ENCRYPTION_KEY': args.integrations_key_secret}
+        for provider in ('whoop', 'google_health'):
+            client = getattr(args, provider+'_client_id')
+            if client:
+                api_env.extend(env({provider.upper()+'_CLIENT_ID': client}))
+                names[provider.upper()+'_CLIENT_SECRET'] = getattr(args, provider+'_client_secret')
+        api_env.extend({'name': name, 'valueFrom': {'secretKeyRef': {'name': secret, 'key': 'latest'}}} for name, secret in names.items())
     cloudbuild = {
         'steps': [{'name': 'gcr.io/cloud-builders/docker', 'args': ['build', '-f', file, '-t', f'{registry}/{name}:{args.tag}', '.']} for name, file in [('api', 'services/api/Dockerfile'), ('web', 'apps/web/Dockerfile')]],
         'images': [f'{registry}/{name}:{args.tag}' for name in ('api', 'web')],
@@ -117,6 +146,12 @@ class Deployment:
         for email, roles in [(runtime, ['roles/datastore.user', 'roles/firebaseauth.viewer']), (build, ['roles/logging.logWriter', 'roles/serviceusage.serviceUsageConsumer'])]:
             for role in roles:
                 self.command('projects', 'add-iam-policy-binding', p, f'--member=serviceAccount:{email}', f'--role={role}', '--condition=None')
+        if a.integrations_origin:
+            self.command('services', 'enable', 'secretmanager.googleapis.com')
+            for secret in (a.integrations_key_secret, a.whoop_client_secret, a.google_health_client_secret):
+                if secret:
+                    self.command('secrets', 'describe', secret)
+                    self.command('secrets', 'add-iam-policy-binding', secret, f'--member=serviceAccount:{runtime}', '--role=roles/secretmanager.secretAccessor')
         repos = self.json('artifacts', 'repositories', 'list', f'--location={a.region}')
         if not any(repo['name'].endswith('/neurasign') for repo in repos):
             self.command('artifacts', 'repositories', 'create', 'neurasign', '--repository-format=docker', f'--location={a.region}')
@@ -134,7 +169,7 @@ class Deployment:
             self.command('firestore', 'databases', 'update', '--database=(default)', '--delete-protection', '--enable-pitr')
         else:
             self.command('firestore', 'databases', 'create', '--database=(default)', f'--location={a.region}', '--type=firestore-native', '--delete-protection', '--enable-pitr')
-        for group in ('readings', 'latest', 'observations', 'signal_state', 'audit', 'invitations', 'enrollments'):
+        for group in ('readings', 'latest', 'observations', 'signal_state', 'audit', 'invitations', 'enrollments', 'vendor_connections', 'vendor_oauth_states'):
             self.command('firestore', 'fields', 'ttls', 'update', 'expires_at', f'--collection-group={group}', '--database=(default)', '--enable-ttl', '--async')
         indexes = self.json('firestore', 'indexes', 'composite', 'list', '--database=(default)')
         fields = [{'fieldPath': 'series_id', 'order': 'ASCENDING'}, {'fieldPath': 'timestamp', 'order': 'DESCENDING'}]

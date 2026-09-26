@@ -379,6 +379,8 @@ def revoke_device(org: str, device_id: str, user: User, store: Store):
         key = tx.get(f'device_keys/{device_id}')
         tx.put(path, {**device, 'revoked': True})
         tx.put(f'device_keys/{device_id}', {**key, 'revoked': True})
+        for provider in ('whoop', 'fitbit'):
+            tx.delete('vendor_connections/'+digest(device_id+':'+provider))
         save_employee(tx, org, {**target, 'device_ids': [item for item in target['device_ids'] if item != device_id]})
         audit(tx, org, actor['id'], 'device.revoked', device_id)
         return {'revoked': True}
@@ -398,6 +400,8 @@ def remove_member(org: str, person_id: str, user: User, store: Store):
         company = tx.get(f'organizations/{org}')
         profile = own_employee(tx, org, target)
         for device_id in (profile or {}).get('device_ids', []):
+            for provider in ('whoop', 'fitbit'):
+                tx.delete('vendor_connections/'+digest(device_id+':'+provider))
             key_path = f'device_keys/{device_id}'
             device_path = f'organizations/{org}/devices/{device_id}'
             key, device = tx.get(key_path), tx.get(device_path)

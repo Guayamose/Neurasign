@@ -9,4 +9,4 @@ ENV PYTHONPATH=/app/services/api
 ENV PYTHONUNBUFFERED=1
 USER neurasign
 EXPOSE 8000
-CMD ["sh", "-c", "exec uvicorn neurasign.main:app --host 0.0.0.0 --port \"${PORT:-8000}\" --no-server-header"]
+CMD ["sh", "-c", "exec uvicorn neurasign.main:app --host 0.0.0.0 --port \"${PORT:-8000}\" --no-server-header --no-access-log"]

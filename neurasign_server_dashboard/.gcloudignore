@@ -1,0 +1,22 @@
+# Cloud Build uploads only application source. Never upload credentials or recordings.
+.gcloudignore
+.git
+.gitignore
+.env
+.env.*
+**/.env
+**/.env.*
+.venv
+**/node_modules
+**/.next
+**/__pycache__
+.pytest_cache
+artifacts
+data/universe
+var
+.firebase
+**/*-debug.log
+**/*.sqlite3*
+**/*.pem
+**/*service-account*.json
+**/*credentials*.json

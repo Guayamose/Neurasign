@@ -1,0 +1,34 @@
+# Local environment files at any depth; only the reviewed template is public.
+.env*
+*.env
+!.env.example
+# Credentials, signing material and machine-specific tool settings.
+*.pem
+*.key
+*.p8
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.mobileprovision
+*service-account*.json
+*service_account*.json
+*credentials*.json
+.claude/
+.codex/
+# Dependencies and generated output.
+.venv/
+node_modules/
+.next/
+dist/
+artifacts/
+var/
+.firebase/
+.expo/
+__pycache__/
+.pytest_cache/
+*.sqlite3*
+*.py[cod]
+*.tsbuildinfo
+.DS_Store
+*.log

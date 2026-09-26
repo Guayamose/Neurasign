@@ -10,7 +10,7 @@ import * as multisignal from '../dist/multisignal.js';
 import * as enrollment from '../dist/enrollment.js';
 import { randomUUID, randomBytes } from 'node:crypto';
 
-function shell(initial = {}) {
+function shell(initial = {}, overrides = {}) {
   const saved = new Map(Object.entries(initial));
   const intervals=[];let queueCleared=0;
   const exports={};
@@ -22,6 +22,8 @@ function shell(initial = {}) {
     '../../src/gateway':gateway,'../../src/contract':contract,'../../src/multisignal':multisignal,'../../src/enrollment':enrollment,
     './storage':{secret:()=>randomBytes(32).toString('base64url'),readSecret:async key=>saved.get(key)??null,writeSecret:async(key,value)=>saved.set(key,structuredClone(value)),removeSecret:async key=>saved.delete(key),EncryptedQueue:{open:async()=>({count:async()=>0,clear:async()=>{queueCleared++}})}},
     './ble':{NativeBle:class {async stopScan(){} async permission(){} }},
+    './watch':{pairedWatches:async()=>[],connectPairedWatch:async()=>{throw new Error('No paired watch in this fixture');}},
+    ...overrides,
   };
   const code=ts.transpileModule(fs.readFileSync(new URL('../mobile/src/controller.ts',import.meta.url),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;
   vm.runInNewContext(code,{exports,require:id=>{if(!mocks[id])throw new Error(`Missing mock ${id}`);return mocks[id]},setTimeout,clearTimeout,setInterval:fn=>{intervals.push(fn)},AbortController,console});
@@ -62,4 +64,19 @@ test('offline disconnect retains only a pending revocation and a second company 
     const restarted=shell(Object.fromEntries(first.saved));await restarted.controller.initialize();
     assert.equal(restarted.saved.has('enrollment'),false);assert.equal(restarted.controller.state.enrollment,null);
   }finally{global.fetch=original}
+});
+
+test('paired-watch capture checks nearby permissions before enabling server sharing or a foreground service', async () => {
+  const original = global.fetch; let requests = 0, permissions = 0;
+  global.fetch = async () => { requests++; throw new Error('Unexpected request'); };
+  try {
+    const first = shell({ enrollment: receipt }, {
+      'react-native': { AppState: { currentState: 'active' }, Platform: { OS: 'android' } },
+      './ble': { NativeBle: class { async stopScan() {} async permission() { permissions++; throw new Error('Nearby devices denied'); } } },
+    });
+    await first.controller.initialize();
+    await assert.rejects(first.controller.start({ id: 'paired-watch', name: 'Watch', services: [], route: 'wear_os' }), /Nearby devices denied/);
+    assert.equal(permissions, 1); assert.equal(requests, 0); assert.equal(first.controller.state.running, false);
+    assert.deepEqual(first.saved.get('enrollment'), receipt);
+  } finally { global.fetch = original; }
 });

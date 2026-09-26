@@ -1,0 +1,15 @@
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdirSync, copyFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+const root = path.dirname(fileURLToPath(import.meta.url));
+const native = path.resolve(root, '../mobile/android');
+if (!existsSync(path.join(native, 'gradlew'))) throw new Error('Build the phone APK first to generate the Gradle wrapper and matching development signing certificate.');
+const samsung = process.argv.includes('--samsung');
+if (samsung && !process.env.SAMSUNG_SENSOR_AAR) throw new Error('Download the official Samsung Health Sensor SDK using your Samsung account and set SAMSUNG_SENSOR_AAR to its AAR path. No vendor binary is bundled in Git.');
+const result = spawnSync(path.join(native, 'gradlew'), ['-p', root, ':app:testDebugUnitTest', ':app:assembleRelease', ...(samsung ? ['-PrequireSamsung'] : [])], { cwd: root, stdio: 'inherit', env: process.env });
+if (result.status !== 0) process.exit(result.status ?? 1);
+mkdirSync(path.join(root, 'artifacts'), { recursive: true });
+const artifact = path.join(root, 'artifacts', samsung ? 'neurasign-watch-samsung.apk' : 'neurasign-watch.apk');
+copyFileSync(path.join(root, 'app/build/outputs/apk/release/app-release.apk'), artifact);
+process.stdout.write(`APK: ${artifact}\n${samsung ? 'Samsung SDK included; device policy and sensor permissions still apply.' : 'Standard Wear OS build; Samsung proprietary channels require the Samsung build.'}\nDevelopment signing must match the phone APK.\n`);

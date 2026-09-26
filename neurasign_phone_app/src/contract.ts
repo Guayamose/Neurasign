@@ -40,7 +40,7 @@ export type Measurement = {
 export type Observation = Measurement & { id: string; source_id: string };
 export type ObservationBatch = { schema_version: 2; observations: Observation[] };
 
-export type Candidate = { id: string; name: string; services: string[] };
+export type Candidate = { id: string; name: string; services: string[]; route?: 'ble' | 'wear_os' };
 export type ConnectedSource = {
   descriptor: SourceDescriptor;
   measurements: AsyncIterable<Measurement>;

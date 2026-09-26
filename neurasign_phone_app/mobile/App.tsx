@@ -49,7 +49,7 @@ export default function App() {
         {button(state.scanning ? 'Searching…' : 'Find wearable', () => void act(() => controller.scan()), Boolean(state.enrollment.candidate), state.scanning)}
         <Text style={styles.body}>Enable Bluetooth sharing on your wearable. Available sensor channels are detected after connecting.</Text>
         {state.scanning && <ActivityIndicator color="#537941" />}
-        {state.candidates.map(candidate => <View key={candidate.id} style={styles.card}><Text style={styles.label}>{candidate.name}</Text><Text style={styles.body}>Bluetooth · Check available channels</Text>{button(`Connect ${candidate.name}`, () => void act(() => controller.start(candidate)), true)}</View>)}
+        {state.candidates.map(candidate => <View key={candidate.id} style={styles.card}><Text style={styles.label}>{candidate.name}</Text><Text style={styles.body}>{candidate.route === 'wear_os' ? 'Paired watch · Open NEURASIGN on the watch and tap Start' : 'Bluetooth · Check available channels'}</Text>{button(`Connect ${candidate.name}`, () => void act(() => controller.start(candidate)), true)}</View>)}
         {!state.scanning && !state.candidates.length && <Text style={styles.hint}>No sensor listed? Check Bluetooth and the wearable’s broadcast settings. Some devices require a manufacturer integration.</Text>}
         {!state.enrollment.paused && button('Pause sharing', () => void act(() => controller.pause()), true)}
       </>}

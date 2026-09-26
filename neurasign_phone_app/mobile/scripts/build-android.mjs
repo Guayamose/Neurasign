@@ -7,7 +7,9 @@ function run(command, args) {
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 run('npx', ['expo', 'prebuild', '--platform', 'android', '--no-install']);
-run('./android/gradlew', ['-p', 'android', 'assembleRelease', '-PreactNativeArchitectures=arm64-v8a,x86_64', '--max-workers=4', '--console=plain']);
+// Gradle's app-local inputs omit the shared ../src and ../contracts trees.
+// Refresh only the JS bundle; native compilation can keep its incremental cache.
+run('./android/gradlew', ['-p', 'android', ':app:createBundleReleaseJsAndAssets', '--rerun', 'assembleRelease', '-PreactNativeArchitectures=arm64-v8a,x86_64', '--max-workers=4', '--console=plain']);
 mkdirSync(new URL('../artifacts/', import.meta.url), { recursive: true });
 const name = process.env.LOCAL_GATEWAY_HTTP === '1' ? 'neurasign-link-local.apk' : 'neurasign-link.apk';
 copyFileSync(new URL('../android/app/build/outputs/apk/release/app-release.apk', import.meta.url), new URL(`../artifacts/${name}`, import.meta.url));

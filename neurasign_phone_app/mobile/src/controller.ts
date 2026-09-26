@@ -8,6 +8,7 @@ import { connectWearable, mergeWearable, UnsupportedWearableError } from '../../
 import { gatewayRequest, parseEnrollmentLink, type EnrollmentLink } from '../../src/enrollment';
 import { EncryptedQueue, readSecret, writeSecret, removeSecret, secret } from './storage';
 import { NativeBle } from './ble';
+import { pairedWatches, connectPairedWatch } from './watch';
 
 export const allowLocalHttp = Constants.expoConfig?.extra?.allowLocalHttp === true;
 export type Preview = { company: string; employee: string; team: string | null; source: string };
@@ -73,7 +74,9 @@ export class LinkController {
   }
   async scan() {
     await this.stopScan(); this.update({ candidates: [], error: '' });
-    await this.ble.scan(candidate => this.update({ candidates: [...this.state.candidates.filter(c => c.id !== candidate.id), candidate] }), e => { void this.stopScan(); this.error(e); });
+    try { this.update({ candidates: await pairedWatches() }); } catch { /* BLE discovery remains available without Google Play services. */ }
+    try { await this.ble.scan(candidate => this.update({ candidates: [...this.state.candidates.filter(c => c.id !== candidate.id), candidate] }), e => { void this.stopScan(); this.error(e); }); }
+    catch (error) { if (!this.state.candidates.length) throw error; this.update({ status: 'Paired watches available' }); return; }
     this.update({ scanning: true, status: 'Searching nearby…' });
     this.scanTimer = setTimeout(() => { void this.stopScan(); }, 12000);
   }
@@ -86,7 +89,10 @@ export class LinkController {
     if (this.state.running) return;
     if (AppState.currentState !== 'active') throw new Error('Open the app to start your wearable connection.');
     const e = this.state.enrollment; if (!e || e.intent === 'disconnect') throw new Error('Connect your company first.');
-    await this.ble.permission(); await this.stopScan();
+    // Android's connectedDevice foreground service also needs a granted nearby
+    // device permission when transport runs through the paired-watch module.
+    await this.ble.permission();
+    await this.stopScan();
     if (this.syncingIntent) throw new Error('Finishing the previous sharing change. Please retry.');
     // Reserve the intent before resuming so the retry timer cannot pause a new session.
     const enrollment = { ...e, candidate, intent: undefined, paused: false };
@@ -106,12 +112,12 @@ export class LinkController {
   private async capture(candidate: Candidate, session: GatewaySession, signal: AbortSignal) {
     // Include protocol semantics in the ID, so changed channels never overwrite old series.
     const sourceId = (profile: string, capabilities: unknown) => Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256,
-      `${this.state.enrollment!.gateway_id}:${candidate.id}:${profile}:${JSON.stringify(capabilities)}`);
+      `${this.state.enrollment!.gateway_id}:${candidate.route ?? 'ble'}:${candidate.id}:${profile}:${JSON.stringify(capabilities)}`);
     let backoff = 1000;
     while (!signal.aborted) {
       let connected;
       try {
-        connected = await connectWearable(this.ble, candidate, signal, sourceId);
+        connected = candidate.route === 'wear_os' ? await connectPairedWatch(candidate, Crypto.randomUUID(), signal, sourceId) : await connectWearable(this.ble, candidate, signal, sourceId);
         const ids = [];
         for (const source of connected.sources) ids.push(await session.registerSource(source.descriptor));
         this.update({ ble: 'connected', error: '', channels: [...new Set(connected.sources.flatMap(source => source.descriptor.capabilities.map(channel => channel.metric)))], warnings: connected.warnings }); backoff = 1000;

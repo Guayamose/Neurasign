@@ -66,7 +66,7 @@ export class GatewaySession {
     this.sourceIds.add(id);
     return id;
   }
-  async capture(sourceId: string, measurement: Measurement): Promise<void> {
+  async capture(sourceId: string, measurement: Measurement, stableId?: string): Promise<void> {
     if (this.stopped) return;
     if (!this.sourceIds.has(sourceId)) throw new Error("Register the source in this session before collecting measurements.");
     if (!Number.isFinite(measurement.value) || !Number.isFinite(Date.parse(measurement.measured_at))) throw new Error("Invalid measurement.");
@@ -75,7 +75,7 @@ export class GatewaySession {
       if (!samples?.length || samples.length > 512 || samples.some(value => !Number.isFinite(value)) || !offsets || offsets.length !== samples.length ||
           samples.at(-1) !== measurement.value || offsets.at(-1) !== 0 || offsets[0]! < -10000 || offsets.some((time, index) => !Number.isFinite(time) || time > 0 || index > 0 && time < offsets[index - 1]!)) throw new Error('Invalid sample block.');
     }
-    const id = this.options.newId();
+    const id = stableId ?? this.options.newId();
     if (!/^[A-Za-z0-9_-]{8,80}$/.test(id)) throw new Error("Generate a stable UUID or equivalent observation ID.");
     await this.options.queue.append(this.options.enrollmentId, { ...measurement, source_id: sourceId, id });
   }

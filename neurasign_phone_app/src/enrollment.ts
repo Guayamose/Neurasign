@@ -18,7 +18,7 @@ export async function gatewayRequest<T>(origin: string, path: string, options: {
   const abort = () => controller.abort();
   options.signal?.addEventListener('abort', abort);
   if (options.signal?.aborted) controller.abort();
-  const timer = setTimeout(abort, 20000);
+  const timer = setTimeout(abort, /^\/integrations\/(whoop|fitbit)\/sync$/.test(path) ? 60000 : 20000);
   try {
     const response = await (options.fetch ?? fetch)(`${origin}/api/v1/gateway${path}`, {
       method: options.method ?? 'GET', redirect: 'error', signal: controller.signal,

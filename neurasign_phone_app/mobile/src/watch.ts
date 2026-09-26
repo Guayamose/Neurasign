@@ -7,13 +7,19 @@ declare class WearModule extends NativeModule<{ message: (event: { node: string;
   peers(): Promise<{ id: string; name: string }[]>;
   send(node: string, message: string): Promise<void>;
 }
-const native = requireOptionalNativeModule<WearModule>('WearLink');
+const modules = {
+  wear_os: requireOptionalNativeModule<WearModule>('WearLink'),
+  garmin: requireOptionalNativeModule<WearModule>('GarminLink'),
+  apple_watch: requireOptionalNativeModule<WearModule>('AppleWatchLink'),
+};
 export async function pairedWatches(): Promise<Candidate[]> {
-  if (!native) return [];
-  return (await native.peers()).map(peer => ({ id: peer.id, name: peer.name, services: [], route: 'wear_os' }));
+  const results = await Promise.allSettled(Object.entries(modules).map(async ([route, native]) =>
+    native ? (await native.peers()).map(peer => ({ id: peer.id, name: peer.name, services: [], route: route as Candidate['route'] })) : []));
+  return results.flatMap(result => result.status === 'fulfilled' ? result.value : []);
 }
 export function connectPairedWatch(candidate: Candidate, session: string, signal: AbortSignal, identity: SourceIdentity) {
-  if (!native) throw new Error('Paired-watch collection requires the Android build.');
+  const native = modules[candidate.route as keyof typeof modules];
+  if (!native) throw new Error('This watch connector is unavailable on this phone.');
   const transport: WatchTransport = { send: (node, value) => native.send(node, value), listen: callback => {
     const subscription = native.addListener('message', event => callback(event.node, event.message));
     return () => subscription.remove();

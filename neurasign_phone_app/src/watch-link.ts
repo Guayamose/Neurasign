@@ -7,9 +7,9 @@ export interface WatchTransport {
   listen(callback: (node: string, message: string) => void): () => void;
 }
 type Definition = { id: string; name: string; capabilities: Capability[] };
-type Hello = { kind: 'hello'; session: string; version: 1; manufacturer: string; model: string; sources: Definition[]; warnings: string[] };
+type Hello = { device_id?: string; kind: 'hello'; session: string; version: 1; manufacturer: string; model: string; sources: Definition[]; warnings: string[] };
 const units: Record<string, string> = {
-  heart_rate: 'bpm', ppi_interval: 'ms', ppi_status: 'code', electrodermal_conductance: 'µS',
+  heart_rate: 'bpm', rr_interval: 'ms', ppi_interval: 'ms', ppi_status: 'code', electrodermal_conductance: 'µS',
   skin_temperature: '°C', sensor_temperature: '°C', oxygen_saturation: '%', electrocardiogram: 'mV',
   barometric_pressure: 'hPa', heart_rate_status: 'code', eda_status: 'code', skin_temperature_status: 'code',
   ecg_contact: 'code', ecg_sequence: 'count', oxygen_status: 'code',
@@ -20,6 +20,7 @@ const object = (value: unknown): value is Record<string, unknown> => value !== n
 
 export function watchHello(value: unknown, session: string): Hello {
   if (!object(value) || value.version !== 1 || value.kind !== 'hello' || value.session !== session || !Array.isArray(value.sources) || !value.sources.length || value.sources.length > 3) throw new Error('Invalid watch capabilities.');
+  if (value.device_id !== undefined && (typeof value.device_id !== 'string' || !/^[A-Za-z0-9_-]{8,100}$/.test(value.device_id))) throw new Error('Invalid watch installation identity.');
   const ids = new Set<string>();
   for (const source of value.sources) {
     if (!object(source) || typeof source.id !== 'string' || !/^[a-z][a-z0-9-]{2,40}$/.test(source.id) || ids.has(source.id) || typeof source.name !== 'string' || source.name.length > 80 || !Array.isArray(source.capabilities) || !source.capabilities.length || source.capabilities.length > 64) throw new Error('Invalid watch source.');
@@ -59,7 +60,12 @@ export async function connectWatch(transport: WatchTransport, node: string, sess
   let retiredThrough = -1;
   let announce: ((value: Hello) => void) | undefined, rejectHello: ((error: Error) => void) | undefined;
   const rows: { source: number; measurement: Measurement }[] = [], seen = new Map<number, string>(), persisted = new Set<number>();
-  const send = (kind: string, extra = {}) => transport.send(node, JSON.stringify({ version: 1, kind, session, ...extra }));
+  const send = async (kind: string, extra = {}) => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try { await Promise.race([transport.send(node, JSON.stringify({ version: 1, kind, session, ...extra })),
+      new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error('Watch send timed out.')), 8000); })]); }
+    finally { clearTimeout(timer); }
+  };
   const fail = (error: Error) => { failure = error; rejectHello?.(error); wake?.(); };
   const remove = transport.listen((sender, message) => {
     if (closed || sender !== node) return;
@@ -76,12 +82,12 @@ export async function connectWatch(transport: WatchTransport, node: string, sess
       } else if (body.kind === 'error') fail(new Error(typeof body.message === 'string' ? body.message.slice(0, 300) : 'Watch collection stopped.'));
       else if (body.kind === 'samples') {
         if (!hello) throw new Error('Watch sent samples before capabilities.');
-        const decoded = watchMeasurements(body, hello.sources, session), previous = seen.get(decoded.sequence);
-        if (previous) { if (previous !== message) throw new Error('Watch reused a sequence with different samples.'); if (persisted.has(decoded.sequence)) void send('ack', { sequence: decoded.sequence }).catch(fail); return; }
+        const decoded = watchMeasurements(body, hello.sources, session), canonical = JSON.stringify(decoded), previous = seen.get(decoded.sequence);
+        if (previous) { if (previous !== canonical) throw new Error('Watch reused a sequence with different samples.'); if (persisted.has(decoded.sequence)) void send('ack', { sequence: decoded.sequence }).catch(fail); return; }
         if (decoded.sequence <= retiredThrough) throw new Error('Watch retry is outside the deduplication window. Reconnect to continue.');
         if (rows.length + decoded.measurements.length > 2048) throw new Error('Watch stream exceeded the phone buffer.');
         // ACK only after the consumer persists this message's last measurement.
-        seen.set(decoded.sequence, message);
+        seen.set(decoded.sequence, canonical);
         for (const measurement of decoded.measurements) rows.push({ source: decoded.source, measurement: { ...measurement, source_record_id: `${session}:${decoded.sequence}:${measurement.metric}` } });
         wake?.();
       }
@@ -102,9 +108,12 @@ export async function connectWatch(transport: WatchTransport, node: string, sess
     const timeout = setTimeout(() => fail(new Error('Open NEURASIGN on your paired watch and tap Start, then retry.')), 20000);
     try { await send('start'); hello = await announced; } finally { clearTimeout(timeout); }
     const descriptorSources: SourceDescriptor[] = [];
-    for (const definition of hello.sources) descriptorSources.push({ client_source_id: await identity(definition.id, definition.capabilities),
+    for (const definition of hello.sources) {
+      definition.capabilities.sort((a, b) => a.metric.localeCompare(b.metric));
+      descriptorSources.push({ client_source_id: await identity(hello.device_id ? `${definition.id}:${hello.device_id}` : definition.id, definition.capabilities),
       name: `${hello.model} · ${definition.name}`.slice(0, 80), manufacturer: hello.manufacturer, model: hello.model,
       adapter: { id: definition.id, version: '1.0.0' }, transport: 'vendor_sdk', capabilities: definition.capabilities });
+    }
     // Each stream consumes only its own queue; all share the transport lifecycle.
     const waiters = new Set<() => void>(); wake = () => { for (const fn of waiters) fn(); waiters.clear(); };
     const remaining = new Map<number, number>();

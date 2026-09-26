@@ -22,6 +22,7 @@ function shell(initial = {}, overrides = {}) {
     '../../src/gateway':gateway,'../../src/contract':contract,'../../src/multisignal':multisignal,'../../src/enrollment':enrollment,
     './storage':{secret:()=>randomBytes(32).toString('base64url'),readSecret:async key=>saved.get(key)??null,writeSecret:async(key,value)=>saved.set(key,structuredClone(value)),removeSecret:async key=>saved.delete(key),EncryptedQueue:{open:async()=>({count:async()=>0,clear:async()=>{queueCleared++}})}},
     './ble':{NativeBle:class {async stopScan(){} async permission(){} }},
+    './health': { healthKitAvailable: false, syncHealthKit: async () => ({channels: [], warnings: []}) },
     './watch':{pairedWatches:async()=>[],connectPairedWatch:async()=>{throw new Error('No paired watch in this fixture');}},
     ...overrides,
   };
@@ -79,4 +80,29 @@ test('paired-watch capture checks nearby permissions before enabling server shar
     assert.equal(permissions, 1); assert.equal(requests, 0); assert.equal(first.controller.state.running, false);
     assert.deepEqual(first.saved.get('enrollment'), receipt);
   } finally { global.fetch = original; }
+});
+
+test('cloud sync bypasses Bluetooth and foreground services, and pauses through company controls', async () => {
+  const original=global.fetch; const requests=[]; let started;
+  const syncing = new Promise(resolve => { started=resolve; });
+  global.fetch=async (url, init) => {
+    requests.push(url);
+    if (url.endsWith('/sync')) { started(); return new Response(JSON.stringify({accepted:2,warnings:[]})); }
+    return new Response(JSON.stringify({sharing:true}));
+  };
+  try {
+    const instance = shell({enrollment:receipt}, {
+      'react-native': {AppState:{currentState:'active'},Platform:{OS:'android'}},
+      './ble': {NativeBle: class { async stopScan(){} async permission(){throw Error('Cloud must not request Bluetooth');} }},
+      'react-native-background-actions': {default:{isRunning:()=>false,start:()=>{throw Error('Cloud must not start connected-device service');}}},
+    });
+    await instance.controller.initialize();
+    await instance.controller.start({id:'whoop',name:'WHOOP',services:[],route:'cloud'});
+    await syncing;
+    assert.equal(instance.controller.state.running,true);
+    await instance.controller.pause();
+    assert.equal(instance.controller.state.running,false);
+    assert.equal(instance.saved.get('enrollment').paused,true);
+    assert.equal(requests.filter(url=>url.endsWith('/sync')).length,1);
+  } finally { global.fetch=original; }
 });

@@ -1,6 +1,25 @@
 # Verification — 2026-09-26
 
-## Multi-signal expansion
+## Wear OS and extended channel follow-up
+
+| Check | Result |
+| --- | --- |
+| Complete server suite | 125 passed; includes 16-source / 96-channel bounds and integral quality-code validation |
+| Gateway + controller + protocol suite | 33 passed; includes expanded Polar/standard fields, watch session isolation, persistence-before-ACK, conflicting/expired retries |
+| Watch JVM block tests | 2 passed; preserves large ECG sequences and sparse irregular samples across count/time bounds |
+| Native TypeScript / Expo lint | Passed |
+| Android phone / base watch | Both APKs built; `com.neurasign.link` and signing certificates verified identical; development signing only |
+| Generated contracts | Match server schemas; 81 definitions including sensor axes and quality fields, not 81 sensors on every device |
+| Next.js production build / local containers | Passed with the quality-field display change |
+| Actual UNIVERSE raw integration | Seven recorded channels verified again through authenticated ingestion, Firestore and browser graphs |
+
+Base watch artifact: `../watch_app/artifacts/neurasign-watch.apk`. Phone artifact: `artifacts/neurasign-link.apk`. The watch application is a minimal sensor companion; enrollment and company credentials remain on the phone. The phone build script explicitly refreshes its JS bundle so changes in the shared gateway directory are included.
+
+**Outstanding:** no physical wearable, Wear OS runtime, sustained multichannel load or iOS native execution was tested. Samsung binding source is present, but the official SDK download requires a Samsung account; the Samsung variant was not built or executed. Garmin/Apple/other proprietary adapters are not implied by the metric catalog. See [model coverage](../docs/model-coverage.md) and [watch setup and limits](../watch_app/README.md).
+
+The earlier onboarding emulator checks below are historical and do not establish watch connectivity. No two-phone test is needed or claimed.
+
+## Earlier multi-signal expansion
 
 | Check | Result |
 | --- | --- |

@@ -47,7 +47,7 @@ Phone credentials cannot access rosters, account administration, another employe
 
 ## Limits and compatibility
 
-Pilot bounds: 50 teams, 100 new independent employee profiles, 100 dashboard accounts, 10 phones per employee, 5 sources per phone, 200 enrollment codes per company/day. Existing account-backed employees can coexist; they preserve their old storage paths, IDs and credentials. Removing an independent employee does not alter a manager account.
+Pilot bounds: 50 teams, 100 new independent employee profiles, 100 dashboard accounts, 10 phones per employee, 16 sources and 96 source/metric pairs per phone, 200 enrollment codes per company/day. Existing account-backed employees can coexist; they preserve their old storage paths, IDs and credentials. Removing an independent employee does not alter a manager account.
 
 Firestore TTL includes global `enrollments` (expiry or consumed recovery deadline), observations, legacy readings, latest values and audit/invitation records. Authorization rejects expired records even before TTL deletion. Google Cloud preparation adds the TTL configuration without deploying anything.
 

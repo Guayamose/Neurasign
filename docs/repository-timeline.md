@@ -28,6 +28,17 @@ No Google Cloud resources are provisioned by this import. Physical wearable comp
 
 These changes address measurement acquisition and transport. Demo interpretations remain unchanged. [Connector status](../neurasign_phone_app/docs/wearable-connectivity.md) distinguishes implementation, recording tests and outstanding hardware validation.
 
+## Wearable coverage follow-up
+
+| Order | Commit | Contents |
+| --- | --- | --- |
+| 13 | `feat(telemetry): add optical channels and sensor quality definitions` | Expanded metric catalog, integral quality codes, bounded per-gateway source/channel capacity and dashboard signal prioritization. |
+| 14 | `feat(bluetooth): retain auxiliary channels and expanded Polar frames` | Standard optional fields, additional optical/electrical/magnetic layouts and regression checks. |
+| 15 | `feat(wearos): bridge watch sensors through the enrolled phone` | Native watch companion, Android phone module, shared protocol, session/lease/retry controls and optional account-gated Samsung binding. |
+| 16 | `docs(wearables): record model coverage and vendor requirements` | Exact implementation matrix, external SDK gaps, reproducible builds and verification evidence. |
+
+Verification for this follow-up: 125 server tests, 33 gateway/controller/protocol tests and two watch JVM tests passed. Phone lint/typecheck and base phone/watch APK builds passed; package names and development signing identities match. The Samsung SDK variant and physical hardware remain unvalidated. The metric catalog is not a supported-model certification.
+
 ## Local files kept out of Git
 
 All `.env*` and `*.env` files are ignored at every depth, except the reviewed `.env.example` template. Credentials and signing files, dependencies, native generated projects, APKs, screenshots, emulator state, local databases and raw study recordings are excluded. The dataset downloader and preprocessing instructions remain available to reproduce the local recording setup.

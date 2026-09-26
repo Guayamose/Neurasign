@@ -33,6 +33,8 @@ adb install -r artifacts/neurasign-link-local.apk
 4. Confirm company and employee. Select a nearby wearable; the app discovers its services and lists supported channels and connection warnings.
 5. Keep the wearable nearby. Confirm incoming measurements in **Team overview**.
 
+**Wear OS route:** install the matching [watch companion](../watch_app/README.md), open it and tap **Start**. **Find wearable** also lists nearby paired watches on Android; select the watch card. Package names and signing certificates must match across the two APKs. The phone remains the only holder of company credentials. The watch stops when its phone lease expires; wearer-triggered spot measurements are separate from continuous streams. Samsung raw channels require the official SDK build and permitted hardware/policy. iPhone does not use this Wear OS transport.
+
 The QR server must be the intended company origin; the app displays it before consent. The bootstrap token is used once. A lost response can be recovered with **Retry connection** using the exact locally persisted claim. The persistent gateway credential never appears in a URL or on the screen.
 
 ## Native behavior

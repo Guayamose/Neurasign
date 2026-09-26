@@ -5,7 +5,7 @@ import { CircleHelp, Clock3, Radio } from "lucide-react";
 import { Chart } from "./monitoring-dashboard";
 
 export type MetricDefinition = { id: string; name: string; unit: string; digits: number; meaning: string; freshness_seconds: number };
-type Observation = { id: string; value: number; timestamp: number; received_at: number; method: string; interval_seconds: number | null };
+type Observation = { id: string; value: number; timestamp: number; received_at: number; method: string; interval_seconds: number | null; samples?: number[]; sample_offsets_ms?: number[]; sample_count?: number; sample_duration_ms?: number };
 export type Signal = {
   series_id: string; metric: string; source_id: string; source_name: string; source: "wearable" | "recording";
   unit: string; measurement_kind: "sample" | "window" | "summary"; delivery_mode: "stream" | "sync";
@@ -55,10 +55,12 @@ export function SignalExplorer({ personId, name, org, signals, catalog, revision
     if (previous && row.timestamp - previous.timestamp > (signal.interval_seconds ?? definition?.freshness_seconds ?? 60) * 2) {
       points.push({ time: previous.timestamp + 1, value: null });
     }
-    points.push({ time: row.timestamp, value: row.value });
+    if (row.samples && row.sample_offsets_ms) {
+      row.samples.forEach((value, index) => points.push({ time: row.timestamp + row.sample_offsets_ms![index] / 1000, value }));
+    } else points.push({ time: row.timestamp, value: row.value });
   });
   return <section className="co-panel co-signal-panel" data-testid="canonical-signals">
-    <div className="co-panel-head"><div><h2>Signal detail · {name}</h2><p>Measurements and recent history.</p></div><span className={`co-status ${signal.status === "current" ? "current" : "stale"}`}>{statusLabel[signal.status]}</span></div>
+    <div className="co-panel-head"><div><h2>Signal detail · {name}</h2><p>{signal.latest?.sample_count ? 'Raw samples and recent history.' : 'Measurements and recent history.'}</p></div><span className={`co-status ${signal.status === "current" ? "current" : "stale"}`}>{statusLabel[signal.status]}</span></div>
     <div className="co-metric-tabs">{signals.map(item => <button key={item.series_id} className={item.series_id === signal.series_id ? "active" : ""} aria-pressed={item.series_id === signal.series_id} onClick={() => setSelected(item.series_id)}>
       {catalog.find(metric => metric.id === item.metric)?.name ?? item.metric}<small>{item.source_name}{item.measurement_kind === "summary" ? " · Summary" : ""}</small>
     </button>)}</div>

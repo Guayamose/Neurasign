@@ -6,7 +6,7 @@ import vm from 'node:vm';
 import ts from 'typescript';
 import * as gateway from '../dist/gateway.js';
 import * as contract from '../dist/contract.js';
-import * as heartRate from '../dist/heart-rate.js';
+import * as multisignal from '../dist/multisignal.js';
 import * as enrollment from '../dist/enrollment.js';
 import { randomUUID, randomBytes } from 'node:crypto';
 
@@ -19,7 +19,7 @@ function shell(initial = {}) {
     'react-native-background-actions':{default:{}},
     'expo-constants':{default:{expoConfig:{extra:{allowLocalHttp:true}}}},
     'expo-crypto':{randomUUID},
-    '../../src/gateway':gateway,'../../src/contract':contract,'../../src/heart-rate':heartRate,'../../src/enrollment':enrollment,
+    '../../src/gateway':gateway,'../../src/contract':contract,'../../src/multisignal':multisignal,'../../src/enrollment':enrollment,
     './storage':{secret:()=>randomBytes(32).toString('base64url'),readSecret:async key=>saved.get(key)??null,writeSecret:async(key,value)=>saved.set(key,structuredClone(value)),removeSecret:async key=>saved.delete(key),EncryptedQueue:{open:async()=>({count:async()=>0,clear:async()=>{queueCleared++}})}},
     './ble':{NativeBle:class {async stopScan(){} async permission(){} }},
   };

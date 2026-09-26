@@ -3,8 +3,8 @@ import BackgroundService from 'react-native-background-actions';
 import Constants from 'expo-constants';
 import * as Crypto from 'expo-crypto';
 import { GatewaySession, GatewayError } from '../../src/gateway';
-import { AdapterRegistry, type Candidate } from '../../src/contract';
-import { StandardHeartRateAdapter } from '../../src/heart-rate';
+import type { Candidate } from '../../src/contract';
+import { connectWearable, mergeWearable, UnsupportedWearableError } from '../../src/multisignal';
 import { gatewayRequest, parseEnrollmentLink, type EnrollmentLink } from '../../src/enrollment';
 import { EncryptedQueue, readSecret, writeSecret, removeSecret, secret } from './storage';
 import { NativeBle } from './ble';
@@ -14,10 +14,10 @@ export type Preview = { company: string; employee: string; team: string | null; 
 type Receipt = { credential: string; gateway_id: string; organization_id: string; employee_id: string; company: string; employee: string };
 type Enrollment = Receipt & { apiOrigin: string; candidate?: Candidate; intent?: 'pause' | 'disconnect'; paused?: boolean };
 type Pending = EnrollmentLink & { installation_id: string; claim_secret: string; phone_name: string; consent: true };
-export type LinkState = { ready: boolean; enrollment: Enrollment | null; pending: boolean; running: boolean; ble: 'connecting' | 'connected' | 'reconnecting'; offline: boolean; scanning: boolean; candidates: Candidate[]; status: string; error: string; queued: number; lastSent: number | null };
+export type LinkState = { ready: boolean; enrollment: Enrollment | null; pending: boolean; running: boolean; ble: 'connecting' | 'connected' | 'reconnecting'; offline: boolean; scanning: boolean; candidates: Candidate[]; channels: string[]; warnings: string[]; status: string; error: string; queued: number; lastSent: number | null };
 const delay = (ms: number, signal: AbortSignal) => new Promise<void>(resolve => { if (signal.aborted) return resolve(); const done = () => { clearTimeout(timer); signal.removeEventListener('abort', done); resolve(); }; const timer = setTimeout(done, ms); signal.addEventListener('abort', done); });
 export class LinkController {
-  state: LinkState = { ready: false, enrollment: null, pending: false, running: false, ble: 'connecting', offline: false, scanning: false, candidates: [], status: 'Starting…', error: '', queued: 0, lastSent: null };
+  state: LinkState = { ready: false, enrollment: null, pending: false, running: false, ble: 'connecting', offline: false, scanning: false, candidates: [], channels: [], warnings: [], status: 'Starting…', error: '', queued: 0, lastSent: null };
   private listeners = new Set<() => void>();
   private queue!: EncryptedQueue;
   private ble = new NativeBle();
@@ -94,7 +94,7 @@ export class LinkController {
     try { await this.request('/sharing', 'PATCH', { enabled: true }); }
     catch (error) { this.update({ enrollment: e }); throw error; }
     await writeSecret('enrollment', enrollment);
-    this.update({ enrollment, running: true, ble: 'connecting', offline: false, status: 'Connecting wearable…', error: '' });
+    this.update({ enrollment, running: true, ble: 'connecting', offline: false, channels: [], warnings: [], status: 'Connecting wearable…', error: '' });
     const abort = new AbortController(); this.abort = abort;
     const session = new GatewaySession({ apiOrigin: e.apiOrigin, enrollmentId: e.gateway_id, credential: e.credential, queue: this.queue, newId: Crypto.randomUUID, allowLocalHttp }); this.session = session;
     const run = async () => { this.task = Promise.all([this.capture(candidate, session, abort.signal), this.upload(session, abort.signal)]).then(() => {}); await this.task; };
@@ -104,24 +104,26 @@ export class LinkController {
     } catch (error) { await this.stop(); throw error; }
   }
   private async capture(candidate: Candidate, session: GatewaySession, signal: AbortSignal) {
-    const registry = new AdapterRegistry();
-    // A stable one-way sensor ID prevents raw Bluetooth addresses reaching the server.
-    const sourceId = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, `${this.state.enrollment!.gateway_id}:${candidate.id}`);
-    registry.register(new StandardHeartRateAdapter(this.ble, () => sourceId));
-    const adapter = registry.matching(candidate)[0];
+    // Include protocol semantics in the ID, so changed channels never overwrite old series.
+    const sourceId = (profile: string, capabilities: unknown) => Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256,
+      `${this.state.enrollment!.gateway_id}:${candidate.id}:${profile}:${JSON.stringify(capabilities)}`);
     let backoff = 1000;
     while (!signal.aborted) {
       let connected;
       try {
-        connected = await adapter.connect(candidate, signal);
-        const id = await session.registerSource(connected.descriptor);
-        this.update({ ble: 'connected', error: '' }); backoff = 1000;
-        for await (const measurement of connected.measurements) {
+        connected = await connectWearable(this.ble, candidate, signal, sourceId);
+        const ids = [];
+        for (const source of connected.sources) ids.push(await session.registerSource(source.descriptor));
+        this.update({ ble: 'connected', error: '', channels: [...new Set(connected.sources.flatMap(source => source.descriptor.capabilities.map(channel => channel.metric)))], warnings: connected.warnings }); backoff = 1000;
+        for await (const { source, measurement } of mergeWearable(connected.sources)) {
           if (signal.aborted) break;
-          await session.capture(id, measurement);
+          await session.capture(ids[source]!, measurement);
           this.update({ queued: await this.queue.count() });
         }
-      } catch (e) { if (!signal.aborted) this.update({ ble: 'reconnecting', error: e instanceof Error ? e.message : 'Connection interrupted.' }); }
+      } catch (e) {
+        if (e instanceof UnsupportedWearableError) { this.abort?.abort(); session.close(); this.update({ running: false, status: 'Connector required', error: e.message }); if (Platform.OS === 'android' && BackgroundService.isRunning()) void BackgroundService.stop(); return; }
+        if (!signal.aborted) this.update({ ble: 'reconnecting', error: e instanceof Error ? e.message : 'Connection interrupted.' });
+      }
       finally { await connected?.close().catch(() => {}); }
       if (!signal.aborted) { await delay(backoff, signal); backoff = Math.min(backoff * 2, 30000); }
     }
@@ -135,7 +137,7 @@ export class LinkController {
         const sent = await session.flush();
         this.update({ offline: false });
         if (sent) this.update({ lastSent: Date.now(), queued: await this.queue.count(), error: '' });
-        backoff = sent === 60 ? 100 : 5000;
+        backoff = sent ? 1000 : 5000;
       } catch (e) {
         if (signal.aborted) return;
         if (e instanceof GatewayError && [401, 403, 410].includes(e.status)) { void this.revokeLocally().catch(this.error); return; }

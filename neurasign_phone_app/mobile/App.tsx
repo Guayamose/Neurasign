@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { LinkController, allowLocalHttp, type Preview } from './src/controller';
 import type { EnrollmentLink } from '../src/enrollment';
+import metricCatalog from '../contracts/metrics.json';
 
 const controller = new LinkController();
 void controller.initialize();
@@ -46,12 +47,14 @@ export default function App() {
       {state.enrollment.intent === 'disconnect' ? <Text style={styles.body}>Capture has stopped. Keep the app open with internet access to finish disconnecting.</Text> : state.running ? <>{button('Pause sharing', () => void act(() => controller.pause()))}<Text style={styles.body}>Keep the wearable near this phone. {Platform.OS === 'android' ? 'A notification stays visible while the connection is active.' : 'iOS controls background Bluetooth activity. Reopen the app if sending stops.'}</Text></> : <>
         {state.enrollment.candidate && button('Resume connection', () => void act(() => controller.start(state.enrollment!.candidate!)))}
         {button(state.scanning ? 'Searching…' : 'Find wearable', () => void act(() => controller.scan()), Boolean(state.enrollment.candidate), state.scanning)}
-        <Text style={styles.body}>Put your wearable in heart-rate broadcast mode. Bluetooth Heart Rate devices appear here.</Text>
+        <Text style={styles.body}>Enable Bluetooth sharing on your wearable. Available sensor channels are detected after connecting.</Text>
         {state.scanning && <ActivityIndicator color="#537941" />}
-        {state.candidates.map(candidate => <View key={candidate.id} style={styles.card}><Text style={styles.label}>{candidate.name}</Text><Text style={styles.body}>Heart rate · Bluetooth</Text>{button(`Connect ${candidate.name}`, () => void act(() => controller.start(candidate)), true)}</View>)}
+        {state.candidates.map(candidate => <View key={candidate.id} style={styles.card}><Text style={styles.label}>{candidate.name}</Text><Text style={styles.body}>Bluetooth · Check available channels</Text>{button(`Connect ${candidate.name}`, () => void act(() => controller.start(candidate)), true)}</View>)}
         {!state.scanning && !state.candidates.length && <Text style={styles.hint}>No sensor listed? Check Bluetooth and the wearable’s broadcast settings. Some devices require a manufacturer integration.</Text>}
         {!state.enrollment.paused && button('Pause sharing', () => void act(() => controller.pause()), true)}
       </>}
+      {state.running && state.channels.length > 0 && <View style={styles.card}><Text style={styles.eyebrow}>SENSOR CHANNELS · {state.channels.length}</Text><Text style={styles.body}>{state.channels.map(id => metricCatalog.metrics.find(metric => metric.id === id)?.name ?? id).join(' · ')}</Text></View>}
+      {state.warnings.length > 0 && <Text style={styles.hint}>Some sensor channels are unavailable. {state.warnings.join(' ')}</Text>}
       <Pressable accessibilityRole="button" accessibilityLabel="Disconnect company" disabled={busy} onPress={() => Alert.alert('Disconnect this phone?', 'Measurement capture stops and phone access is revoked when the server is reachable.', [{ text: 'Cancel', style: 'cancel' }, { text: 'Disconnect', style: 'destructive', onPress: () => void act(() => controller.disconnect()) }])}><Text style={styles.disconnect}>Disconnect company</Text></Pressable>
     </>}
     {busy && <ActivityIndicator style={{ marginTop: 12 }} color="#537941" />}

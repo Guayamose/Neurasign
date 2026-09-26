@@ -1,10 +1,10 @@
 import { PermissionsAndroid, Platform } from 'react-native';
 import { BleManager, State } from 'react-native-ble-plx';
-import { toByteArray } from 'base64-js';
+import { toByteArray, fromByteArray } from 'base64-js';
 import type { Candidate } from '../../src/contract';
-import { HEART_RATE_SERVICE, type BleTransport, type BleConnection } from '../../src/heart-rate';
+import type { GattTransport, GattConnection } from '../../src/ble-protocol';
 
-export class NativeBle implements BleTransport {
+export class NativeBle implements GattTransport {
   readonly manager = new BleManager({ restoreStateIdentifier: 'neurasign-link-ble', restoreStateFunction: state => {
     // Never restart capture from an OS callback without the persisted user session.
     for (const device of state?.connectedPeripherals ?? []) void device.cancelConnection().catch(() => {});
@@ -21,22 +21,43 @@ export class NativeBle implements BleTransport {
   }
   async scan(onFound: (candidate: Candidate) => void, onError: (error: Error) => void) {
     await this.permission();
-    await this.manager.startDeviceScan([HEART_RATE_SERVICE], { allowDuplicates: false }, (error, device) => {
+    await this.manager.startDeviceScan(null, { allowDuplicates: false }, (error, device) => {
       if (error) { onError(new Error(error.message)); return; }
-      if (device) onFound({ id: device.id, name: device.name || device.localName || 'Heart rate sensor', services: device.serviceUUIDs ?? [HEART_RATE_SERVICE] });
+      if (device && device.isConnectable !== false) onFound({ id: device.id, name: device.name || device.localName || 'Bluetooth device', services: device.serviceUUIDs ?? [] });
     });
   }
   async stopScan() { await this.manager.stopDeviceScan(); }
-  async connect(candidate: Candidate, signal: AbortSignal): Promise<BleConnection> {
+  async connect(candidate: Candidate, signal: AbortSignal): Promise<GattConnection> {
     if (signal.aborted) throw new Error('Connection cancelled.');
     const cancel = () => { void this.manager.cancelDeviceConnection(candidate.id).catch(() => {}); };
     signal.addEventListener('abort', cancel);
     let device;
-    try { device = await this.manager.connectToDevice(candidate.id, { timeout: 15000 }); await device.discoverAllServicesAndCharacteristics(); }
+    try {
+      device = await this.manager.connectToDevice(candidate.id, { timeout: 15000 });
+      if (Platform.OS === 'android') {
+        try { device = await device.requestMTU(232); }
+        catch { /* Standard services can still work at the default MTU. */ }
+      }
+      await device.discoverAllServicesAndCharacteristics();
+    }
     catch (e) { signal.removeEventListener('abort', cancel); cancel(); throw e; }
     if (signal.aborted) { cancel(); throw new Error('Connection cancelled.'); }
     const manager = this.manager;
     return {
+      characteristics: async () => {
+        const result = [];
+        for (const service of await device.services()) {
+          for (const characteristic of await service.characteristics()) result.push({ service: service.uuid, uuid: characteristic.uuid,
+            notify: characteristic.isNotifiable, indicate: characteristic.isIndicatable, read: characteristic.isReadable, write: characteristic.isWritableWithResponse });
+        }
+        return result;
+      },
+      read: async (service, characteristic) => {
+        const value = await device.readCharacteristicForService(service, characteristic);
+        if (!value.value) throw new Error('Wearable returned an empty characteristic.');
+        return toByteArray(value.value);
+      },
+      write: async (service, characteristic, bytes) => { await device.writeCharacteristicWithResponseForService(service, characteristic, fromByteArray(bytes)); },
       notifications: async function* (service, characteristic, abortSignal) {
         const packets: { bytes: Uint8Array; receivedAt: string }[] = [];
         let failed: Error | undefined, wake: (() => void) | undefined;

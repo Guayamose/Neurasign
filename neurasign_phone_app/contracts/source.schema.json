@@ -1,0 +1,194 @@
+{
+  "$defs": {
+    "AdapterInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "version": {
+          "maxLength": 40,
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ],
+      "title": "AdapterInfo",
+      "type": "object"
+    },
+    "Capability": {
+      "additionalProperties": false,
+      "properties": {
+        "metric": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Metric",
+          "type": "string"
+        },
+        "unit": {
+          "maxLength": 20,
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "delivery_mode": {
+          "enum": [
+            "stream",
+            "sync"
+          ],
+          "title": "Delivery Mode",
+          "type": "string"
+        },
+        "measurement_kind": {
+          "enum": [
+            "sample",
+            "window",
+            "summary"
+          ],
+          "title": "Measurement Kind",
+          "type": "string"
+        },
+        "method": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Method",
+          "type": "string"
+        },
+        "timestamp_basis": {
+          "default": "device",
+          "enum": [
+            "device",
+            "phone_receipt",
+            "source_record"
+          ],
+          "title": "Timestamp Basis",
+          "type": "string"
+        },
+        "interval_seconds": {
+          "anyOf": [
+            {
+              "maximum": 604800,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Interval Seconds"
+        },
+        "availability": {
+          "default": "available",
+          "enum": [
+            "available",
+            "unsupported",
+            "permission_required"
+          ],
+          "title": "Availability",
+          "type": "string"
+        }
+      },
+      "required": [
+        "metric",
+        "unit",
+        "delivery_mode",
+        "measurement_kind",
+        "method"
+      ],
+      "title": "Capability",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "client_source_id": {
+      "pattern": "^[A-Za-z0-9_-]{8,80}$",
+      "title": "Client Source Id",
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "adapter": {
+      "$ref": "#/$defs/AdapterInfo"
+    },
+    "transport": {
+      "enum": [
+        "ble",
+        "vendor_sdk",
+        "health_store",
+        "cloud_api",
+        "recording"
+      ],
+      "title": "Transport",
+      "type": "string"
+    },
+    "manufacturer": {
+      "anyOf": [
+        {
+          "maxLength": 80,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Manufacturer"
+    },
+    "model": {
+      "anyOf": [
+        {
+          "maxLength": 80,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model"
+    },
+    "firmware": {
+      "anyOf": [
+        {
+          "maxLength": 80,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Firmware"
+    },
+    "capabilities": {
+      "items": {
+        "$ref": "#/$defs/Capability"
+      },
+      "maxItems": 20,
+      "minItems": 1,
+      "title": "Capabilities",
+      "type": "array"
+    }
+  },
+  "required": [
+    "client_source_id",
+    "name",
+    "adapter",
+    "transport",
+    "capabilities"
+  ],
+  "title": "SourceInput",
+  "type": "object"
+}

@@ -1,0 +1,87 @@
+{
+  "$defs": {
+    "Observation": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9_-]{8,80}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "source_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "metric": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Metric",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        },
+        "unit": {
+          "maxLength": 20,
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "measured_at": {
+          "format": "date-time",
+          "title": "Measured At",
+          "type": "string"
+        },
+        "source_record_id": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Record Id"
+        }
+      },
+      "required": [
+        "id",
+        "source_id",
+        "metric",
+        "value",
+        "unit",
+        "measured_at"
+      ],
+      "title": "Observation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "observations": {
+      "items": {
+        "$ref": "#/$defs/Observation"
+      },
+      "maxItems": 60,
+      "minItems": 1,
+      "title": "Observations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "observations"
+  ],
+  "title": "ObservationBatch",
+  "type": "object"
+}

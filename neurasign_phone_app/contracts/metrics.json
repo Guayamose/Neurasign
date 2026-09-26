@@ -1,0 +1,147 @@
+{
+  "schema_version": 2,
+  "metrics": [
+    {
+      "name": "Heart rate",
+      "unit": "bpm",
+      "digits": 0,
+      "minimum": 0,
+      "maximum": 300,
+      "freshness_seconds": 60,
+      "meaning": "Heartbeats per minute.",
+      "id": "heart_rate",
+      "accepted_units": [
+        "bpm",
+        "Hz"
+      ]
+    },
+    {
+      "name": "HRV · RMSSD",
+      "unit": "ms",
+      "digits": 1,
+      "minimum": 0,
+      "maximum": 1000,
+      "freshness_seconds": 60,
+      "meaning": "Variation between successive beat intervals, using RMSSD. Compare the same method and measurement period.",
+      "id": "hrv_rmssd",
+      "accepted_units": [
+        "ms",
+        "s"
+      ]
+    },
+    {
+      "name": "HRV · SDNN",
+      "unit": "ms",
+      "digits": 1,
+      "minimum": 0,
+      "maximum": 1000,
+      "freshness_seconds": 60,
+      "meaning": "Standard deviation of normal beat intervals. This is a different quantity from RMSSD.",
+      "id": "hrv_sdnn",
+      "accepted_units": [
+        "ms",
+        "s"
+      ]
+    },
+    {
+      "name": "Skin conductance",
+      "unit": "µS",
+      "digits": 2,
+      "minimum": 0,
+      "maximum": 1000,
+      "freshness_seconds": 60,
+      "meaning": "Electrical conductance at the skin. This does not identify an emotion or its cause.",
+      "id": "electrodermal_conductance",
+      "accepted_units": [
+        "µS",
+        "uS",
+        "S"
+      ]
+    },
+    {
+      "name": "Skin temperature",
+      "unit": "°C",
+      "digits": 1,
+      "minimum": -50,
+      "maximum": 100,
+      "freshness_seconds": 60,
+      "meaning": "Absolute temperature at the skin sensor, not core body temperature.",
+      "id": "skin_temperature",
+      "accepted_units": [
+        "°C",
+        "Cel",
+        "°F"
+      ]
+    },
+    {
+      "name": "Skin temperature change",
+      "unit": "°C",
+      "digits": 1,
+      "minimum": -50,
+      "maximum": 50,
+      "freshness_seconds": 60,
+      "meaning": "Change from the source baseline. This is not an absolute skin temperature.",
+      "id": "skin_temperature_delta",
+      "accepted_units": [
+        "°C",
+        "Cel",
+        "°F"
+      ]
+    },
+    {
+      "name": "Movement",
+      "unit": "g",
+      "digits": 3,
+      "minimum": 0,
+      "maximum": 1000,
+      "freshness_seconds": 60,
+      "meaning": "Standard deviation of acceleration magnitude over the reported interval. This is not a step count.",
+      "id": "acceleration_magnitude_std",
+      "accepted_units": [
+        "g",
+        "m/s²"
+      ]
+    },
+    {
+      "name": "Respiratory rate",
+      "unit": "breaths/min",
+      "digits": 1,
+      "minimum": 0,
+      "maximum": 150,
+      "freshness_seconds": 60,
+      "meaning": "Breaths per minute over the reported measurement interval.",
+      "id": "respiratory_rate",
+      "accepted_units": [
+        "breaths/min",
+        "Hz"
+      ]
+    },
+    {
+      "name": "Oxygen saturation",
+      "unit": "%",
+      "digits": 1,
+      "minimum": 0,
+      "maximum": 100,
+      "freshness_seconds": 60,
+      "meaning": "Oxygen saturation reported by the sensor, with its measurement method preserved.",
+      "id": "oxygen_saturation",
+      "accepted_units": [
+        "%",
+        "fraction"
+      ]
+    },
+    {
+      "name": "Steps",
+      "unit": "count",
+      "digits": 0,
+      "minimum": 0,
+      "maximum": 1000000,
+      "freshness_seconds": 60,
+      "meaning": "Steps counted during the reported interval. Counts from overlapping sources are not added together.",
+      "id": "steps",
+      "accepted_units": [
+        "count"
+      ]
+    }
+  ]
+}

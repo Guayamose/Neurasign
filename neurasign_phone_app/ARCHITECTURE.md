@@ -11,7 +11,10 @@ An employee record identifies the person whose measurements are collected. A das
 ```mermaid
 flowchart LR
     W[Wearable] --> A[Wearable adapter]
-    H[Optional phone health store] --> A
+    H[Phone health store] --> A
+    W --> V[Manufacturer cloud]
+    V --> C[Phone-authorized server import]
+    C --> N
     A --> Q[Phone upload queue]
     Q --> I[Authenticated ingestion API]
     I --> N[Server validation and normalization]
@@ -25,7 +28,7 @@ The wearable needs to reach its phone, and the phone needs an Internet connectio
 
 Implement independent adapters behind a shared contract. Prefer direct phone access. An optional health-store or manufacturer-cloud connector can add coverage where permitted, but is a distinct route with its own delay and dependencies. A phone cannot extract measurements that the device or platform does not expose.
 
-The following are researched access routes, **not a list of devices supported by NEURASIGN**. Standard BLE HR/RR, thermometer and pulse oximeter decoders plus an experimental direct Polar PMD connector are implemented against the shared transport; the native transport uses react-native-ble-plx. The official Polar SDK is not bundled. The Wear OS companion and paired Android bridge are also implemented. An optional Samsung Health Sensor binding is present but its account-gated SDK is not included or runtime-tested. Other routes below are unimplemented. All routes remain untested on hardware. See the [implemented connector matrix](docs/wearable-connectivity.md).
+The following are researched access routes, **not a list of devices supported by NEURASIGN**. Standard BLE HR/RR, thermometer and pulse oximeter decoders plus an experimental direct Polar PMD connector are implemented against the shared transport; the native transport uses react-native-ble-plx. The official Polar SDK is not bundled. The Wear OS companion and paired Android bridge are also implemented. An optional Samsung Health Sensor binding is present but its account-gated SDK is not included or runtime-tested. WHOOP/Google Health OAuth, native HealthKit/Apple Watch sources and the public Garmin Connect IQ route are now present; their distinct account/build/validation boundaries are in the [vendor integration guide](docs/vendor-integrations.md). The enterprise Garmin Health SDK and Health Connect remain unimplemented. All routes remain untested on hardware. See the [implemented connector matrix](docs/wearable-connectivity.md).
 
 | Route | Potential coverage | Boundary to preserve |
 | --- | --- | --- |

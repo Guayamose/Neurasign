@@ -51,7 +51,7 @@ The QR server must be the intended company origin; the app displays it before co
 
 `../tests/` covers QR parsing, idempotent retries, enrollment recovery, offline privacy actions and capture/queue separation using explicit test transports. The server's `scripts/onboarding_smoke.py` covers browser QR generation, actual Firebase/Firestore, company/team permissions, labeled recording ingestion, charts and revocation. Android emulator acceptance uses the actual native application and local API. Recorded inputs establish transport semantics, not physical wearable compatibility.
 
-Standard BLE heart rate/RR, thermometer and pulse oximeter connectors and an experimental Polar PMD connector are implemented. See [exact stream support](../docs/wearable-connectivity.md). Other proprietary devices still require a documented vendor adapter. No wearable, battery-duration or physical locked-screen test has been performed. iOS runtime behavior remains unvalidated until an Apple build/device is available.
+Standard BLE heart rate/RR, thermometer and pulse oximeter connectors and an experimental Polar PMD connector are implemented. See [exact stream support](../docs/wearable-connectivity.md). WHOOP/Fitbit accounts, Garmin Connect IQ and Apple routes are covered in the [vendor integration guide](../docs/vendor-integrations.md), including their build/account constraints. Other proprietary devices still require a documented adapter. No wearable, battery-duration or physical locked-screen test has been performed. iOS runtime behavior remains unvalidated until an Apple build/device is available.
 
 ## Acceptance commands
 

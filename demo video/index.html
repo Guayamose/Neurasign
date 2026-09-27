@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Every second matters. A narrated, 76-second NeuraSign hospital concept film with original animation and sound.">
+  <title>Every second matters — NeuraSign</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root{color-scheme:dark;font-family:Arial,Helvetica,sans-serif;background:#0d1321;color:#f5f7fc;--muted:#afbdd2;--line:#2b384e;--blue:#6c8bff}
+    *{box-sizing:border-box}body{margin:0;padding:36px clamp(20px,5vw,88px) 50px}header,main,footer{max-width:1440px;margin-inline:auto}
+    header{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-bottom:42px}header img{display:block;width:218px;height:auto}.eyebrow{color:var(--muted);font-size:12px;letter-spacing:1.8px;text-transform:uppercase}
+    .intro{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:24px}h1{margin:0;font-size:clamp(34px,4.5vw,64px);font-weight:500;line-height:1.06;letter-spacing:-2.7px}.intro p{margin:13px 0 0;color:var(--muted);font-size:16px;line-height:1.5}.duration{white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px;letter-spacing:1px;padding-bottom:4px}
+    .screen{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#080e18}video{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#080e18}video::cue{font-size:clamp(14px,1.6vw,22px);font-family:Arial,Helvetica,sans-serif;color:white;background:rgba(9,16,29,.86)}
+    .player-tools{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:15px;min-height:48px}.player-tools p{margin:0;color:var(--muted);font-size:13px;line-height:1.4}.quality{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}select{min-height:42px;padding:8px 35px 8px 12px;border:1px solid #42526d;border-radius:7px;background:#121c2e;color:#f5f7fc;font:inherit;cursor:pointer}select:disabled{cursor:wait;opacity:.65}
+    .chapters{display:flex;gap:9px;overflow-x:auto;padding:16px 0 8px;scrollbar-width:thin;scrollbar-color:#465571 transparent}.chapters button{flex:none;min-height:44px;padding:10px 15px;background:transparent;border:1px solid var(--line);border-radius:7px;color:#d3dced;font:inherit;font-size:14px;cursor:pointer}.chapters button span{font-size:12px;color:var(--muted);margin-right:8px;font-variant-numeric:tabular-nums}.chapters button:hover{background:#172239;border-color:#556882}.chapters button[aria-current=true]{border-color:var(--blue);background:#1b2b51;color:white}.chapters button[aria-current=true] span{color:#b9c9ff}
+    #status{margin:7px 0 0;min-height:19px;color:#e9c48d;font-size:13px;line-height:1.5}footer{margin-top:26px;border-top:1px solid var(--line);padding-top:27px;display:flex;align-items:flex-start;justify-content:space-between;gap:32px}.concept{max-width:600px}.concept strong{font-size:15px;font-weight:500;color:#dce4f2}.concept p{font-size:13px;line-height:1.65;color:var(--muted);margin:9px 0 0}.downloads{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}.downloads a{display:inline-flex;align-items:center;min-height:44px;padding:11px 16px;border:1px solid #42526d;border-radius:7px;color:#f5f7fc;text-decoration:none;font-size:14px;white-space:nowrap}.downloads a:first-child{background:#2854e8;border-color:#2854e8}.downloads a:hover{background:#253755}.downloads a:first-child:hover{background:#3d66ed}a{color:#b8c8ff}a:focus-visible,button:focus-visible,select:focus-visible,video:focus-visible{outline:3px solid #b5c5ff;outline-offset:4px}
+    @media(max-width:900px){footer{flex-direction:column;gap:22px}.downloads{justify-content:flex-start}.concept{max-width:100%}header{padding-bottom:32px}}
+    @media(max-width:550px){body{padding-top:24px;padding-bottom:32px}header{gap:14px}header img{width:170px}.eyebrow{font-size:10px;letter-spacing:1.2px;text-align:right;max-width:92px;line-height:1.5}.intro{gap:12px;align-items:flex-start}h1{letter-spacing:-1.5px;max-width:270px}.duration{padding-top:8px;font-size:12px}.intro p{font-size:14px;max-width:235px}.player-tools{gap:12px;align-items:flex-start}.player-tools p{max-width:160px;font-size:12px;padding-top:6px}.quality{gap:6px;font-size:12px}.quality select{max-width:122px;padding-left:9px}.chapters{padding-top:13px}.downloads a{font-size:13px;padding-inline:13px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+  <header>
+    <img src="public/brand/neurasign-dark.svg" alt="NeuraSign">
+    <span class="eyebrow">The concept film</span>
+  </header>
+  <main>
+    <div class="intro">
+      <div><h1>Every second matters.</h1><p>A team. A patient. A moment to act.</p></div>
+      <span class="duration" aria-label="Duration: one minute and sixteen seconds">01:16</span>
+    </div>
+    <div class="screen">
+      <video id="film" controls playsinline preload="metadata" poster="review/hospital/poster.png" src="exports/neurasign-hospital-76s-1080p.mp4" aria-label="Every second matters: the complete 76-second NeuraSign hospital concept film, with English narration and original music">
+        <track kind="captions" src="public/audio/hospital-narration.vtt" srclang="en" label="English">
+        <p>Your browser cannot play this film. <a href="exports/neurasign-hospital-76s-1080p.mp4">Download the 1080p MP4.</a></p>
+      </video>
+    </div>
+    <div class="player-tools">
+      <p>76-second film · Sound on · English captions available</p>
+      <div class="quality"><label for="quality">Quality</label><select id="quality"><option value="1080p">1080p HD</option><option value="4k">4K UHD</option></select></div>
+    </div>
+    <nav class="chapters" aria-label="Jump to a film chapter">
+      <button type="button" data-time="0" aria-current="true"><span>00:00</span> Hospital</button>
+      <button type="button" data-time="11"><span>00:11</span> Wearables</button>
+      <button type="button" data-time="26"><span>00:26</span> Team</button>
+      <button type="button" data-time="33"><span>00:33</span> Incident</button>
+      <button type="button" data-time="41"><span>00:41</span> Match</button>
+      <button type="button" data-time="49"><span>00:49</span> Response</button>
+      <button type="button" data-time="56"><span>00:56</span> Beyond hospitals</button>
+    </nav>
+    <p id="status" role="status" aria-live="polite"></p>
+  </main>
+  <footer>
+    <div class="concept">
+      <strong>Original animation. One complete story.</strong>
+      <p>Illustrative workplace scenarios · Simulated signals · Human-confirmed recommendation.<br>A product concept, not a recording of a deployed workflow.</p>
+    </div>
+    <div class="downloads" aria-label="Download the film or editable project">
+      <a href="exports/neurasign-hospital-76s-1080p.mp4" download>1080p MP4 ↓</a>
+      <a href="exports/neurasign-hospital-76s-4k.mp4" download>4K MP4 ↓</a>
+      <a href="exports/neurasign-hospital-editable-project.zip" download>Editable project ↓</a>
+    </div>
+  </footer>
+  <script>
+    const film = document.getElementById('film');
+    const quality = document.getElementById('quality');
+    const status = document.getElementById('status');
+    const chapters = [...document.querySelectorAll('[data-time]')];
+    let pendingSeek = null;
+    let resumeAfterLoad = false;
+    let captionMode = 'hidden';
+
+    function updateChapter() {
+      const current = [...chapters].reverse().find(button => film.currentTime >= Number(button.dataset.time)) || chapters[0];
+      chapters.forEach(button => button.setAttribute('aria-current', button === current ? 'true' : 'false'));
+    }
+    film.addEventListener('timeupdate', updateChapter);
+    film.addEventListener('loadedmetadata', () => {
+      if (pendingSeek !== null) {
+        film.currentTime = Math.min(pendingSeek, Math.max(0, film.duration - .05));
+        pendingSeek = null;
+      }
+      if (film.textTracks.length) film.textTracks[0].mode = captionMode;
+      quality.disabled = false;
+      status.textContent = '';
+      if (resumeAfterLoad) {
+        resumeAfterLoad = false;
+        film.play().catch(() => { status.textContent = 'Press play to continue.'; });
+      }
+      updateChapter();
+    });
+    quality.addEventListener('change', () => {
+      pendingSeek = film.currentTime || 0;
+      resumeAfterLoad = !film.paused && !film.ended;
+      captionMode = film.textTracks.length ? film.textTracks[0].mode : 'hidden';
+      quality.disabled = true;
+      status.textContent = `Loading ${quality.value === '4k' ? '4K' : '1080p'}…`;
+      film.src = `exports/neurasign-hospital-76s-${quality.value}.mp4`;
+      film.load();
+    });
+    chapters.forEach(button => button.addEventListener('click', () => {
+      const time = Number(button.dataset.time);
+      if (film.readyState >= 1) film.currentTime = time;
+      else pendingSeek = time;
+      updateChapter();
+    }));
+    film.addEventListener('error', () => {
+      quality.disabled = false;
+      resumeAfterLoad = false;
+      status.textContent = 'This export is unavailable. Try the other quality or download the film.';
+    });
+  </script>
+</body>
+</html>

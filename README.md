@@ -2,6 +2,8 @@
 
 A company workspace for monitoring received physiological signals from employees’ compatible wearables.
 
+Watch the [76-second animated concept film](<demo video/exports/neurasign-hospital-76s-1080p.mp4>) or download its [4K version](<demo video/exports/neurasign-hospital-76s-4k.mp4>). The hospital is an illustrative example of the wider workplace concept; its signals and recommendations are scripted. [Video source and playback instructions](<demo video/README.md>) and the [pitch presentation](presentation/NeuraSign_Pitch.pdf) are included.
+
 ```text
 neurasign/
 ├── neurasign_phone_app/          Native phone gateway, shared core and adapter contract
@@ -39,4 +41,4 @@ For watches that require an app on the wearable, [`watch_app/`](neurasign_phone_
 
 Run `make phone-setup` for the shared core, `make mobile-setup` for native dependencies, and `make test-all` for server/core/contracts. `make mobile-check` runs native lint and TypeScript checks. The native build guide explains Android APK installation, USB loopback forwarding and the outstanding physical-device/iOS validation.
 
-The [repository timeline](docs/repository-timeline.md) explains the ordered import commits. Environment files, credentials, raw recordings, local databases and build artifacts are excluded from Git; `.env.example` contains only empty credential fields and public configuration examples.
+The [repository timeline](docs/repository-timeline.md) explains the ordered import commits. Environment files, credentials, raw research recordings, local databases and intermediate build artifacts are excluded from Git; the reviewed final film exports and narration assets are explicitly included. `.env.example` contains only empty credential fields and public configuration examples.

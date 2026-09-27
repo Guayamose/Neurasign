@@ -1,19 +1,8 @@
-const glyphs: Record<string, string[]> = {
-  N: ["10001", "11001", "11001", "10101", "10011", "10011", "10001"],
-  E: ["11111", "10000", "10000", "11110", "10000", "10000", "11111"],
-  U: ["10001", "10001", "10001", "10001", "10001", "10001", "01110"],
-  R: ["11110", "10001", "10001", "11110", "10100", "10010", "10001"],
-  A: ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
-  S: ["01111", "10000", "10000", "01110", "00001", "00001", "11110"],
-  I: ["11111", "00100", "00100", "00100", "00100", "00100", "11111"],
-  G: ["01111", "10000", "10000", "10111", "10001", "10001", "01110"],
-};
+import Image from "next/image";
 
-/** A small vector wordmark, readable without an external font or image request. */
+/** Official approved artwork; source SVG proportions and colors are preserved. */
 export function Brand({ className = "" }: { className?: string }) {
-  return <svg className={`ns-brand ${className}`} viewBox="0 0 213 29" role="img" aria-label="NEURASIGN" fill="currentColor">
-    {Array.from("NEURASIGN").flatMap((letter, index) => glyphs[letter].flatMap((row, y) => Array.from(row).flatMap((dot, x) => dot === "1" ? <circle key={`${index}-${x}-${y}`} cx={index * 24 + x * 4 + 2} cy={y * 4 + 2} r="1.35" /> : [])))}
-  </svg>;
+  return <Image className={`ns-brand ${className}`} src="/brand/neurasign-dark.svg" alt="NeuraSign" width={956} height={304} unoptimized />;
 }
 
 /** Decorative halftone sphere. It represents the identity, never live sensor data. */

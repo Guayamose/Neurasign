@@ -107,8 +107,8 @@ export default function ModelEngine() {
     <header className="me-header"><a className="me-logo" href="/" aria-label="NEURASIGN home"><Brand /></a><span className="me-section-label">Model engine</span><div className="me-header-actions"><span className="me-local-badge"><i />Local research</span><a href="/demo"><ArrowLeft size={14} />Dashboard</a></div></header>
     <main className="me-main">
       <section className="me-heading" aria-labelledby="model-engine-title">
-        <div><span className="me-eyebrow">NEURASIGN / RESEARCH ENGINE</span><h1 id="model-engine-title">Signals.<br /><span>Interpreted.</span></h1></div>
-        <div className="me-heading-aside"><div className="me-runtime-status"><span>Models available</span><strong>{catalog ? String(readyCount).padStart(2, "0") : "—"}<small>/ {catalog ? String(catalog.models.length).padStart(2, "0") : "04"}</small></strong><span>Verified bundles</span></div><p>Saved models.<br />Original research inputs.<br />Every prediction, traceable.</p></div>
+        <div><span className="me-eyebrow">NEURASIGN / RESEARCH ENGINE</span><h1 id="model-engine-title">Model engine</h1><p className="me-heading-description">Test trained models using anonymous research records.</p></div>
+        <div className="me-heading-aside"><div className="me-runtime-status"><span>Models available</span><strong>{catalog ? String(readyCount).padStart(2, "0") : "—"}<small>/ {catalog ? String(catalog.models.length).padStart(2, "0") : "04"}</small></strong><span>Verified bundles</span></div></div>
       </section>
       <div className="me-process" aria-label="Model inference process"><span>01 — Recorded input</span><ArrowRight size={13} /><span>02 — Trained model</span><ArrowRight size={13} /><span>03 — Prediction + reference</span><small>Anonymous records only</small></div>
 

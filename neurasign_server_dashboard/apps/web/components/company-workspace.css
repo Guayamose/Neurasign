@@ -30,3 +30,8 @@
   .co-nav>button{flex-direction:column;justify-content:center;gap:6px;white-space:normal;font-size:10px;padding:9px 3px;min-height:53px;text-align:center}
   .co-nav>button svg{width:16px;height:16px}
 }
+.co-nav .co-model-link{display:flex;align-items:center;gap:10px;padding:13px 14px;border:1px solid #d8e8e2;border-radius:9px;background:#f0f8f4;color:#107c68;font-size:13px;margin-top:12px}
+.co-nav .co-model-link svg:last-child{margin-left:auto}
+.co-nav .co-model-link:hover{background:#e5f3eb}
+@media(max-width:900px){.co-nav .co-model-link{flex-shrink:0;margin-top:0;padding:10px 12px;font-size:11px;white-space:nowrap}}
+@media(max-width:680px){.co-nav .co-model-link{grid-column:1/-1;justify-content:center;margin-top:4px;font-size:10px;padding:9px 12px}.co-nav .co-model-link svg:last-child{margin-left:0}}

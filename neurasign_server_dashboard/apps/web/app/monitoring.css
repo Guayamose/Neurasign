@@ -21,6 +21,8 @@
 .monitor-tabs button{display:flex;align-items:center;gap:8px;border:0;border-bottom:3px solid transparent;background:transparent;min-height:58px;padding:0 17px;color:#64748b;font-size:13px;white-space:nowrap}
 .monitor-tabs button.active{border-bottom-color:#107c68;color:#107c68;font-weight:650}
 .monitor-tabs button:hover{background:#f7faf9;color:#142b2a}
+.monitor-tabs .monitor-model-link{display:flex;align-items:center;gap:8px;min-height:58px;padding:0 17px;margin-left:auto;color:#107c68;font-size:13px;white-space:nowrap;border-left:1px solid #e3e9ed}
+.monitor-tabs .monitor-model-link:hover{background:#edf7f3}
 .monitor-tabs .example-label{font-size:10px;font-weight:600;letter-spacing:1.2px;color:#82909d;border-left:1px solid #e3e9ed;padding-left:24px;margin-left:12px;margin-right:3px;white-space:nowrap}
 .monitor-content{max-width:1480px;margin:0 auto;padding:34px 40px 0}
 .monitor-heading{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:27px}

@@ -1,0 +1,909 @@
+{
+  "frozen_utc": "2026-09-26T21:24:31.619558+00:00",
+  "seed": 20260926,
+  "selection": "Minimum person-macro development MAE; coarse maximum development balanced accuracy. No held-out scores used.",
+  "targets": {
+    "mental_demand": {
+      "learned": {
+        "target": "mental_demand",
+        "name": "local__summary__ridge1000",
+        "config": {
+          "profile": "summary",
+          "algorithm": "ridge1000"
+        },
+        "source_mode": "local",
+        "experiment": "pooled",
+        "metrics_file": "results/transfer-v1/pooled/mental_demand__local__summary__ridge1000.metrics.json",
+        "development_metrics": {
+          "mae": 19.67381163627829,
+          "within_tolerance": 0.3176638176638178,
+          "tolerance_points": 10,
+          "exact_or_three_level_accuracy": 0.39948420525343614,
+          "balanced_accuracy": 0.3502252536735295,
+          "represented_classes": 3,
+          "people": 26,
+          "blocks": 78,
+          "windows": 722
+        }
+      },
+      "constant": {
+        "target": "mental_demand",
+        "name": "local__summary__constant_median",
+        "config": {
+          "profile": "summary",
+          "algorithm": "constant_median"
+        },
+        "source_mode": "local",
+        "experiment": "pooled",
+        "metrics_file": "results/transfer-v1/pooled/mental_demand__local__summary__constant_median.metrics.json",
+        "development_metrics": {
+          "mae": 19.294871794871792,
+          "within_tolerance": 0.37179487179487186,
+          "tolerance_points": 10,
+          "exact_or_three_level_accuracy": 0.37179487179487186,
+          "balanced_accuracy": 0.3333333333333333,
+          "represented_classes": 3,
+          "people": 26,
+          "blocks": 78,
+          "windows": 722
+        }
+      },
+      "coarse": {
+        "target": "mental_demand",
+        "name": "local__summary__cat",
+        "config": {
+          "profile": "summary",
+          "algorithm": "cat"
+        },
+        "source_mode": "local",
+        "experiment": "coarse",
+        "metrics_file": "results/transfer-v1/coarse/mental_demand__local__summary__cat.metrics.json",
+        "development_metrics": {
+          "accuracy": 0.3410913872452334,
+          "balanced_accuracy": 0.3385447805706426,
+          "macro_f1": 0.32851770199723845,
+          "people": 26,
+          "windows": 722
+        }
+      }
+    },
+    "physical_demand": {
+      "learned": {
+        "target": "physical_demand",
+        "name": "pooled__summary__cat6",
+        "config": {
+          "profile": "summary",
+          "algorithm": "cat6"
+        },
+        "source_mode": "pooled",
+        "experiment": "pooled",
+        "metrics_file": "results/transfer-v1/pooled/physical_demand__pooled__summary__cat6.metrics.json",
+        "development_metrics": {
+          "mae": 16.452718129181793,
+          "within_tolerance": 0.5311488369180678,
+          "tolerance_points": 10,
+          "exact_or_three_level_accuracy": 0.7435897435897437,
+          "balanced_accuracy": 0.3333333333333333,
+          "represented_classes": 3,
+          "people": 26,
+          "blocks": 78,
+          "windows": 722
+        }
+      },
+      "constant": {
+        "target": "physical_demand",
+        "name": "pooled__summary__constant_median",
+        "config": {
+          "profile": "summary",
+          "algorithm": "constant_median"
+        },
+        "source_mode": "pooled",
+        "experiment": "pooled",
+        "metrics_file": "results/transfer-v1/pooled/physical_demand__pooled__summary__constant_median.metrics.json",
+        "development_metrics": {
+          "mae": 19.67948717948718,
+          "within_tolerance": 0.653846153846154,
+          "tolerance_points": 10,
+          "exact_or_three_level_accuracy": 0.7435897435897437,
+          "balanced_accuracy": 0.3333333333333333,
+          "represented_classes": 3,
+          "people": 26,
+          "blocks": 78,
+          "windows": 722
+        }
+      },
+      "coarse": {
+        "target": "physical_demand",
+        "name": "local__summary_history__log1",
+        "config": {
+          "profile": "summary_history",
+          "algorithm": "log1"
+        },
+        "source_mode": "local",
+        "experiment": "coarse",
+        "metrics_file": "results/transfer-v1/coarse/physical_demand__local__summary_history__log1.metrics.json",
+        "development_metrics": {
+          "accuracy": 0.4530699001852848,
+          "balanced_accuracy": 0.4814933629588802,
+          "macro_f1": 0.38995759666713975,
+          "people": 26,
+          "windows": 722
+        }
+      }
+    },
+    "temporal_demand": {
+      "learned": {
+        "target": "temporal_demand",
+        "name": "pooled__summary_history__ridge1000",
+        "config": {
+          "profile": "summary_history",
+          "algorithm": "ridge1000"
+        },
+        "source_mode": "pooled",
+        "experiment": "pooled",
+        "metrics_file": "results/transfer-v1/pooled/temporal_demand__pooled__summary_history__ridge1000.metrics.json",
+        "development_metrics": {
+          "mae": 27.62959177877033,
+          "within_tolerance": 0.2001424501424502,
+          "tolerance_points": 10,
+          "exact_or_three_level_accuracy": 0.3589743589743591,
+          "balanced_accuracy": 0.3333333333333333,
+          "represented_classes": 3,
+          "people": 26,
+          "blocks": 78,
+          "windows": 722
+        }
+      },
+      "constant": {
+        "target": "temporal_demand",
+        "name": "pooled__summary__constant_mean",
+        "config": {
+          "profile": "summary",
+          "algorithm": "constant_mean"
+        },
+        "source_mode": "pooled",
+        "experiment": "pooled",
+        "metrics_file": "results/transfer-v1/pooled/temporal_demand__pooled__summary__constant_mean.metrics.json",
+        "development_metrics": {
+          "mae": 28.037859370505267,
+          "within_tolerance": 0.20512820512820518,
+          "tolerance_points": 10,
+          "exact_or_three_level_accuracy": 0.3589743589743591,
+          "balanced_accuracy": 0.3333333333333333,
+          "represented_classes": 3,
+          "people": 26,
+          "blocks": 78,
+          "windows": 722
+        }
+      },
+      "coarse": {
+        "target": "temporal_demand",
+        "name": "pooled__summary_history__cat",
+        "config": {
+          "profile": "summary_history",
+          "algorithm": "cat"
+        },
+        "source_mode": "pooled",
+        "experiment": "coarse",
+        "metrics_file": "results/transfer-v1/coarse/temporal_demand__pooled__summary_history__cat.metrics.json",
+        "development_metrics": {
+          "accuracy": 0.46879893610662854,
+          "balanced_accuracy": 0.46848582270424916,
+          "macro_f1": 0.45209474898539864,
+          "people": 26,
+          "windows": 722
+        }
+      }
+    },
+    "perceived_performance": {
+      "learned": {
+        "target": "perceived_performance",
+        "name": "local__summary_history__ridge100",
+        "config": {
+          "profile": "summary_history",
+          "algorithm": "ridge100"
+        },
+        "source_mode": "local",
+        "experiment": "pooled",
+        "metrics_file": "results/transfer-v1/pooled/perceived_performance__local__summary_history__ridge100.metrics.json",
+        "development_metrics": {
+          "mae": 23.08793637629997,
+          "within_tolerance": 0.24606305375536147,
+          "tolerance_points": 10,
+          "exact_or_three_level_accuracy": 0.420728843805767,
+          "balanced_accuracy": 0.3356061927490499,
+          "represented_classes": 3,
+          "people": 26,
+          "blocks": 78,
+          "windows": 722
+        }
+      },
+      "constant": {
+        "target": "perceived_performance",
+        "name": "local__summary__constant_median",
+        "config": {
+          "profile": "summary",
+          "algorithm": "constant_median"
+        },
+        "source_mode": "local",
+        "experiment": "pooled",
+        "metrics_file": "results/transfer-v1/pooled/perceived_performance__local__summary__constant_median.metrics.json",
+        "development_metrics": {
+          "mae": 23.333333333333332,
+          "within_tolerance": 0.33333333333333337,
+          "tolerance_points": 10,
+          "exact_or_three_level_accuracy": 0.42307692307692313,
+          "balanced_accuracy": 0.3333333333333333,
+          "represented_classes": 3,
+          "people": 26,
+          "blocks": 78,
+          "windows": 722
+        }
+      },
+      "coarse": {
+        "target": "perceived_performance",
+        "name": "local__summary_history__log1",
+        "config": {
+          "profile": "summary_history",
+          "algorithm": "log1"
+        },
+        "source_mode": "local",
+        "experiment": "coarse",
+        "metrics_file": "results/transfer-v1/coarse/perceived_performance__local__summary_history__log1.metrics.json",
+        "development_metrics": {
+          "accuracy": 0.45066258527796993,
+          "balanced_accuracy": 0.44021275291567513,
+          "macro_f1": 0.44130616463151373,
+          "people": 26,
+          "windows": 722
+        }
+      }
+    },
+    "effort": {
+      "learned": {
+        "target": "effort",
+        "name": "pooled__summary_history__cat6",
+        "config": {
+          "profile": "summary_history",
+          "algorithm": "cat6"
+        },
+        "source_mode": "pooled",
+        "experiment": "pooled",
+        "metrics_file": "results/transfer-v1/pooled/effort__pooled__summary_history__cat6.metrics.json",
+        "development_metrics": {
+          "mae": 23.898865195100363,
+          "within_tolerance": 0.2555346363038671,
+          "tolerance_points": 10,
+          "exact_or_three_level_accuracy": 0.42646078992232844,
+          "balanced_accuracy": 0.4109252215676187,
+          "represented_classes": 3,
+          "people": 26,
+          "blocks": 78,
+          "windows": 722
+        }
+      },
+      "constant": {
+        "target": "effort",
+        "name": "pooled__summary__constant_median",
+        "config": {
+          "profile": "summary",
+          "algorithm": "constant_median"
+        },
+        "source_mode": "pooled",
+        "experiment": "pooled",
+        "metrics_file": "results/transfer-v1/pooled/effort__pooled__summary__constant_median.metrics.json",
+        "development_metrics": {
+          "mae": 24.166666666666668,
+          "within_tolerance": 0.2820512820512821,
+          "tolerance_points": 10,
+          "exact_or_three_level_accuracy": 0.3589743589743591,
+          "balanced_accuracy": 0.3333333333333333,
+          "represented_classes": 3,
+          "people": 26,
+          "blocks": 78,
+          "windows": 722
+        }
+      },
+      "coarse": {
+        "target": "effort",
+        "name": "local__summary__log1",
+        "config": {
+          "profile": "summary",
+          "algorithm": "log1"
+        },
+        "source_mode": "local",
+        "experiment": "coarse",
+        "metrics_file": "results/transfer-v1/coarse/effort__local__summary__log1.metrics.json",
+        "development_metrics": {
+          "accuracy": 0.3970559710944327,
+          "balanced_accuracy": 0.39611046431267266,
+          "macro_f1": 0.39502457254780277,
+          "people": 26,
+          "windows": 722
+        }
+      }
+    }
+  },
+  "development_summary": {
+    "universe": {
+      "mental_effort": {
+        "learned": {
+          "target": "mental_effort",
+          "name": "local__ppg_eda__boost_absolute",
+          "config": {
+            "profile": "ppg_eda",
+            "algorithm": "boost_absolute"
+          },
+          "source_mode": "local",
+          "experiment": "universe",
+          "metrics_file": "results/transfer-v1/universe/mental_effort__local__ppg_eda__boost_absolute.metrics.json",
+          "development_metrics": {
+            "mae": 0.8571977044275908,
+            "within_tolerance": 0.7338446103528969,
+            "tolerance_points": 1,
+            "exact_or_three_level_accuracy": 0.36974790678307456,
+            "balanced_accuracy": 0.21987685008981028,
+            "represented_classes": 5,
+            "people": 19,
+            "blocks": 338,
+            "windows": 33723
+          }
+        },
+        "constant": {
+          "target": "mental_effort",
+          "name": "local__latent__constant_median",
+          "config": {
+            "profile": "latent",
+            "algorithm": "constant_median"
+          },
+          "source_mode": "local",
+          "experiment": "latent",
+          "metrics_file": "results/transfer-v1/latent/mental_effort__local__latent__constant_median.metrics.json",
+          "development_metrics": {
+            "mae": 0.8384219318246661,
+            "within_tolerance": 0.795747032036461,
+            "tolerance_points": 1,
+            "exact_or_three_level_accuracy": 0.43462158236128384,
+            "balanced_accuracy": 0.2,
+            "represented_classes": 5,
+            "people": 19,
+            "blocks": 338,
+            "windows": 33723
+          }
+        },
+        "candidates": 86
+      },
+      "mental_demand": {
+        "learned": {
+          "target": "mental_demand",
+          "name": "local__summary_history__cat4",
+          "config": {
+            "profile": "summary_history",
+            "algorithm": "cat4"
+          },
+          "source_mode": "local",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/mental_demand__local__summary_history__cat4.metrics.json",
+          "development_metrics": {
+            "mae": 23.36867065840608,
+            "within_tolerance": 0.29130791310004706,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.40986404447592056,
+            "balanced_accuracy": 0.36248435746509083,
+            "represented_classes": 3,
+            "people": 19,
+            "blocks": 472,
+            "windows": 41069
+          }
+        },
+        "constant": {
+          "target": "mental_demand",
+          "name": "local__latent__constant_median",
+          "config": {
+            "profile": "latent",
+            "algorithm": "constant_median"
+          },
+          "source_mode": "local",
+          "experiment": "latent",
+          "metrics_file": "results/transfer-v1/latent/mental_demand__local__latent__constant_median.metrics.json",
+          "development_metrics": {
+            "mae": 23.781987885789096,
+            "within_tolerance": 0.3626893830473974,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.38586764674332025,
+            "balanced_accuracy": 0.31162212178280746,
+            "represented_classes": 3,
+            "people": 19,
+            "blocks": 472,
+            "windows": 41069
+          }
+        },
+        "candidates": 104
+      },
+      "physical_demand": {
+        "learned": {
+          "target": "physical_demand",
+          "name": "local__native__boost_absolute",
+          "config": {
+            "profile": "native",
+            "algorithm": "boost_absolute"
+          },
+          "source_mode": "local",
+          "experiment": "native",
+          "metrics_file": "results/transfer-v1/native/physical_demand__local__native__boost_absolute.metrics.json",
+          "development_metrics": {
+            "mae": 19.436069867619736,
+            "within_tolerance": 0.4687297832011626,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.7251987747829665,
+            "balanced_accuracy": 0.3456329875780138,
+            "represented_classes": 3,
+            "people": 19,
+            "blocks": 472,
+            "windows": 41069
+          }
+        },
+        "constant": {
+          "target": "physical_demand",
+          "name": "local__latent__constant_median",
+          "config": {
+            "profile": "latent",
+            "algorithm": "constant_median"
+          },
+          "source_mode": "local",
+          "experiment": "latent",
+          "metrics_file": "results/transfer-v1/latent/physical_demand__local__latent__constant_median.metrics.json",
+          "development_metrics": {
+            "mae": 19.413961014355,
+            "within_tolerance": 0.685132959736234,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.737919934054993,
+            "balanced_accuracy": 0.3333333333333333,
+            "represented_classes": 3,
+            "people": 19,
+            "blocks": 472,
+            "windows": 41069
+          }
+        },
+        "candidates": 104
+      },
+      "temporal_demand": {
+        "learned": {
+          "target": "temporal_demand",
+          "name": "local__all_history__ridge100",
+          "config": {
+            "profile": "all_history",
+            "algorithm": "ridge100"
+          },
+          "source_mode": "local",
+          "experiment": "universe",
+          "metrics_file": "results/transfer-v1/universe/temporal_demand__local__all_history__ridge100.metrics.json",
+          "development_metrics": {
+            "mae": 25.839258310134518,
+            "within_tolerance": 0.1908264911914429,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.39420267286190813,
+            "balanced_accuracy": 0.37673381511940923,
+            "represented_classes": 3,
+            "people": 19,
+            "blocks": 472,
+            "windows": 41069
+          }
+        },
+        "constant": {
+          "target": "temporal_demand",
+          "name": "pooled__summary__constant_median",
+          "config": {
+            "profile": "summary",
+            "algorithm": "constant_median"
+          },
+          "source_mode": "pooled",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/temporal_demand__pooled__summary__constant_median.metrics.json",
+          "development_metrics": {
+            "mae": 27.449066366225495,
+            "within_tolerance": 0.20295456573209364,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.2818210537391816,
+            "balanced_accuracy": 0.3333333333333333,
+            "represented_classes": 3,
+            "people": 19,
+            "blocks": 472,
+            "windows": 41069
+          }
+        },
+        "candidates": 104
+      },
+      "perceived_performance": {
+        "learned": {
+          "target": "perceived_performance",
+          "name": "local__all_history__ridge1000",
+          "config": {
+            "profile": "all_history",
+            "algorithm": "ridge1000"
+          },
+          "source_mode": "local",
+          "experiment": "universe",
+          "metrics_file": "results/transfer-v1/universe/perceived_performance__local__all_history__ridge1000.metrics.json",
+          "development_metrics": {
+            "mae": 20.31857094735085,
+            "within_tolerance": 0.3064145328988061,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.40254506590630684,
+            "balanced_accuracy": 0.3442907328358941,
+            "represented_classes": 3,
+            "people": 19,
+            "blocks": 472,
+            "windows": 41069
+          }
+        },
+        "constant": {
+          "target": "perceived_performance",
+          "name": "local__latent__constant_median",
+          "config": {
+            "profile": "latent",
+            "algorithm": "constant_median"
+          },
+          "source_mode": "local",
+          "experiment": "latent",
+          "metrics_file": "results/transfer-v1/latent/perceived_performance__local__latent__constant_median.metrics.json",
+          "development_metrics": {
+            "mae": 20.18620784083126,
+            "within_tolerance": 0.3883523758237769,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.35684513108211624,
+            "balanced_accuracy": 0.3333333333333333,
+            "represented_classes": 3,
+            "people": 19,
+            "blocks": 472,
+            "windows": 41069
+          }
+        },
+        "candidates": 86
+      },
+      "effort": {
+        "learned": {
+          "target": "effort",
+          "name": "local__all_history__boost_absolute",
+          "config": {
+            "profile": "all_history",
+            "algorithm": "boost_absolute"
+          },
+          "source_mode": "local",
+          "experiment": "universe",
+          "metrics_file": "results/transfer-v1/universe/effort__local__all_history__boost_absolute.metrics.json",
+          "development_metrics": {
+            "mae": 20.200089654656757,
+            "within_tolerance": 0.3218240707831728,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.40092223534586635,
+            "balanced_accuracy": 0.35322373566435367,
+            "represented_classes": 3,
+            "people": 19,
+            "blocks": 472,
+            "windows": 41069
+          }
+        },
+        "constant": {
+          "target": "effort",
+          "name": "pooled__summary__constant_median",
+          "config": {
+            "profile": "summary",
+            "algorithm": "constant_median"
+          },
+          "source_mode": "pooled",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/effort__pooled__summary__constant_median.metrics.json",
+          "development_metrics": {
+            "mae": 20.546968239441846,
+            "within_tolerance": 0.3848847714670271,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.3739430115437363,
+            "balanced_accuracy": 0.3333333333333333,
+            "represented_classes": 3,
+            "people": 19,
+            "blocks": 472,
+            "windows": 41069
+          }
+        },
+        "candidates": 104
+      }
+    },
+    "mobile": {
+      "mental_demand": {
+        "learned": {
+          "target": "mental_demand",
+          "name": "local__summary__ridge1000",
+          "config": {
+            "profile": "summary",
+            "algorithm": "ridge1000"
+          },
+          "source_mode": "local",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/mental_demand__local__summary__ridge1000.metrics.json",
+          "development_metrics": {
+            "mae": 19.67381163627829,
+            "within_tolerance": 0.3176638176638178,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.39948420525343614,
+            "balanced_accuracy": 0.3502252536735295,
+            "represented_classes": 3,
+            "people": 26,
+            "blocks": 78,
+            "windows": 722
+          }
+        },
+        "constant": {
+          "target": "mental_demand",
+          "name": "local__summary__constant_median",
+          "config": {
+            "profile": "summary",
+            "algorithm": "constant_median"
+          },
+          "source_mode": "local",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/mental_demand__local__summary__constant_median.metrics.json",
+          "development_metrics": {
+            "mae": 19.294871794871792,
+            "within_tolerance": 0.37179487179487186,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.37179487179487186,
+            "balanced_accuracy": 0.3333333333333333,
+            "represented_classes": 3,
+            "people": 26,
+            "blocks": 78,
+            "windows": 722
+          }
+        },
+        "candidates": 40
+      },
+      "physical_demand": {
+        "learned": {
+          "target": "physical_demand",
+          "name": "pooled__summary__cat6",
+          "config": {
+            "profile": "summary",
+            "algorithm": "cat6"
+          },
+          "source_mode": "pooled",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/physical_demand__pooled__summary__cat6.metrics.json",
+          "development_metrics": {
+            "mae": 16.452718129181793,
+            "within_tolerance": 0.5311488369180678,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.7435897435897437,
+            "balanced_accuracy": 0.3333333333333333,
+            "represented_classes": 3,
+            "people": 26,
+            "blocks": 78,
+            "windows": 722
+          }
+        },
+        "constant": {
+          "target": "physical_demand",
+          "name": "pooled__summary__constant_median",
+          "config": {
+            "profile": "summary",
+            "algorithm": "constant_median"
+          },
+          "source_mode": "pooled",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/physical_demand__pooled__summary__constant_median.metrics.json",
+          "development_metrics": {
+            "mae": 19.67948717948718,
+            "within_tolerance": 0.653846153846154,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.7435897435897437,
+            "balanced_accuracy": 0.3333333333333333,
+            "represented_classes": 3,
+            "people": 26,
+            "blocks": 78,
+            "windows": 722
+          }
+        },
+        "candidates": 40
+      },
+      "temporal_demand": {
+        "learned": {
+          "target": "temporal_demand",
+          "name": "pooled__summary_history__ridge1000",
+          "config": {
+            "profile": "summary_history",
+            "algorithm": "ridge1000"
+          },
+          "source_mode": "pooled",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/temporal_demand__pooled__summary_history__ridge1000.metrics.json",
+          "development_metrics": {
+            "mae": 27.62959177877033,
+            "within_tolerance": 0.2001424501424502,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.3589743589743591,
+            "balanced_accuracy": 0.3333333333333333,
+            "represented_classes": 3,
+            "people": 26,
+            "blocks": 78,
+            "windows": 722
+          }
+        },
+        "constant": {
+          "target": "temporal_demand",
+          "name": "pooled__summary__constant_mean",
+          "config": {
+            "profile": "summary",
+            "algorithm": "constant_mean"
+          },
+          "source_mode": "pooled",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/temporal_demand__pooled__summary__constant_mean.metrics.json",
+          "development_metrics": {
+            "mae": 28.037859370505267,
+            "within_tolerance": 0.20512820512820518,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.3589743589743591,
+            "balanced_accuracy": 0.3333333333333333,
+            "represented_classes": 3,
+            "people": 26,
+            "blocks": 78,
+            "windows": 722
+          }
+        },
+        "candidates": 40
+      },
+      "perceived_performance": {
+        "learned": {
+          "target": "perceived_performance",
+          "name": "local__summary_history__ridge100",
+          "config": {
+            "profile": "summary_history",
+            "algorithm": "ridge100"
+          },
+          "source_mode": "local",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/perceived_performance__local__summary_history__ridge100.metrics.json",
+          "development_metrics": {
+            "mae": 23.08793637629997,
+            "within_tolerance": 0.24606305375536147,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.420728843805767,
+            "balanced_accuracy": 0.3356061927490499,
+            "represented_classes": 3,
+            "people": 26,
+            "blocks": 78,
+            "windows": 722
+          }
+        },
+        "constant": {
+          "target": "perceived_performance",
+          "name": "local__summary__constant_median",
+          "config": {
+            "profile": "summary",
+            "algorithm": "constant_median"
+          },
+          "source_mode": "local",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/perceived_performance__local__summary__constant_median.metrics.json",
+          "development_metrics": {
+            "mae": 23.333333333333332,
+            "within_tolerance": 0.33333333333333337,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.42307692307692313,
+            "balanced_accuracy": 0.3333333333333333,
+            "represented_classes": 3,
+            "people": 26,
+            "blocks": 78,
+            "windows": 722
+          }
+        },
+        "candidates": 22
+      },
+      "effort": {
+        "learned": {
+          "target": "effort",
+          "name": "pooled__summary_history__cat6",
+          "config": {
+            "profile": "summary_history",
+            "algorithm": "cat6"
+          },
+          "source_mode": "pooled",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/effort__pooled__summary_history__cat6.metrics.json",
+          "development_metrics": {
+            "mae": 23.898865195100363,
+            "within_tolerance": 0.2555346363038671,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.42646078992232844,
+            "balanced_accuracy": 0.4109252215676187,
+            "represented_classes": 3,
+            "people": 26,
+            "blocks": 78,
+            "windows": 722
+          }
+        },
+        "constant": {
+          "target": "effort",
+          "name": "pooled__summary__constant_median",
+          "config": {
+            "profile": "summary",
+            "algorithm": "constant_median"
+          },
+          "source_mode": "pooled",
+          "experiment": "pooled",
+          "metrics_file": "results/transfer-v1/pooled/effort__pooled__summary__constant_median.metrics.json",
+          "development_metrics": {
+            "mae": 24.166666666666668,
+            "within_tolerance": 0.2820512820512821,
+            "tolerance_points": 10,
+            "exact_or_three_level_accuracy": 0.3589743589743591,
+            "balanced_accuracy": 0.3333333333333333,
+            "represented_classes": 3,
+            "people": 26,
+            "blocks": 78,
+            "windows": 722
+          }
+        },
+        "candidates": 40
+      }
+    }
+  },
+  "reserved_mobile_codes": [
+    "f6fbt",
+    "hu32w",
+    "hznrn",
+    "izhf7",
+    "mgjvs",
+    "q0s8q",
+    "vbd5b",
+    "wymuo",
+    "y7r8r",
+    "ya3qv"
+  ],
+  "known_missing_label_file": "vbd5b: reserved but cannot be scored; no replacement after development inspection.",
+  "selection_records": 680,
+  "data_hashes": {
+    "universe": "6ad2eda59a80c8004a66760266371b419aecf1b2aaa0486cd932f9c300636e16",
+    "mobile_development": "084764273be4177b68656b63495948d85824d8eb6243163ba24fa15a90a53cd1",
+    "mobile_test": "33fef6eebf41bd4ecc91d347022cb8133ab25b068fabf827113c8eb72e6c9d37"
+  },
+  "code_hashes": {
+    "src/neurasign_engine/__init__.py": "f3cc8409914a1b8899b3522d2b5a86b3a4c822751bdb04d9fc49db730097e107",
+    "src/neurasign_engine/causal.py": "3884d6728f174fbae0422d6af3112feec96b6aedd93ee2d43c99d6f7774ad63c",
+    "src/neurasign_engine/causal_data.py": "96298e6bb004ec9063d8f776832bdea866e36e1f578f3eff7989c23a4f3c6a3c",
+    "src/neurasign_engine/causal_training.py": "08bfa3d837f3fbaf351f0b71dd32a9d0cffedd4655296afad81a008a4c3896af",
+    "src/neurasign_engine/data.py": "ba70e80f59c35e5d7ff32edd2379a7d2812f9fb8fc1a8d7a745590a1dffff1b5",
+    "src/neurasign_engine/external_labeled.py": "ec47a37bea16166013e788700e4a1a3561b182460f495f0434bc7a6993f78c8f",
+    "src/neurasign_engine/information_audit.py": "7eb88167223906fbe2b398a2ea641de61f8f2b31b80eef1be040258c4cd16b71",
+    "src/neurasign_engine/information_report.py": "f8c946f5bf5b991c1c4ea026ba728535dcb13f33f98371357494be81b2133e0e",
+    "src/neurasign_engine/jev_benchmark.py": "bbf7f3dd20237b84aac533b1fd6d217f8c3ecafa618bb9825056e9995bddd8aa",
+    "src/neurasign_engine/jev_report.py": "cc7801bc3c6c2216a92240301869b710b46873f36c6bbc132d787b66ea22239b",
+    "src/neurasign_engine/model.py": "21addcfb959e82b20f79075f54d407d2a5a47bc0356a3d5da0abd8bed3ca5923",
+    "src/neurasign_engine/schema.py": "f339dcab8c2e26e8639887114d5a2ad2719434708e6c0b3e9dfb4b614ecbe72f",
+    "src/neurasign_engine/streaming.py": "7ba7f296b39cc01e8feafae5cdf5ce14477481eae836a5293d4f9ab8320da84c",
+    "src/neurasign_engine/swell.py": "755bb18f27b5f3b3e113614425fa1a33e0e6d4d01331e820546c77574d3247b4",
+    "src/neurasign_engine/swell_report.py": "2ffc73d6332e222dd32cdc365aa8261894756d7c51e19a57051f89ab86f92aa7",
+    "src/neurasign_engine/training.py": "47800b471f71525a70915c7c380179344c14d9f8cb1e3bef022aa97f7c81f295",
+    "src/neurasign_engine/transfer_features.py": "e76b00945f399e849d0526911bee37dbcc2034d8264fca034ddad156e441d2be",
+    "src/neurasign_engine/transfer_neural.py": "bb7734766a9407f34cb1886a50628a8065661693026eb844090d8e62c78a228d",
+    "src/neurasign_engine/transfer_training.py": "dbfe018580a0bf6046fb0f32e55803dabee21a872e000bc3c08917a8939a5275",
+    "src/neurasign_engine/tuning.py": "57545773b9516f03196f9fded3c956f1acaec37fc74c6b0c7a676783f1e2713d",
+    "scripts/finalize_transfer.py": "cd0cfe964b94db11b071d7c49f098c114b577671c05c1729406f9582816d964c",
+    "scripts/pretrain_transfer.py": "8843350679160d6842cd9330708de32899d5a3fab43e6e63f0f7260fdea24624",
+    "scripts/report_transfer.py": "4c15f7e4d23c6a909b1050ac28d2c86873f4b900a320906a11b2ca695eaf3c84",
+    "scripts/train_coarse_transfer.py": "218fe6f582b248505411c1b72ebf08283f795eea3d117ba47262a1bef5b2fc35",
+    "scripts/train_multitask_transfer.py": "3150e0c04f59adc515b68cbd2e310647bee9a4a791b0552732976349c48fe086",
+    "scripts/train_transfer.py": "85dbe34fd92aee9d53100d4cde22295cf12be6c43f57760f9a6366f8a09d7e63",
+    "scripts/verify_transfer.py": "f06684e01e09e1cba761c210e00a1f0341ed148159a1cdf25b35aced4edac547"
+  },
+  "gate": {
+    "per_output": true,
+    "relative_MAE_reduction_vs_training_selected_constant_at_least": 0.15,
+    "paired_participant_bootstrap_95_percent_lower_reduction_above": 0,
+    "three_level_balanced_accuracy_at_least": 0.6,
+    "within_10_points_fraction_at_least": 0.6,
+    "coverage_at_least": 0.8,
+    "heldout_participants_at_least": 10,
+    "meaning": "Provisional engineering criterion, not clinical or workplace validation; cannot be passed by task-condition classification or provider confidence."
+  },
+  "claim": "Research candidate selection. Development winner scores are optimistic after search. No product runtime enabled."
+}

@@ -1,0 +1,46 @@
+{
+  "version": "008-multidataset-transfer",
+  "seed": 20260926,
+  "created_utc": "2026-09-26T21:00:50.670358+00:00",
+  "status": "preregistered_before_new_target_evaluation",
+  "external_final_test": "All 15 CognitiveLoad_Wearables participants. Excluded from training, feature normalization, unsupervised pretraining, prompt selection and hyperparameter tuning. Inspect schema/units and alignment, not target distributions or outcomes before frozen selection.",
+  "development": "Original UNIVERSE development participants; compatible newly accessible labeled sources after source-specific mapping. Existing SWELL as separate non-wrist benchmark. CLACIR/CogWear can contribute unlabeled pretraining; task classes remain auxiliary, never relabeled as questionnaire ratings.",
+  "locked_original_test": "UN_108,UN_113,UN_122,UN_123,UN_124 remain excluded.",
+  "objectives": [
+    "mental_effort_ordinal_UNIVERSE_only",
+    "mental_demand",
+    "physical_demand",
+    "temporal_demand",
+    "effort",
+    "perceived_performance_source_specific_unless_direction_verified"
+  ],
+  "excluded": [
+    "EEG predictors",
+    "affect/emotion/stress/frustration targets or predictors",
+    "composite NASA-TLX containing frustration",
+    "identity/task/condition as predictors",
+    "future data in features or personal baseline"
+  ],
+  "development_trials": [
+    "new modality profiles",
+    "strictly past personal feature references",
+    "manufacturer IBI when alignment and gap checks pass",
+    "Ridge/SVR/ExtraTrees/boosting/CatBoost",
+    "multitask neural representations if available",
+    "unlabeled external signal/feature pretraining",
+    "pooled training only on compatible labels",
+    "coarse 3-level TLX evaluation with fixed thresholds 100/3 and 200/3; separate from original rating accuracy"
+  ],
+  "scoring": "Per-observation error then block mean then person mean. Participant-grouped development folds. External test scored once after all final choices frozen.",
+  "mvp_research_gate": {
+    "per_output": true,
+    "relative_MAE_reduction_vs_training_selected_constant_at_least": 0.15,
+    "paired_participant_bootstrap_95_percent_lower_reduction_above": 0,
+    "three_level_balanced_accuracy_at_least": 0.6,
+    "within_10_points_fraction_at_least": 0.6,
+    "coverage_at_least": 0.8,
+    "heldout_participants_at_least": 10,
+    "meaning": "Provisional engineering criterion, not clinical or workplace validation; cannot be passed by task-condition classification or provider confidence."
+  },
+  "stop_rule": "Complete feasible bounded experiments on accessible sources. Report outstanding source-access/evidence limits and all outcomes. Do not repeatedly tune on external test or lower the gate after seeing results."
+}

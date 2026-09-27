@@ -1,0 +1,335 @@
+{
+  "experiment": 22,
+  "seed": 2026022,
+  "production_enabled": false,
+  "created_before_feature_extraction_or_model_fitting": true,
+  "source": "https://ubi29.informatik.uni-siegen.de/usi/data_wesad.html",
+  "download": "https://uni-siegen.sciebo.de/public.php/dav/files/HGdUkoNlW1Ub0Gx",
+  "paper": "https://doi.org/10.1145/3242969.3242985",
+  "license": "Scientific, non-commercial use with attribution; no commercial deployment authorization.",
+  "target": "WESAD study condition: baseline (label 1) vs TSST stress condition (label 2).",
+  "not_target": "Not self-reported stress, clinical state, fatigue, readiness, or employee condition.",
+  "split": {
+    "development": [
+      "S10",
+      "S11",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S2",
+      "S3",
+      "S6",
+      "S7",
+      "S8",
+      "S9"
+    ],
+    "test": [
+      "S17",
+      "S4",
+      "S5"
+    ]
+  },
+  "inner_validation_people": [
+    [
+      "S13",
+      "S2",
+      "S7"
+    ],
+    [
+      "S14",
+      "S15",
+      "S6"
+    ],
+    [
+      "S10",
+      "S11",
+      "S16"
+    ],
+    [
+      "S3",
+      "S8",
+      "S9"
+    ]
+  ],
+  "window_seconds": 60,
+  "stride_seconds": 60,
+  "boundary_rule": "Every 700 Hz label within each 60 s window must be the same and equal 1 or 2; others excluded.",
+  "predictors": {
+    "autonomic": [
+      "eda_mean",
+      "eda_std",
+      "eda_q10",
+      "eda_median",
+      "eda_q90",
+      "eda_slope",
+      "eda_abs_diff",
+      "temp_mean",
+      "temp_std",
+      "temp_q10",
+      "temp_median",
+      "temp_q90",
+      "temp_slope",
+      "temp_abs_diff",
+      "bvp_mean",
+      "bvp_std",
+      "bvp_q10",
+      "bvp_median",
+      "bvp_q90",
+      "bvp_slope",
+      "bvp_abs_diff",
+      "eda_peak_count",
+      "eda_peak_prominence",
+      "bvp_peak_hr",
+      "bvp_rmssd",
+      "bvp_sdnn",
+      "bvp_peak_fraction",
+      "bvp_dominant_hz",
+      "bvp_spectral_concentration"
+    ],
+    "wrist_all": [
+      "eda_mean",
+      "eda_std",
+      "eda_q10",
+      "eda_median",
+      "eda_q90",
+      "eda_slope",
+      "eda_abs_diff",
+      "temp_mean",
+      "temp_std",
+      "temp_q10",
+      "temp_median",
+      "temp_q90",
+      "temp_slope",
+      "temp_abs_diff",
+      "bvp_mean",
+      "bvp_std",
+      "bvp_q10",
+      "bvp_median",
+      "bvp_q90",
+      "bvp_slope",
+      "bvp_abs_diff",
+      "eda_peak_count",
+      "eda_peak_prominence",
+      "bvp_peak_hr",
+      "bvp_rmssd",
+      "bvp_sdnn",
+      "bvp_peak_fraction",
+      "bvp_dominant_hz",
+      "bvp_spectral_concentration",
+      "acc_x_mean",
+      "acc_x_std",
+      "acc_x_q10",
+      "acc_x_median",
+      "acc_x_q90",
+      "acc_x_slope",
+      "acc_x_abs_diff",
+      "acc_y_mean",
+      "acc_y_std",
+      "acc_y_q10",
+      "acc_y_median",
+      "acc_y_q90",
+      "acc_y_slope",
+      "acc_y_abs_diff",
+      "acc_z_mean",
+      "acc_z_std",
+      "acc_z_q10",
+      "acc_z_median",
+      "acc_z_q90",
+      "acc_z_slope",
+      "acc_z_abs_diff",
+      "acc_norm_mean",
+      "acc_norm_std",
+      "acc_norm_q10",
+      "acc_norm_median",
+      "acc_norm_q90",
+      "acc_norm_slope",
+      "acc_norm_abs_diff"
+    ]
+  },
+  "candidates": [
+    {
+      "profile": "autonomic",
+      "kind": "logit",
+      "C": 0.01
+    },
+    {
+      "profile": "autonomic",
+      "kind": "logit",
+      "C": 0.1
+    },
+    {
+      "profile": "autonomic",
+      "kind": "logit",
+      "C": 1
+    },
+    {
+      "profile": "autonomic",
+      "kind": "logit",
+      "C": 10
+    },
+    {
+      "profile": "autonomic",
+      "kind": "svm",
+      "C": 0.1,
+      "gamma": "scale"
+    },
+    {
+      "profile": "autonomic",
+      "kind": "svm",
+      "C": 0.1,
+      "gamma": 0.01
+    },
+    {
+      "profile": "autonomic",
+      "kind": "svm",
+      "C": 1,
+      "gamma": "scale"
+    },
+    {
+      "profile": "autonomic",
+      "kind": "svm",
+      "C": 1,
+      "gamma": 0.01
+    },
+    {
+      "profile": "autonomic",
+      "kind": "svm",
+      "C": 10,
+      "gamma": "scale"
+    },
+    {
+      "profile": "autonomic",
+      "kind": "svm",
+      "C": 10,
+      "gamma": 0.01
+    },
+    {
+      "profile": "autonomic",
+      "kind": "extra",
+      "leaf": 3
+    },
+    {
+      "profile": "autonomic",
+      "kind": "extra",
+      "leaf": 8
+    },
+    {
+      "profile": "autonomic",
+      "kind": "extra",
+      "leaf": 15
+    },
+    {
+      "profile": "autonomic",
+      "kind": "hist",
+      "leaf_nodes": 3
+    },
+    {
+      "profile": "autonomic",
+      "kind": "hist",
+      "leaf_nodes": 7
+    },
+    {
+      "profile": "autonomic",
+      "kind": "hist",
+      "leaf_nodes": 15
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "logit",
+      "C": 0.01
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "logit",
+      "C": 0.1
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "logit",
+      "C": 1
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "logit",
+      "C": 10
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "svm",
+      "C": 0.1,
+      "gamma": "scale"
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "svm",
+      "C": 0.1,
+      "gamma": 0.01
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "svm",
+      "C": 1,
+      "gamma": "scale"
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "svm",
+      "C": 1,
+      "gamma": 0.01
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "svm",
+      "C": 10,
+      "gamma": "scale"
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "svm",
+      "C": 10,
+      "gamma": 0.01
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "extra",
+      "leaf": 3
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "extra",
+      "leaf": 8
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "extra",
+      "leaf": 15
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "hist",
+      "leaf_nodes": 3
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "hist",
+      "leaf_nodes": 7
+    },
+    {
+      "profile": "wrist_all",
+      "kind": "hist",
+      "leaf_nodes": 15
+    }
+  ],
+  "fixed_baseline": {
+    "profile": "autonomic",
+    "kind": "logit",
+    "C": 1
+  },
+  "selection": "Mean per-person balanced accuracy over four whole-person inner folds. First candidate wins exact ties. No held-out selection.",
+  "training_weights": "Equal participant contribution and equal class contribution within participant.",
+  "preprocessing": "Within-window feature extraction; fit imputation and standardization only on fitting people. No subject calibration or future recording statistics.",
+  "timing": "Trailing 60 seconds; one prediction per completed non-overlapping minute; no instantaneous claim.",
+  "uncertainty": "Participant-cluster bootstrap percentile 95% interval, 2000 resamples, only 3 held-out people; descriptive, unstable.",
+  "acceptance": "Report every metric regardless of result; no retuning after test. Scores are not calibrated confidence."
+}

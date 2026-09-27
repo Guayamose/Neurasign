@@ -7,11 +7,11 @@ import { SignalExplorer, SignalTiles } from "./company-signals";
 import type { Features, Member, Reading, Snapshot } from "./company-workspace";
 
 const metrics = {
-  heart_rate: { name: "Heart rate", short: "HR", unit: "bpm", digits: 0, meaning: "Heartbeats per minute, summarized over the device’s measurement window.", color: "#107c68" },
-  hrv: { name: "Heart rate variability", short: "HRV", unit: "ms", digits: 1, meaning: "Variation between successive beat intervals, reported as RMSSD. It requires interval data; heart rate alone is insufficient.", color: "#7b61b7" },
-  eda: { name: "Skin conductance", short: "EDA", unit: "µS", digits: 2, meaning: "Skin conductance varies with sweat-gland activity. It cannot identify an emotion or its cause.", color: "#287ea4" },
-  temperature: { name: "Skin temperature", short: "Skin temp", unit: "°C", digits: 1, meaning: "Temperature at the sensor’s contact point, not core body temperature.", color: "#b87929" },
-  movement: { name: "Movement", short: "Movement", unit: "g", digits: 3, meaning: "Variability of acceleration magnitude within the measurement window. This is not a step count.", color: "#566d9c" },
+  heart_rate: { name: "Heart rate", short: "HR", unit: "bpm", digits: 0, meaning: "Heartbeats per minute, summarized over the device’s measurement window.", color: "#ff6b35" },
+  hrv: { name: "Heart rate variability", short: "HRV", unit: "ms", digits: 1, meaning: "Variation between successive beat intervals, reported as RMSSD. It requires interval data; heart rate alone is insufficient.", color: "#ff6b35" },
+  eda: { name: "Skin conductance", short: "EDA", unit: "µS", digits: 2, meaning: "Skin conductance varies with sweat-gland activity. It cannot identify an emotion or its cause.", color: "#ff6b35" },
+  temperature: { name: "Skin temperature", short: "Skin temp", unit: "°C", digits: 1, meaning: "Temperature at the sensor’s contact point, not core body temperature.", color: "#ff6b35" },
+  movement: { name: "Movement", short: "Movement", unit: "g", digits: 3, meaning: "Variability of acceleration magnitude within the measurement window. This is not a step count.", color: "#ff6b35" },
 };
 const format = (value: number | null | undefined, digits = 0) => value == null ? "—" : value.toLocaleString("en-US", { maximumFractionDigits: digits });
 const timeLabel = (value: number) => new Date(value * 1000).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
@@ -47,13 +47,13 @@ export function CompanyOverview({ snapshot, org, canManage, openPeople, demoAvai
   const meta = metrics[metric];
   return <>
     <div className="co-stat-grid" aria-label="Workspace summary">
-      <div className="co-stat-card"><span><Users size={17} />Team members</span><strong>{snapshot.members.length}<small>in this workspace</small></strong><div>{snapshot.teams.length} {snapshot.teams.length === 1 ? "team" : "teams"}</div></div>
-      <div className="co-stat-card co-stat-live"><span><Radio size={17} />Receiving wearable data</span><strong>{current}<small>of {snapshot.members.length} {snapshot.members.length === 1 ? "person" : "people"}</small></strong><div>{current > 0 && <i />}{current ? "Recent measurements" : "No recent wearable data"}</div></div>
-      <div className="co-stat-card"><span><Smartphone size={17} />Authorized connections</span><strong>{connected}<small>{connected === 1 ? "gateway" : "gateways"}</small></strong><div>Phone and device access</div></div>
-      <div className="co-stat-card"><span><History size={17} />Awaiting readings</span><strong>{awaiting}<small>sharing enabled</small></strong><div>{snapshot.organization.retention_days}-day history retention</div></div>
+      <div className="co-stat-card"><span><Users size={17} />People</span><strong>{snapshot.members.length}<small>in this workspace</small></strong><div>{snapshot.teams.length} {snapshot.teams.length === 1 ? "team" : "teams"}</div></div>
+      <div className="co-stat-card co-stat-live"><span><Radio size={17} />Receiving signals</span><strong>{current}<small>of {snapshot.members.length} {snapshot.members.length === 1 ? "person" : "people"}</small></strong><div>{current > 0 && <i />}{current ? "Recent measurements" : "No recent wearable data"}</div></div>
+      <div className="co-stat-card"><span><Smartphone size={17} />Connections</span><strong>{connected}<small>{connected === 1 ? "gateway" : "gateways"}</small></strong><div>Phone and device access</div></div>
+      <div className="co-stat-card"><span><History size={17} />Awaiting data</span><strong>{awaiting}<small>sharing enabled</small></strong><div>{snapshot.organization.retention_days}-day history retention</div></div>
     </div>
     {!hasReadings && <section className="co-onboarding co-panel">
-      <div className="co-onboarding-intro"><span className="co-onboarding-icon"><Bluetooth size={25} /></span><div><span className="co-eyebrow">LET’S GET CONNECTED</span><h2>{snapshot.members.length ? "Your workspace is ready for its first signals" : "Connect your first employee"}</h2><p>Connect a wearable through the phone app to start seeing measurements here.</p></div></div>
+      <div className="co-onboarding-intro"><span className="co-onboarding-icon"><Bluetooth size={25} /></span><div><span className="co-eyebrow">LET’S GET CONNECTED</span><h2>{snapshot.members.length ? "Ready for your first signal." : "Start with your people."}</h2><p>Add your team. Connect a phone. See the signals arrive.</p></div></div>
       <div className="co-setup-steps"><div><span>1</span><strong>Create a team</strong><small>Organize your people</small></div><ChevronRight size={17} /><div><span>2</span><strong>Add an employee</strong><small>No employee account needed</small></div><ChevronRight size={17} /><div><span>3</span><strong>Connect their phone</strong><small>Scan the code in NEURASIGN Link</small></div></div>
       <div className="co-onboarding-actions">{canManage && <button className="co-primary" onClick={openPeople}><Plus size={16} />Set up your team</button>}{demoAvailable && <a className="co-text" href="/demo">Preview with recorded data<ArrowRight size={15} /></a>}</div>
     </section>}
@@ -78,6 +78,6 @@ export function CompanyOverview({ snapshot, org, canManage, openPeople, demoAvai
       }) }]} />}
       <footer className="co-panel-foot"><span>Measured time · gaps mean missing readings</span><span>{person.latest.quality == null ? "Quality not reported" : `Reported quality ${format(person.latest.quality * 100)}%`}</span></footer>
     </section>}
-    <div className="co-note"><ShieldCheck size={16} /><span>Wearable measurements, with source and freshness. Mental-state estimates remain experimental.</span></div>
+    <div className="co-note"><ShieldCheck size={16} /><span>Received measurements only. Source and freshness stay visible.</span></div>
   </>;
 }

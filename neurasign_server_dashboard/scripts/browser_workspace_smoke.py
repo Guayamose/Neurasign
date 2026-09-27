@@ -3,6 +3,7 @@ import asyncio
 from datetime import datetime, timedelta, timezone
 import hashlib
 from pathlib import Path
+import re
 import secrets
 
 from playwright.async_api import async_playwright, expect
@@ -26,7 +27,7 @@ async def main():
         owner = await owner_context.new_page()
         owner.on('pageerror', lambda error: errors.append(str(error)))
         await owner.goto(WEB, wait_until='domcontentloaded')
-        await expect(owner.get_by_role('heading', name='Welcome to NEURASIGN')).to_be_visible()
+        await expect(owner.get_by_role('heading', name='Sign in.')).to_be_visible()
         await owner.screenshot(path=str(artifacts / 'company-sign-in.png'), full_page=True)
         await owner.get_by_role('button', name='New here? Create an account').click()
         await owner.get_by_label('Full name').fill('Taylor')
@@ -41,7 +42,7 @@ async def main():
         await owner.get_by_label('Company name').fill('Northstar Team')
         await owner.get_by_role('button', name='Create workspace', exact=True).click()
         await expect(owner.get_by_test_id('company-workspace')).to_be_visible(timeout=15000)
-        await expect(owner.get_by_role('heading', name='Connect your first employee')).to_be_visible()
+        await expect(owner.get_by_role('heading', name='Start with your people.')).to_be_visible()
         # Compatibility coverage for existing employee logins; new phone-only
         # onboarding has its own browser/native acceptance suite.
         from workspace_smoke import auth_call
@@ -84,6 +85,12 @@ async def main():
         await expect(owner.locator('.co-chart-value')).to_contain_text('successive beat intervals')
         await owner.screenshot(path=str(artifacts / 'company-desktop.png'), full_page=True)
         await owner.set_viewport_size({'width': 390, 'height': 844})
+        # ResizeObserver must reduce the live time axis before its labels collide.
+        time_ticks = owner.locator('.data-chart > svg > text').filter(has_text=re.compile(r'\d{1,2}:\d{2}'))
+        await expect(time_ticks).to_have_count(2)
+        time_bounds = await time_ticks.evaluate_all('nodes => nodes.map(node => { const r = node.getBoundingClientRect(); return {left: r.left, right: r.right, width: r.width}; })')
+        assert all(bounds['width'] > 0 for bounds in time_bounds), 'Time labels must be rendered'
+        assert time_bounds[0]['right'] < time_bounds[1]['left'], 'Mobile chart time labels overlap'
         await owner.screenshot(path=str(artifacts / 'company-mobile.png'), full_page=True)
         assert await owner.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), 'Mobile overflow'
         await employee.get_by_test_id('company-tab-overview').click()
@@ -97,7 +104,7 @@ async def main():
         await expect(employee.get_by_role('button', name='Revoke Example recording')).not_to_be_visible()
         call('POST', '/readings', credential, {'readings': rows}, expected=401)
         await owner.get_by_role('button', name='Sign out', exact=True).click()
-        await expect(owner.get_by_role('heading', name='Welcome to NEURASIGN')).to_be_visible()
+        await expect(owner.get_by_role('heading', name='Sign in.')).to_be_visible()
         await expect(owner.get_by_test_id('company-workspace')).not_to_be_visible()
         assert not errors, errors
         await browser.close()

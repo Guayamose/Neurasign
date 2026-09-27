@@ -1,10 +1,10 @@
-> New employee/team/QR enrollment is implemented. See [phone onboarding](phone-onboarding.md) for the current company model and scoped phone endpoints. The self-enrollment examples below remain available for legacy dashboard accounts.
-
 # Company workspace and gateway contract
 
-The company application monitors received physiological measurements. It has no preloaded employees, generated physiological readings, automatic work reassignment or uncalibrated mental-state scoring. The local `/demo` provides the separate recorded hackathon examples, including Jev/Gemini incident workflows.
+The company application at `/` monitors received physiological measurements. It has no preloaded employees, generated physiological readings, automatic work reassignment or uncalibrated mental-state scoring. The separate local `/demo` uses labeled synthetic signals on a fresh checkout, or recorded UNIVERSE features after import. It also offers optional Jev/Gemini incident examples.
 
-This document retains the **v1 compatibility contract**. The [phone onboarding contract](phone-onboarding.md) describes the implemented employee/dashboard separation, QR enrollment and team grants. The [telemetry extension](telemetry.md) describes source capabilities, independent observations and normalization. The native phone app is a wearable connection and upload gateway.
+This document retains the **v1 compatibility contract** for account-backed self-sharing and feature-window uploads. For current onboarding, use **People & teams → Create team → Add employee → Connect phone**; the employee scans the QR in NEURASIGN Link and confirms sharing without needing a dashboard account. Owners invite managers and assign teams under **Dashboard access**. The [phone onboarding contract](phone-onboarding.md) is the canonical reference for that employee/dashboard separation, QR enrollment and scoped phone endpoints. The [telemetry extension](telemetry.md) describes multi-signal source capabilities, independent observations and normalization.
+
+The native phone app is a wearable connection and upload gateway. Legacy self-sharing remains under **My privacy**, and account-backed credential creation under **Connections → Advanced · personal gateway credential**. Those compatibility paths are not required for QR-enrolled employees.
 
 ## Access
 
@@ -12,19 +12,19 @@ Users authenticate with Firebase email/password and must verify their email. The
 
 | Role | Visibility and actions |
 | --- | --- |
-| Owner | Organization-wide measurements for active sharing members; invite employees/managers; remove members; revoke devices |
+| Owner | Organization-wide measurements subject to sharing; manage teams/employees and dashboard access; revoke devices |
 | Manager | Measurements and employee administration within granted teams; capture-time team restrictions also apply to history |
-| Employee | Own measurements and own devices only |
+| Employee dashboard account (legacy) | Own measurements and own devices only; independent employee profiles need no dashboard login |
 
 Organizations isolate companies; team grants additionally restrict managers inside a company. The server enforces both.
 
-The [Manager overview preview](manager-preview.md) at `/demo#manager` illustrates an individual interpretation-only experience. It does not change the permissions above: production managers can still access individual measurements within their granted teams. An interpretation-only production role requires backend changes to allow permitted conclusions while denying raw measurements.
+The [Manager preview](manager-preview.md) at `/demo#manager` illustrates an individual interpretation-only experience. It does not change the permissions above: production managers can still access individual measurements within their granted teams. An interpretation-only production role requires backend changes to allow permitted conclusions while denying raw measurements.
 
 Employees control their sharing through the phone; existing account-backed employees retain the self-sharing controls. A manager cannot enable another employee’s sharing or authorize a device for them. Sharing is initially off. Pausing rejects new uploads and hides history from the workspace view. Re-enabling makes retained history visible again. Sharing controls are product permissions, not a claim of legal compliance or a determination of an employer’s lawful basis.
 
 Invitations are bound to an email and role, expire after 72 hours and are single-use (a retry by the same account is idempotent). Links use a URL fragment so the invitation token is not part of server request logs. The app does not automatically send invitation messages. Removed members cannot access the company or upload data. Membership reinstatement, role changes and owner transfer do not yet have workflows; removed accounts cannot accept a new invitation to the same company.
 
-Companies have a 100-active-member pilot limit. Accounts can join up to 20 workspaces. Invitations are capped at 100 per company/day and devices at ten active credentials per person. Credentials are revocable and stored as SHA-256 hashes; the original is returned only at creation. An authenticated company user cannot select another company or employee in an upload payload.
+Companies have a 100-active-dashboard-account pilot limit; the independent profile flow additionally permits 100 employees and 50 teams. See [current onboarding limits](phone-onboarding.md#limits-and-compatibility). Accounts can join up to 20 workspaces. Invitations are capped at 100 per company/day and devices at ten active credentials per person. Credentials are revocable and stored as SHA-256 hashes; the original is returned only at creation. An authenticated company user cannot select another company or employee in an upload payload.
 
 ## Request conventions
 
@@ -92,4 +92,6 @@ Deleting measurements pauses sharing and removes active stored windows and the l
 
 ## Current readiness
 
-Auth, tenancy, roles, explicit sharing, persistent storage, authenticated ingestion, visible freshness and the dashboard are implemented and locally tested with actual Firebase/Firestore emulators. Cloud deployment configuration is prepared but has not been applied to the future account. The portable gateway core and standard BLE heart-rate decoder are implemented; the installable phone app, native Bluetooth/storage bindings, validated hardware support matrix, production load/restore tests and operational monitoring setup remain outstanding. Local test recordings verify transport and UI only; they do not demonstrate wearable integration.
+Auth, tenancy, team-scoped access, explicit sharing, persistent storage, authenticated ingestion, visible freshness and the dashboard are implemented and locally tested with Firebase/Firestore emulators. QR enrollment, the native NEURASIGN Link app, Bluetooth bindings, multi-signal adapters, secure credential storage and the encrypted offline queue are also implemented. See [native build and acceptance details](../../neurasign_phone_app/mobile/README.md) and [exact connector support](../../neurasign_phone_app/docs/wearable-connectivity.md).
+
+Cloud deployment configuration is prepared but has not been applied to the future account. Physical wearable compatibility, vendor account/device end-to-end validation, iOS runtime behavior, battery/locked-screen behavior, production load/restore tests and operational monitoring setup remain outstanding. Available signals depend on the device and adapter. Local test recordings verify transport and UI only; they do not demonstrate physical wearable integration.

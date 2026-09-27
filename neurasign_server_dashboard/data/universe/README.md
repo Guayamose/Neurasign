@@ -1,7 +1,8 @@
 # UNIVERSE-derived replay
 
-The locally imported `replay.json` contains derived temporal features from actual UNIVERSE recordings
-`UN_101/Lab1` and `UN_103/Lab1`, mapped to the fictional workers Alex and Aoi.
+When imported, the local `replay.json` contains derived temporal features from actual UNIVERSE recordings
+`UN_101/Lab1` and `UN_103/Lab1`, mapped to the fictional workers Alex and Sam.
+Their stable internal IDs remain `alex` and `aoi`; `aoi` is displayed as Sam.
 The cognitive scores inferred from them are not validated scientific labels.
 
 Source: [UNIVERSE, DOI 10.5281/zenodo.10371068](https://zenodo.org/records/10371068)
@@ -14,6 +15,9 @@ Download details, feature units, transformations, calibration choices, missing-d
 handling, reproduction commands, and scientific limits are in
 [docs/dataset.md](../../docs/dataset.md). The replay metadata contains source-member
 checksums and the exact recording selection. Both the imported replay and raw
-downloads under `raw/` are ignored by version control. A fresh checkout uses the
-synthetic fixture until you run the download/import commands. Raw samples need
-not be retained to run the imported replay.
+downloads under `raw/` are ignored by version control. A fresh checkout runs `/demo`
+with the included synthetic fixture, labeled **Illustrative data**, without a dataset
+download. After downloading/importing and restarting the API, valid UNIVERSE replay
+data is preferred and labeled **Recorded wearable data**. Raw samples need not be
+retained to run the imported replay. See the [interactive demo guide](../../docs/demo-workspace.md)
+for source selection and the distinction from the company workspace.

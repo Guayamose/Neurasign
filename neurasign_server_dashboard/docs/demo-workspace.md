@@ -1,25 +1,25 @@
-# Recorded demo and example workflows
+# Interactive demo and example workflows
 
 This document describes `/demo` and the legacy local demo API. These routes are disabled in production. For the company application, see [Company workspace](company-workspace.md).
 
-Server and dashboard project inside the [NEURASIGN workspace](../../README.md). All commands and paths below are relative to `neurasign_server_dashboard/`. The separate [phone app workspace](../../neurasign_phone_app/README.md) is reserved for the mobile companion and is not implemented yet.
+Server and dashboard project inside the [NEURASIGN workspace](../../README.md). All commands and paths below are relative to `neurasign_server_dashboard/`. The implemented [NEURASIGN Link native app](../../neurasign_phone_app/mobile/README.md) uses the separate company [QR enrollment and gateway contract](phone-onboarding.md); the legacy `/api/live/readings` example below is not that app's upload endpoint.
 
-**Monitor physiological signals.** The recorded demo illustrates team monitoring and separate example use cases. Its relative state indices are demonstration estimates, not validated company-device measurements.
+**Monitor physiological signals.** The demo illustrates team monitoring and separate example use cases. A fresh checkout works with included synthetic signals and labels them **Illustrative data**. Imported UNIVERSE recordings are optional and appear as **Recorded wearable data**. Its relative state indices are demonstration estimates, not validated company-device measurements or predictions from the separate `/models` research service.
 
 Next.js + TypeScript dashboard · FastAPI + Pydantic API · physiological monitoring and charts · personal reference normalization · Jev routing · Gemini analysis.
 
 ## Start locally
 
-Requirements: Python 3.11+, Node.js 20.9+ (22 recommended), npm. `uv` is optional and speeds up Python setup.
+Requirements: Python 3.11+, Node.js 20.9+ (22 recommended), npm and Docker for the local Firebase emulators. `uv` is optional and speeds up Python setup.
 
 ```bash
 make setup
 make dev
 ```
 
-Open **http://localhost:3000/demo**. API docs: http://localhost:8000/docs. `Ctrl+C` stops both services. Both bind to loopback for a private local session. If ports 3000/8000 are occupied, stop the conflicting process first.
+Open **http://localhost:3000/demo**. API docs: http://localhost:8000/docs. `Ctrl+C` stops the development processes; `docker compose stop emulator` stops the emulators. The web app and API bind to loopback for a private local session. If ports 3000/8000 are occupied, stop the conflicting process first.
 
-The existing root `.env` is preserved. **Do not copy `.env.example` over it.** Python loads the existing `JEV_API_key` and `Google_AI_API_key` names without printing them. Jev and Gemini use these credentials on the server; no API key is passed to Next.js or embedded in a browser bundle. External failures have visible local fallbacks so the workflow remains usable.
+The server workspace's existing `.env` is preserved. **Do not copy `.env.example` over it.** Python loads the existing `JEV_API_key` and `Google_AI_API_key` names without printing them. These keys are optional for the local incident example; the demo starts without them. Jev and Gemini use configured credentials on the server; no API key is passed to Next.js or embedded in a browser bundle. Missing credentials and external failures have visible local fallbacks so the workflow remains usable.
 
 Docker alternative (Docker Compose 2.24+):
 
@@ -31,7 +31,7 @@ Compose injects `.env` into the API container only. The build context excludes e
 
 ## Monitor the team
 
-The main dashboard is the product's starting point. It shows the same two workers throughout: Alex and Sam, their work context, estimated load/readiness/fatigue/interruption cost, physiological summaries, and time-series charts. Monitoring runs independently of the example workflows.
+**Team signals** is the demo's starting point. It shows the same two fictional workers throughout: Alex and Sam. Select a person and a signal to inspect physiological summaries and time-series charts. **Experimental estimates** contains the workload, readiness and fatigue formula indices; interruption cost is also used in the secondary examples. Monitoring runs independently of those examples. The company application at `/` has a separate team roster and access controls.
 
 When the imported recording is present, the dashboard starts with two minutes of actual replay history and continues at 10×. The charts show mean heart rate in bpm, pulse-derived HRV (RMSSD) in milliseconds, mean EDA in µS, skin temperature in °C, and movement variability in g. These are recorded window summaries, not raw PPG or ECG waveforms. The source indicator distinguishes real UNIVERSE recordings, synthetic replay, Manual controls, and Live gateway input.
 
@@ -39,31 +39,31 @@ Physiological measurements use physical units. Cognitive load, readiness, fatigu
 
 Replay history uses recording-relative seconds; Live history uses device timestamps. Missing features appear as gaps. Manual mode supplies cognitive indices directly and has no physiological measurements to display. Live input that becomes stale retains its earlier history while current physiological values become unavailable.
 
-Use the question-mark button beside a metric for its plain-language meaning and units. **Metric guide** opens the same help from the header. Calculation details and limitations stay under **How it works & limitations**, with the full list under **Explore all metrics**. Signal colors identify chart series; they are not medical thresholds.
+Use the question-mark button beside a metric or the metric guide for its plain-language meaning and units. **Compare with personal reference**, **Experimental estimates** and **Recording & signal details** reveal additional context without crowding the main chart. Signal colors identify chart series; they are not medical thresholds.
 
 See [dataset processing and chart interpretation](dataset.md) for exact windows, units, provenance, missing data, and reference calculations.
 
 ## Manager perspective
 
-Choose **Manager overview** next to **Team overview** to see each named employee’s interpreted state and experimental indices, without their physiological measurements. It uses the same recorded/manual/live demo interpretations as Team overview; it does not change production manager permissions. Open directly at `/demo#manager`. See [Manager overview preview](manager-preview.md) for scope and privacy limitations.
+Choose **Manager preview** next to **Team signals** to see each named employee’s interpreted state and experimental indices, without their physiological measurements. It uses the same replay/manual/live demo interpretations as Team signals. This is a browser presentation filter, not a server permission boundary, and it does not change company manager permissions. Open directly at `/demo#manager`. See [Manager preview](manager-preview.md) for scope and privacy limitations.
 
 ## Explore work examples
 
-The tabs keep monitoring first and use the same current worker states in three secondary examples. Switching tabs preserves the signal source and does not start an incident.
+The main tabs are **Team signals**, **Manager preview** and **Use cases**. The Use cases page opens three secondary examples using the same current worker states. Switching sections preserves the signal source and does not start an incident.
 
-| Tab | What it shows or does |
+| Section | What it shows or does |
 | --- | --- |
-| **Team overview** | Detailed demo measurements, personal references, trends, and experimental indices |
-| **Manager overview** | Individual conclusions, experimental indices and their trends; physiological measurements omitted |
-| **Breaks & wellbeing** | Explains an illustrative pause suggestion; **Draft suggestion** creates a downloadable local draft |
-| **Focus & meetings** | Explains whether to protect focus or consider a short meeting; **Draft agenda** creates a downloadable local draft |
-| **Incidents** | Runs a connected workflow with Jev assignments, Gemini artifacts, and explicit human decisions |
+| **Team signals** | Detailed demo measurements, personal references, trends, and experimental indices |
+| **Manager preview** | Individual conclusions, experimental indices and their trends; physiological measurements omitted |
+| **Use cases → Break suggestions** | Explains an illustrative pause suggestion; **Draft suggestion** creates a downloadable local draft |
+| **Use cases → Team check-ins** | Explains whether to suggest an asynchronous update or a short check-in; **Draft agenda** creates a downloadable local draft |
+| **Use cases → Incident walkthrough** | Runs a connected workflow with Jev assignments, Gemini artifacts, and explicit human decisions |
 
 Wellbeing and focus use local rules, show their reasons, and disable suggestions when state confidence is insufficient. Their drafts are not sent to anyone and do not change a calendar.
 
 For the incident example:
 
-1. Open **Incidents** and click **Start investigation**. The sample case, **Checkout is slow**, moves through **Investigate → Human decision → Check & report**. Jev chooses among eligible owners using the current monitoring source and states.
+1. Open **Use cases → Incident walkthrough** and click **Start investigation**. The sample case, **Checkout is slow**, moves through **Investigate → Human decision → Check & report**. Jev chooses among eligible owners using the current monitoring source and states when configured; otherwise the labeled local routing policy is used.
 2. Open **Read full analysis** when Gemini's diagnosis draft is ready. Each step shows its owner and result; **Assignment & execution details** provides routing and model provenance.
 3. Click **Confirm diagnosis** after reviewing the evidence. This records the human review and unlocks the separate recovery decision.
 4. Click **Approve recovery plan** when the decision is ready. Gemini checks the sample recovery data and writes the report. **Case complete** then offers **Read incident report**.
@@ -72,15 +72,15 @@ Worker identities, work context, and incident evidence are fictional demonstrati
 
 Model response time and the two human review actions determine completion time. Diagnosis and the critical decision do not complete on a timer. As state changes, the routing policy reconsiders unfinished work and explains any resulting reassignment. Model or network failures appear as explicit fallback results, not successful Gemini calls.
 
-Use **Replay**, **Manual**, or **Live** on **Team overview** to select a source, and choose playback speeds of 1×, 5×, 10×, or 30×. Manual mode exposes the relative-index sliders. **Pause** stops signal playback while eligible background AI work can continue. Example start, review, approval, and resolution preserve the monitoring playback choice. **Restart replay** resets the workspace and reloads the preferred recording; selecting Replay alone resumes the currently loaded recording.
+Open **Presenter controls** on **Team signals** to choose **Recorded playback**, **Manual scenario**, or **Live input**, and playback speeds of 1×, 5×, 10×, or 30×. Despite the playback control's label, a fresh checkout replays synthetic signals; the source banner identifies them. Manual mode exposes the relative-index sliders. **Pause recording** stops signal playback while eligible background AI work can continue. Example start, review, approval, and resolution preserve the monitoring playback choice. **Restart demo** resets the demo and reloads the preferred source; selecting playback alone resumes the currently loaded replay.
 
 ## Input modes
 
 | Mode | Input | How to use |
 | --- | --- | --- |
-| Replay | Preprocessed real UNIVERSE feature windows, with labeled fixture fallback | Select Replay and play; choose speed |
-| Manual | Direct relative state indices | Select Manual; adjust each worker's load, readiness, fatigue and interruption cost |
-| Live | Device/gateway feature readings | Select Live and POST the payload below; routing uses the same inference/orchestration path |
+| Replay | Included synthetic fixture by default; imported UNIVERSE feature windows when present | Select Recorded playback; choose speed |
+| Manual | Direct relative state indices | Select Manual scenario; adjust each worker's workload, readiness, fatigue and interruption cost |
+| Live | Legacy local demo feature readings | Select Live input and POST the payload below; routing uses the same inference/orchestration path |
 
 Manual changes immediately reroute unfinished work using the same policy. Completed steps are retained; dependencies and human-judgment requirements still apply. Scores are relative within-person estimates; a readiness index of 73 does **not** mean “73% medically ready.”
 
@@ -97,7 +97,9 @@ See [dataset processing and exact import commands](dataset.md) for the bounded d
 
 Source: [UNIVERSE dataset, Zenodo record 10371068](https://zenodo.org/records/10371068). This app makes no claim that the workload dataset validates the heuristic readiness/fatigue indices or the fictional enterprise scenario.
 
-### Future ESP32 / MAX30102 / GSR device
+### Legacy local live-input example: ESP32 / MAX30102 / GSR
+
+This development-only endpoint illustrates a custom device or test gateway. It has no company enrollment or device authentication. The implemented phone app instead uses authenticated company `/api/v1` endpoints, as described in [phone onboarding](phone-onboarding.md) and [multi-signal telemetry](telemetry.md).
 
 The device or its private gateway derives heart-rate/variability features from a temporal PPG window. A raw PPG amplitude is insufficient to estimate HRV. Send normalized-schema physiological features (physical feature units, before personal z-score normalization) to:
 
@@ -116,9 +118,9 @@ Content-Type: application/json
 }
 ```
 
-Use a current UTC timestamp. `heart_rate` is beats/minute, `hrv` is RMSSD in milliseconds, EDA is microsiemens, skin temperature is °C, and movement is the standard deviation of acceleration magnitude in g. Send at least five readings spanning eight seconds for a populated ten-second live window. Readings must be strictly increasing per worker and no more than 30 seconds old or five seconds in the future; invalid readings return HTTP 422. After 15 seconds without fresh readings, current monitoring features become unavailable while history is retained. Inference confidence decays and reaches zero after 60 seconds. Worker IDs are `alex` and `aoi`. HTTP is the hardware ingestion interface; `/ws` carries the monitoring snapshot and workflow updates.
+Use a current UTC timestamp. `heart_rate` is beats/minute, `hrv` is RMSSD in milliseconds, EDA is microsiemens, skin temperature is °C, and movement is the standard deviation of acceleration magnitude in g. Send at least five readings spanning eight seconds for a populated ten-second live window. Readings must be strictly increasing per worker and no more than 30 seconds old or five seconds in the future; invalid readings return HTTP 422. After 15 seconds without fresh readings, current monitoring features become unavailable while history is retained. Inference confidence decays and reaches zero after 60 seconds. Stable worker IDs are `alex` (displayed as Alex) and `aoi` (displayed as Sam). HTTP is this demo's ingestion interface; `/ws` carries the monitoring snapshot and workflow updates.
 
-Live input uses an independent **provisional personal reference**, never the imported replay participants' baselines. Until hardware calibration is implemented, live confidence is capped at 0.54. Human assignments require confidence of at least 0.25; falling below that threshold queues human work while eligible AI steps remain available. The confidence threshold is a demo policy, not a scientifically calibrated cutoff. Hardware firmware, device authentication and device-specific baseline calibration are future work.
+Live input uses an independent **provisional personal reference**, never the imported replay participants' baselines. Until hardware calibration is implemented, live confidence is capped at 0.54. Human assignments require confidence of at least 0.25; falling below that threshold queues human work while eligible AI steps remain available. The confidence threshold is a demo policy, not a scientifically calibrated cutoff. Custom ESP32 firmware and device-specific baseline calibration are not implemented here. Company phone credential authentication is implemented separately; it does not secure this legacy local endpoint.
 
 ## Routing and inference
 
@@ -158,7 +160,7 @@ A developer can enable the separate `GET /api/research` endpoint for detailed so
 RESEARCH_ENABLED=true make dev
 ```
 
-Restart required. Requests must also originate from loopback, or provide a configured `RESEARCH_TOKEN` through the `X-Research-Token` header. Research inspection is a developer API surface, separate from the dashboard. This gate protects optional developer diagnostics; ordinary physiological-summary monitoring does not require it. This local MVP has no production authentication, multi-tenant isolation, or durable retention controls.
+Restart required. Requests must also originate from loopback, or provide a configured `RESEARCH_TOKEN` through the `X-Research-Token` header. Research inspection is a developer API surface, separate from the dashboard. This gate protects optional developer diagnostics; ordinary demo physiological-summary monitoring does not require it. The legacy demo has no company authentication, tenant isolation or durable retention; the separate [company workspace](company-workspace.md) implements those controls.
 
 ## Verify
 
@@ -196,4 +198,4 @@ tests/                       Core behavior and failure-path tests
 docs/                        API contract, architecture, dataset provenance
 ```
 
-State lives in one API process and resets when the process restarts. Run a single API worker. This is a local physiological-monitoring MVP with unvalidated cognitive inference and secondary work examples using real model calls over sample operational evidence.
+Demo state lives in one API process and resets when the process restarts. Run a single API worker for the local demo. These examples use unvalidated formula indices and optional real AI calls over sample operational evidence. Company persistence, phone enrollment and deployment are separate from this legacy demo contract; see the [server overview](../README.md).

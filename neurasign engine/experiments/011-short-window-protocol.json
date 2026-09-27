@@ -1,0 +1,36 @@
+{
+  "version": "011-one-second-evidence",
+  "registered_before": "Extraction or scoring of the new duration comparison. Previous experiment 010 outcomes are already known.",
+  "question": "Can a classifier using one second of released raw wrist samples distinguish low/high questionnaire ratings, compared with a matched sixty-second interval?",
+  "seed": 20260926,
+  "population": "Exactly the experiment 010 eligible Lab1/Lab2 rows per target, from the original 19 development participants. The original five UNIVERSE test people and Mobile test remain excluded. Mental demand has 17 paired people; mental effort has two and is descriptive only.",
+  "timing": "Extract [end-1,end) and [end-60,end) at the same existing endpoints, spaced 10 seconds apart. Change evidence duration, not refresh cadence or example count. Matching starts at the existing 60-second endpoints; this does not test the first second after a task transition.",
+  "profiles": {
+    "short1": "23 statistics from exactly one second of raw BVP, EDA, temperature and aligned acceleration, without prior samples, padding, filter state or history features.",
+    "short60": "The identical 23 statistics from sixty seconds: the controlled duration comparator.",
+    "legacy60": "The existing 28-feature, sixty-second experiment 010 all profile, including device HR and pulse-interval variability. A feature comparator, not the controlled duration effect. No history-relative features."
+  },
+  "short_features": "For BVP, EDA, temperature and motion magnitude: mean, population standard deviation, p90-p10 range, slope per second, last-third mean minus first-third mean. Also motion ENMO mean, motion jerk RMS and accelerometer clipping fraction. One sample supports mean only. Invalid or absent features remain NaN. Median imputation and missingness indicators are fitted on training folds only. No HRV, pulse-rate or spectral estimate is fabricated from one second.",
+  "upstream_limits": "Exclude manufacturer heart_rate from both matched profiles because E4 HR averages ten-second spans. Hardware internal filtering and the authors' offline clock alignment remain upstream limitations. The test uses one second of released aligned samples, not an end-to-end hardware latency claim.",
+  "targets": {
+    "mental_demand": "Primary: questionnaire <=100/3 is low; >=200/3 is high. Middle and missing answers are excluded exactly as in experiment 010.",
+    "mental_effort": "Secondary: original questionnaire 1-2 is low, 4-5 is high; neutral 3 and missing answers are excluded exactly as in experiment 010."
+  },
+  "split": "Lab1 only for preprocessing, fitting and selection; Lab2 for evaluation. General training excludes the evaluation person's entire original participant fold. Personal training uses own Lab1. Hybrid combines those sources with half the weight assigned to each before class balancing. Lab2 labels never select models.",
+  "models": {
+    "fixed": "Logistic regression C=1 in every profile and general/personal/hybrid arm.",
+    "selected": "Four candidates: logistic C=1, RBF SVM C=1, ExtraTrees with 150 trees/depth 6/minimum leaf 5, and CatBoost with 200 iterations/depth 4/learning rate 0.04/L2 10. Hyperparameters and preprocessing match experiment 010. Only the declared feature columns enter models.",
+    "validation": "General selection uses up to three participant-disjoint Lab1 folds. Personal selection uses up to three stratified task-disjoint Lab1 folds. Hybrid uses the general choice. Insufficient personal calibration uses the fixed algorithm; single-class calibration uses a documented constant fallback.",
+    "fitting": "At most 20 evenly spaced windows per training task; evaluate every eligible Lab2 window. Equal person/task weighting, then class balancing. Fit imputation and scaling separately inside each training fold.",
+    "baselines": "Other-person majority and own-session majority calculated from Lab1 only, with equal person/task weighting."
+  },
+  "evaluation": {
+    "primary": "Mean within-person balanced accuracy among people with both Lab2 classes. Also ordinary accuracy, low/high recall and the weighted confusion matrix.",
+    "groups": "All paired people first; then active tasks excluding relaxation video, and adequate calibration with at least two Lab1 tasks per class. Preserve exact row matching across profiles.",
+    "duration_effect": "short1 minus short60, with 10,000 paired whole-person bootstrap draws for each corresponding fixed/selected arm. Intervals are descriptive and do not account for multiple comparisons or prior use of development data.",
+    "coverage": "Report matched row counts, source label coverage and per-feature availability. More output windows are not additional independently labeled seconds.",
+    "interpretation": "A constant scores 50% within-person balanced accuracy. The prior 70% research criterion remains context, not deployment certification. Labels describe tasks, not instantaneous states. Lab2 has appeared in earlier development and is not an untouched test."
+  },
+  "artifacts": "Write new short-window-v1 data/results/models, experiment 011 records and new code/tests. Preserve earlier data, models, reports and code hashes. Freeze selections before evaluation; refuse to overwrite completed evaluation. No dashboard or phone integration.",
+  "stop": "Finish the matched comparison and audit window boundaries, excluded vendor HR, group separation, saved artifacts and independently recalculated metrics. Report actual outcomes without changing cutoffs or tuning on Lab2."
+}

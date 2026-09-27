@@ -5,8 +5,13 @@ A company workspace for monitoring received physiological signals from employees
 ```text
 neurasign/
 ├── neurasign_phone_app/          Native phone gateway, shared core and adapter contract
-└── neurasign_server_dashboard/   Company API, dashboard, demo, deployment and tests
+├── neurasign_server_dashboard/   Company API, dashboard, demo, deployment and tests
+└── neurasign engine/             Signal interpretation research and experiment plans
 ```
+
+The [engine research workspace](<neurasign engine/README.md>) contains verified UNIVERSE wrist data, offline model comparisons and a causal raw-signal interface. The latter processes timestamped sensor blocks through 60-second trailing windows with updates every 10 seconds, including motion and signal-quality checks. A separate [one-second evidence experiment](<neurasign engine/experiments/011-short-window-results.md>) compares retrained classifiers on matched 1s/60s raw windows; the one-second mental-demand results remain near the 50% constant reference. Its research models estimate questionnaire ratings; streaming computation does not establish instantaneous state accuracy. The engine is not integrated into the company application.
+
+The [model evidence card](<neurasign engine/MODEL_CARD.md>) maps the research to stress, readiness, fatigue and workload. It includes the newly trained stress benchmarks and their measured results, baselines, sensor limits and missing labels. There is no validated 80% model across the four product outputs.
 
 Start locally, without any Google Cloud account:
 

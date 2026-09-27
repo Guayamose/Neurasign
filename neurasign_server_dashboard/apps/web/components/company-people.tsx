@@ -13,9 +13,9 @@ export type DashboardAccount = { id: string; name: string; email: string; role: 
 type Api = <T>(path: string, method?: string, body?: unknown) => Promise<T>;
 type ConnectionCode = { link: string; name: string; personId: string; expires: number };
 
-export function CompanyPeople({ org, teams, people, accounts, owner, canManage, api, reload }: {
+export function CompanyPeople({ org, teams, people, accounts, owner, canManage, focusPersonId, startSetup = false, api, reload }: {
   org: string; teams: Team[]; people: Person[]; accounts: DashboardAccount[]; owner: boolean;
-  canManage: boolean; api: Api; reload: () => Promise<void>;
+  canManage: boolean; focusPersonId?: string; startSetup?: boolean; api: Api; reload: () => Promise<void>;
 }) {
   const [busy, setBusy] = useState(false), [error, setError] = useState("");
   const [invite, setInvite] = useState(""), [copied, setCopied] = useState("");
@@ -25,12 +25,29 @@ export function CompanyPeople({ org, teams, people, accounts, owner, canManage, 
   const [sort, setSort] = useState<RosterSort>("name");
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(25);
+  const [setupOpen, setSetupOpen] = useState(startSetup || !people.length);
+  const [focusedPersonId, setFocusedPersonId] = useState<string>();
   const listRef = useRef<HTMLDivElement>(null);
+  const focusRow = useRef<HTMLDivElement>(null);
   const [code, setCode] = useState<ConnectionCode | null>(null);
   const [now, setNow] = useState(Date.now());
   const dialog = useRef<HTMLElement>(null);
   const connectionTrigger = useRef<HTMLElement | null>(null);
   const dialogOpen = code !== null;
+  const targetName = people.find(person => person.id === focusPersonId)?.name;
+
+  useEffect(() => {
+    if (!focusPersonId || !targetName) return;
+    setFocusedPersonId(focusPersonId); setQuery(targetName); setTeamFilter(""); setSharingFilter(""); setPageIndex(0); setSetupOpen(false);
+  }, [focusPersonId, targetName]);
+  useEffect(() => {
+    if (!focusedPersonId) return;
+    const frame = requestAnimationFrame(() => {
+      focusRow.current?.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
+      focusRow.current?.scrollIntoView({ block: "center" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [focusedPersonId]);
 
   useEffect(() => {
     if (!dialogOpen) return;
@@ -89,19 +106,19 @@ export function CompanyPeople({ org, teams, people, accounts, owner, canManage, 
   const canManagePerson = (person: Person) => canManage && (owner || teams.some(team => team.id === person.team_id));
   const path = `/organizations/${org}`;
   const seconds = code ? Math.min(300, Math.max(0, Math.ceil(code.expires - now / 1000))) : 0;
-  const filteredPeople = useMemo(() => selectRoster(people, teams, { query, team: teamFilter, sharing: sharingFilter, sort }), [people, teams, query, teamFilter, sharingFilter, sort]);
+  const filteredPeople = useMemo(() => selectRoster(people, teams, { query, team: teamFilter, sharing: sharingFilter, sort }).filter(person => !focusedPersonId || person.id === focusedPersonId), [people, teams, query, teamFilter, sharingFilter, sort, focusedPersonId]);
   const page = rosterPage(filteredPeople, pageIndex, pageSize);
   useEffect(() => { if (page.page !== pageIndex) setPageIndex(page.page); }, [page.page, pageIndex]);
-  function changeFilter(update: () => void) { update(); setPageIndex(0); }
+  function changeFilter(update: () => void) { update(); setFocusedPersonId(undefined); setPageIndex(0); }
   function changePage(next: number) { setPageIndex(next); if (listRef.current) listRef.current.scrollTop = 0; }
 
   return <div className="co-people-admin">
     {error && !code && <div className="co-message error" role="alert">{error}<button aria-label="Dismiss error" onClick={() => setError("")}><X size={16} /></button></div>}
-    {canManage && <ol className="co-setup-path" aria-label="Employee setup steps">
+    {canManage && <details className="co-people-setup-disclosure" open={setupOpen} onToggle={event => setSetupOpen(event.currentTarget.open)}><summary><UserPlus size={19} /><span><strong>Add people or teams</strong><small>Create a profile, then connect their phone.</small></span><ChevronDown size={18} /></summary><div className="co-setup-disclosure-body"><ol className="co-setup-path" aria-label="Employee setup steps">
       <li className={teams.length ? "complete" : ""}><span>{teams.length ? <Check size={16} /> : "1"}</span><div><strong>Create a team</strong><small>Group your people</small></div><ArrowRight size={16} /></li>
       <li className={people.length ? "complete" : ""}><span>{people.length ? <Check size={16} /> : "2"}</span><div><strong>Add an employee</strong><small>No employee account needed</small></div><ArrowRight size={16} /></li>
       <li><span><Smartphone size={16} /></span><div><strong>Connect their phone</strong><small>Scan the code below</small></div></li>
-    </ol>}
+    </ol>
 
     <div className="co-people-setup">
       <section className="co-panel co-form-panel co-team-setup">
@@ -121,10 +138,10 @@ export function CompanyPeople({ org, teams, people, accounts, owner, canManage, 
           void act(async () => { await api(`${path}/employees`, "POST", { name: data.get("name"), team_id: data.get("team") }); form.reset(); });
         }}><fieldset disabled={busy || !teams.length} className="co-employee-fields"><label>Employee name<input name="name" placeholder="Alex Morgan" minLength={2} maxLength={80} required /></label><label>Team<select name="team" aria-label="Employee team" required defaultValue=""><option value="" disabled>Select a team</option>{teams.map(team => <option key={team.id} value={team.id}>{team.name}</option>)}</select></label></fieldset><div className="co-form-action"><span>{!teams.length ? "Create a team first." : "You can connect their phone next."}</span><button className="co-primary" disabled={busy || !teams.length}><Plus size={15} />Add employee</button></div></form>
       </section>}
-    </div>
+    </div></div></details>}
 
     <section className="co-panel co-roster">
-      <div className="co-panel-head"><div><h2>Employees <span className="co-inline-count">{people.length}</span></h2><p>Connect phones and manage team membership.</p></div></div>
+      <div className="co-panel-head"><div><h2>Employees <span className="co-inline-count">{people.length}</span></h2><p>Connect a phone or change an employee’s team.</p></div>{canManage && !setupOpen && <button className="co-secondary" onClick={() => { setSetupOpen(true); requestAnimationFrame(() => document.querySelector<HTMLInputElement>('.co-employee-setup input[name="name"]')?.focus()); }}><UserPlus size={17} />Add employee</button>}</div>
       {people.length > 0 && <div className="co-roster-filters co-admin-filters">
         <label className="co-filter-search">Find a person or team<input type="search" aria-label="Search employees or teams" placeholder="Name or team" value={query} onChange={event => changeFilter(() => setQuery(event.target.value))} /></label>
         <label>Team<select aria-label="Filter employee team" value={teamFilter} onChange={event => changeFilter(() => setTeamFilter(event.target.value))}><option value="">All teams</option><option value="unassigned">Unassigned</option>{teams.map(team => <option key={team.id} value={team.id}>{team.name}</option>)}</select></label>
@@ -132,7 +149,8 @@ export function CompanyPeople({ org, teams, people, accounts, owner, canManage, 
         <label>Sort by<select aria-label="Sort employees" value={sort} onChange={event => changeFilter(() => setSort(event.target.value as RosterSort))}><option value="name">Name A–Z</option><option value="name_desc">Name Z–A</option></select></label>
         {(query || teamFilter || sharingFilter) && <button className="co-secondary" onClick={() => changeFilter(() => { setQuery(""); setTeamFilter(""); setSharingFilter(""); })}>Clear filters</button>}
       </div>}
-      {!people.length ? <div className="co-empty"><span className="co-empty-detail-icon"><Users size={26} /></span><h3>Your team starts here</h3><p>Add your first employee above. Then select <strong>Connect phone</strong>.</p></div> : !filteredPeople.length ? <div className="co-empty"><Search size={24} /><h3>No matching people</h3><button className="co-text" onClick={() => changeFilter(() => { setQuery(""); setTeamFilter(""); setSharingFilter(""); })}>Clear filters</button></div> : <div ref={listRef} className="co-admin-list" role="list" aria-label="Employees">{page.items.map(person => <div className="co-list-row co-employee-row" role="listitem" key={person.id}>
+      {focusedPersonId && <div className="co-focused-person-note" role="status"><span>Connect this person’s phone using the button below.</span><button className="co-text" onClick={() => changeFilter(() => setQuery(""))}>Show all employees</button></div>}
+      {!people.length ? <div className="co-empty"><span className="co-empty-detail-icon"><Users size={26} /></span><h3>Your team starts here</h3><p>{canManage ? <>Add your first employee above. Then select <strong>Connect phone</strong>.</> : "Your manager will add people to this workspace."}</p></div> : !filteredPeople.length ? <div className="co-empty"><Search size={24} /><h3>No matching people</h3><button className="co-text" onClick={() => changeFilter(() => { setQuery(""); setTeamFilter(""); setSharingFilter(""); })}>Clear filters</button></div> : <div ref={listRef} className="co-admin-list" role="list" aria-label="Employees">{page.items.map(person => <div className={`co-list-row co-employee-row${person.id === focusedPersonId ? " targeted" : ""}`} role="listitem" key={person.id} data-person-id={person.id} ref={person.id === focusedPersonId ? focusRow : undefined}>
         <span className="co-avatar">{person.name.split(" ").map(part => part[0]).slice(0, 2).join("")}</span>
         <div className="co-employee-identity"><strong>{person.name}</strong><small className={person.sharing ? "co-sharing-on" : ""}>{person.sharing ? <><span className="co-tiny-dot" />Sharing enabled</> : <><Pause size={10} />Sharing paused</>}</small></div>
         {canManagePerson(person) ? <select aria-label={`Team for ${person.name}`} value={person.team_id ?? ""} disabled={busy} onChange={e => { const teamId = e.target.value; void act(async () => { await api(`${path}/employees/${person.id}`, "PATCH", { name: person.name, team_id: teamId }); }); }}><option value="" disabled>Unassigned</option>{teams.map(team => <option key={team.id} value={team.id}>{team.name}</option>)}</select> : <span className="co-employee-team">{teams.find(team => team.id === person.team_id)?.name ?? "Unassigned"}</span>}

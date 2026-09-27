@@ -99,6 +99,7 @@ async def main():
         await page.goto(WEB + "/", wait_until="domcontentloaded")
         await page.get_by_role("button", name="Sign in with test account").click()
         await expect(page.get_by_test_id("company-workspace")).to_be_visible(timeout=30000)
+        await page.locator(".co-research-nav > summary").click()
         await page.get_by_role("link", name="Model engine", exact=True).click()
         await expect(page).to_have_url(WEB + "/models")
         await expect(page.get_by_test_id("run-model")).to_be_enabled(timeout=60000)

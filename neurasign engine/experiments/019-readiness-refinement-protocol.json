@@ -1,0 +1,773 @@
+{
+  "experiment": 19,
+  "name": "readiness-refinement-v1",
+  "target": "Observed daily Oura readiness1\u2013100; vendor-score approximation, not independent live employee readiness.",
+  "evaluation": "Exploratory nested development evaluation only. Original four test people stay excluded; not fresh external validation or a direct comparison with the prior3.98testMAE.",
+  "people": [
+    "par_1",
+    "par_10",
+    "par_11",
+    "par_12",
+    "par_16",
+    "par_17",
+    "par_19",
+    "par_2",
+    "par_3",
+    "par_4",
+    "par_5",
+    "par_7",
+    "par_8",
+    "par_9"
+  ],
+  "old_test_people_excluded": [
+    "par_13",
+    "par_15",
+    "par_18",
+    "par_6"
+  ],
+  "rows": 2788,
+  "profiles": {
+    "original": [
+      "duration",
+      "awake",
+      "light",
+      "rem",
+      "deep",
+      "total",
+      "onset_latency",
+      "midpoint_time",
+      "efficiency",
+      "restless",
+      "hr_average",
+      "hr_lowest",
+      "rmssd",
+      "breath_average",
+      "temperature_delta",
+      "hr_average_past7_mean",
+      "hr_average_past7_delta",
+      "hr_lowest_past7_mean",
+      "hr_lowest_past7_delta",
+      "rmssd_past7_mean",
+      "rmssd_past7_delta",
+      "total_past7_mean",
+      "total_past7_delta",
+      "temperature_delta_past7_mean",
+      "temperature_delta_past7_delta",
+      "hr_average_past14_mean",
+      "hr_average_past14_delta",
+      "hr_lowest_past14_mean",
+      "hr_lowest_past14_delta",
+      "rmssd_past14_mean",
+      "rmssd_past14_delta",
+      "total_past14_mean",
+      "total_past14_delta",
+      "temperature_delta_past14_mean",
+      "temperature_delta_past14_delta",
+      "previous_activity_cal_active",
+      "previous_activity_steps",
+      "previous_activity_non_wear",
+      "previous_activity_rest",
+      "previous_activity_inactive",
+      "previous_activity_low",
+      "previous_activity_medium",
+      "previous_activity_high",
+      "previous_activity_average_met",
+      "heart_rate_night_std",
+      "heart_rate_night_range",
+      "heart_rate_late_minus_early",
+      "heart_rmssd_night_std",
+      "heart_rmssd_night_range",
+      "heart_rmssd_late_minus_early"
+    ],
+    "recovery_context": [
+      "duration",
+      "awake",
+      "light",
+      "rem",
+      "deep",
+      "total",
+      "onset_latency",
+      "midpoint_time",
+      "efficiency",
+      "restless",
+      "hr_average",
+      "hr_lowest",
+      "rmssd",
+      "breath_average",
+      "temperature_delta",
+      "hr_average_past7_mean",
+      "hr_average_past7_delta",
+      "hr_lowest_past7_mean",
+      "hr_lowest_past7_delta",
+      "rmssd_past7_mean",
+      "rmssd_past7_delta",
+      "total_past7_mean",
+      "total_past7_delta",
+      "temperature_delta_past7_mean",
+      "temperature_delta_past7_delta",
+      "hr_average_past14_mean",
+      "hr_average_past14_delta",
+      "hr_lowest_past14_mean",
+      "hr_lowest_past14_delta",
+      "rmssd_past14_mean",
+      "rmssd_past14_delta",
+      "total_past14_mean",
+      "total_past14_delta",
+      "temperature_delta_past14_mean",
+      "temperature_delta_past14_delta",
+      "previous_activity_cal_active",
+      "previous_activity_steps",
+      "previous_activity_non_wear",
+      "previous_activity_rest",
+      "previous_activity_inactive",
+      "previous_activity_low",
+      "previous_activity_medium",
+      "previous_activity_high",
+      "previous_activity_average_met",
+      "heart_rate_night_std",
+      "heart_rate_night_range",
+      "heart_rate_late_minus_early",
+      "heart_rmssd_night_std",
+      "heart_rmssd_night_range",
+      "heart_rmssd_late_minus_early",
+      "awake_fraction",
+      "light_fraction",
+      "rem_fraction",
+      "deep_fraction",
+      "total_fraction",
+      "log_rmssd",
+      "heart_average_above_lowest",
+      "heart_average_lowest_ratio",
+      "sleep_below_eight_hours",
+      "bedtime_duration_hours",
+      "bedtime_start_midnight_delta_sin",
+      "bedtime_start_midnight_delta_cos",
+      "bedtime_end_midnight_delta_sin",
+      "bedtime_end_midnight_delta_cos",
+      "hr_average_history7_median",
+      "hr_average_history7_delta",
+      "hr_average_history7_relative",
+      "hr_average_history7_robust_z",
+      "hr_lowest_history7_median",
+      "hr_lowest_history7_delta",
+      "hr_lowest_history7_relative",
+      "hr_lowest_history7_robust_z",
+      "rmssd_history7_median",
+      "rmssd_history7_delta",
+      "rmssd_history7_relative",
+      "rmssd_history7_robust_z",
+      "breath_average_history7_median",
+      "breath_average_history7_delta",
+      "breath_average_history7_relative",
+      "breath_average_history7_robust_z",
+      "temperature_delta_history7_median",
+      "temperature_delta_history7_delta",
+      "temperature_delta_history7_relative",
+      "temperature_delta_history7_robust_z",
+      "total_history7_median",
+      "total_history7_delta",
+      "total_history7_relative",
+      "total_history7_robust_z",
+      "deep_history7_median",
+      "deep_history7_delta",
+      "deep_history7_relative",
+      "deep_history7_robust_z",
+      "rem_history7_median",
+      "rem_history7_delta",
+      "rem_history7_relative",
+      "rem_history7_robust_z",
+      "efficiency_history7_median",
+      "efficiency_history7_delta",
+      "efficiency_history7_relative",
+      "efficiency_history7_robust_z",
+      "onset_latency_history7_median",
+      "onset_latency_history7_delta",
+      "onset_latency_history7_relative",
+      "onset_latency_history7_robust_z",
+      "restless_history7_median",
+      "restless_history7_delta",
+      "restless_history7_relative",
+      "restless_history7_robust_z",
+      "sleep_debt_history7",
+      "hr_average_history14_median",
+      "hr_average_history14_delta",
+      "hr_average_history14_relative",
+      "hr_average_history14_robust_z",
+      "hr_lowest_history14_median",
+      "hr_lowest_history14_delta",
+      "hr_lowest_history14_relative",
+      "hr_lowest_history14_robust_z",
+      "rmssd_history14_median",
+      "rmssd_history14_delta",
+      "rmssd_history14_relative",
+      "rmssd_history14_robust_z",
+      "breath_average_history14_median",
+      "breath_average_history14_delta",
+      "breath_average_history14_relative",
+      "breath_average_history14_robust_z",
+      "temperature_delta_history14_median",
+      "temperature_delta_history14_delta",
+      "temperature_delta_history14_relative",
+      "temperature_delta_history14_robust_z",
+      "total_history14_median",
+      "total_history14_delta",
+      "total_history14_relative",
+      "total_history14_robust_z",
+      "deep_history14_median",
+      "deep_history14_delta",
+      "deep_history14_relative",
+      "deep_history14_robust_z",
+      "rem_history14_median",
+      "rem_history14_delta",
+      "rem_history14_relative",
+      "rem_history14_robust_z",
+      "efficiency_history14_median",
+      "efficiency_history14_delta",
+      "efficiency_history14_relative",
+      "efficiency_history14_robust_z",
+      "onset_latency_history14_median",
+      "onset_latency_history14_delta",
+      "onset_latency_history14_relative",
+      "onset_latency_history14_robust_z",
+      "restless_history14_median",
+      "restless_history14_delta",
+      "restless_history14_relative",
+      "restless_history14_robust_z",
+      "sleep_debt_history14",
+      "hr_average_history28_median",
+      "hr_average_history28_delta",
+      "hr_average_history28_relative",
+      "hr_average_history28_robust_z",
+      "hr_lowest_history28_median",
+      "hr_lowest_history28_delta",
+      "hr_lowest_history28_relative",
+      "hr_lowest_history28_robust_z",
+      "rmssd_history28_median",
+      "rmssd_history28_delta",
+      "rmssd_history28_relative",
+      "rmssd_history28_robust_z",
+      "breath_average_history28_median",
+      "breath_average_history28_delta",
+      "breath_average_history28_relative",
+      "breath_average_history28_robust_z",
+      "temperature_delta_history28_median",
+      "temperature_delta_history28_delta",
+      "temperature_delta_history28_relative",
+      "temperature_delta_history28_robust_z",
+      "total_history28_median",
+      "total_history28_delta",
+      "total_history28_relative",
+      "total_history28_robust_z",
+      "deep_history28_median",
+      "deep_history28_delta",
+      "deep_history28_relative",
+      "deep_history28_robust_z",
+      "rem_history28_median",
+      "rem_history28_delta",
+      "rem_history28_relative",
+      "rem_history28_robust_z",
+      "efficiency_history28_median",
+      "efficiency_history28_delta",
+      "efficiency_history28_relative",
+      "efficiency_history28_robust_z",
+      "onset_latency_history28_median",
+      "onset_latency_history28_delta",
+      "onset_latency_history28_relative",
+      "onset_latency_history28_robust_z",
+      "restless_history28_median",
+      "restless_history28_delta",
+      "restless_history28_relative",
+      "restless_history28_robust_z",
+      "sleep_debt_history28",
+      "activity_history7_steps_mean",
+      "activity_history7_steps_std",
+      "activity_history7_steps_last_delta",
+      "activity_history7_cal_active_mean",
+      "activity_history7_cal_active_std",
+      "activity_history7_cal_active_last_delta",
+      "activity_history7_average_met_mean",
+      "activity_history7_average_met_std",
+      "activity_history7_average_met_last_delta",
+      "activity_history7_inactive_mean",
+      "activity_history7_inactive_std",
+      "activity_history7_inactive_last_delta",
+      "activity_history7_low_mean",
+      "activity_history7_low_std",
+      "activity_history7_low_last_delta",
+      "activity_history7_medium_mean",
+      "activity_history7_medium_std",
+      "activity_history7_medium_last_delta",
+      "activity_history7_high_mean",
+      "activity_history7_high_std",
+      "activity_history7_high_last_delta",
+      "activity_history14_steps_mean",
+      "activity_history14_steps_std",
+      "activity_history14_steps_last_delta",
+      "activity_history14_cal_active_mean",
+      "activity_history14_cal_active_std",
+      "activity_history14_cal_active_last_delta",
+      "activity_history14_average_met_mean",
+      "activity_history14_average_met_std",
+      "activity_history14_average_met_last_delta",
+      "activity_history14_inactive_mean",
+      "activity_history14_inactive_std",
+      "activity_history14_inactive_last_delta",
+      "activity_history14_low_mean",
+      "activity_history14_low_std",
+      "activity_history14_low_last_delta",
+      "activity_history14_medium_mean",
+      "activity_history14_medium_std",
+      "activity_history14_medium_last_delta",
+      "activity_history14_high_mean",
+      "activity_history14_high_std",
+      "activity_history14_high_last_delta",
+      "heart_rate_trajectory_q10",
+      "heart_rate_trajectory_q50",
+      "heart_rate_trajectory_q90",
+      "heart_rate_trajectory_early_median",
+      "heart_rate_trajectory_late_median",
+      "heart_rate_trajectory_late_minus_early",
+      "heart_rate_trajectory_slope",
+      "heart_rate_trajectory_lowest_position",
+      "heart_rate_trajectory_early_above_lowest",
+      "heart_rate_trajectory_high_fraction",
+      "heart_rmssd_trajectory_q10",
+      "heart_rmssd_trajectory_q50",
+      "heart_rmssd_trajectory_q90",
+      "heart_rmssd_trajectory_early_median",
+      "heart_rmssd_trajectory_late_median",
+      "heart_rmssd_trajectory_late_minus_early",
+      "heart_rmssd_trajectory_slope",
+      "heart_rmssd_trajectory_lowest_position",
+      "heart_rmssd_trajectory_early_above_lowest",
+      "heart_rmssd_trajectory_high_fraction"
+    ]
+  },
+  "configurations": [
+    {
+      "profile": "original",
+      "algorithm": "ridge100"
+    },
+    {
+      "profile": "original",
+      "algorithm": "spline100"
+    },
+    {
+      "profile": "original",
+      "algorithm": "svr10"
+    },
+    {
+      "profile": "original",
+      "algorithm": "svr100"
+    },
+    {
+      "profile": "original",
+      "algorithm": "cat_rmse3"
+    },
+    {
+      "profile": "original",
+      "algorithm": "cat_rmse5"
+    },
+    {
+      "profile": "original",
+      "algorithm": "cat_mae4"
+    },
+    {
+      "profile": "original",
+      "algorithm": "hgb7"
+    },
+    {
+      "profile": "original",
+      "algorithm": "hgb15"
+    },
+    {
+      "profile": "recovery_context",
+      "algorithm": "ridge100"
+    },
+    {
+      "profile": "recovery_context",
+      "algorithm": "spline100"
+    },
+    {
+      "profile": "recovery_context",
+      "algorithm": "svr10"
+    },
+    {
+      "profile": "recovery_context",
+      "algorithm": "svr100"
+    },
+    {
+      "profile": "recovery_context",
+      "algorithm": "cat_rmse3"
+    },
+    {
+      "profile": "recovery_context",
+      "algorithm": "cat_rmse5"
+    },
+    {
+      "profile": "recovery_context",
+      "algorithm": "cat_mae4"
+    },
+    {
+      "profile": "recovery_context",
+      "algorithm": "hgb7"
+    },
+    {
+      "profile": "recovery_context",
+      "algorithm": "hgb15"
+    }
+  ],
+  "folds": [
+    {
+      "fold": 0,
+      "training_people": [
+        "par_1",
+        "par_10",
+        "par_16",
+        "par_19",
+        "par_3",
+        "par_4",
+        "par_5",
+        "par_7",
+        "par_8",
+        "par_9"
+      ],
+      "validation_people": [
+        "par_11",
+        "par_12",
+        "par_17",
+        "par_2"
+      ],
+      "inner": [
+        {
+          "training_people": [
+            "par_1",
+            "par_16",
+            "par_19",
+            "par_3",
+            "par_4",
+            "par_8",
+            "par_9"
+          ],
+          "validation_people": [
+            "par_10",
+            "par_5",
+            "par_7"
+          ]
+        },
+        {
+          "training_people": [
+            "par_10",
+            "par_4",
+            "par_5",
+            "par_7",
+            "par_8",
+            "par_9"
+          ],
+          "validation_people": [
+            "par_1",
+            "par_16",
+            "par_19",
+            "par_3"
+          ]
+        },
+        {
+          "training_people": [
+            "par_1",
+            "par_10",
+            "par_16",
+            "par_19",
+            "par_3",
+            "par_5",
+            "par_7"
+          ],
+          "validation_people": [
+            "par_4",
+            "par_8",
+            "par_9"
+          ]
+        }
+      ]
+    },
+    {
+      "fold": 1,
+      "training_people": [
+        "par_1",
+        "par_11",
+        "par_12",
+        "par_16",
+        "par_17",
+        "par_19",
+        "par_2",
+        "par_3",
+        "par_4",
+        "par_8",
+        "par_9"
+      ],
+      "validation_people": [
+        "par_10",
+        "par_5",
+        "par_7"
+      ],
+      "inner": [
+        {
+          "training_people": [
+            "par_1",
+            "par_16",
+            "par_19",
+            "par_3",
+            "par_4",
+            "par_8",
+            "par_9"
+          ],
+          "validation_people": [
+            "par_11",
+            "par_12",
+            "par_17",
+            "par_2"
+          ]
+        },
+        {
+          "training_people": [
+            "par_11",
+            "par_12",
+            "par_17",
+            "par_2",
+            "par_4",
+            "par_8",
+            "par_9"
+          ],
+          "validation_people": [
+            "par_1",
+            "par_16",
+            "par_19",
+            "par_3"
+          ]
+        },
+        {
+          "training_people": [
+            "par_1",
+            "par_11",
+            "par_12",
+            "par_16",
+            "par_17",
+            "par_19",
+            "par_2",
+            "par_3"
+          ],
+          "validation_people": [
+            "par_4",
+            "par_8",
+            "par_9"
+          ]
+        }
+      ]
+    },
+    {
+      "fold": 2,
+      "training_people": [
+        "par_10",
+        "par_11",
+        "par_12",
+        "par_17",
+        "par_2",
+        "par_4",
+        "par_5",
+        "par_7",
+        "par_8",
+        "par_9"
+      ],
+      "validation_people": [
+        "par_1",
+        "par_16",
+        "par_19",
+        "par_3"
+      ],
+      "inner": [
+        {
+          "training_people": [
+            "par_10",
+            "par_4",
+            "par_5",
+            "par_7",
+            "par_8",
+            "par_9"
+          ],
+          "validation_people": [
+            "par_11",
+            "par_12",
+            "par_17",
+            "par_2"
+          ]
+        },
+        {
+          "training_people": [
+            "par_11",
+            "par_12",
+            "par_17",
+            "par_2",
+            "par_4",
+            "par_8",
+            "par_9"
+          ],
+          "validation_people": [
+            "par_10",
+            "par_5",
+            "par_7"
+          ]
+        },
+        {
+          "training_people": [
+            "par_10",
+            "par_11",
+            "par_12",
+            "par_17",
+            "par_2",
+            "par_5",
+            "par_7"
+          ],
+          "validation_people": [
+            "par_4",
+            "par_8",
+            "par_9"
+          ]
+        }
+      ]
+    },
+    {
+      "fold": 3,
+      "training_people": [
+        "par_1",
+        "par_10",
+        "par_11",
+        "par_12",
+        "par_16",
+        "par_17",
+        "par_19",
+        "par_2",
+        "par_3",
+        "par_5",
+        "par_7"
+      ],
+      "validation_people": [
+        "par_4",
+        "par_8",
+        "par_9"
+      ],
+      "inner": [
+        {
+          "training_people": [
+            "par_1",
+            "par_10",
+            "par_16",
+            "par_19",
+            "par_3",
+            "par_5",
+            "par_7"
+          ],
+          "validation_people": [
+            "par_11",
+            "par_12",
+            "par_17",
+            "par_2"
+          ]
+        },
+        {
+          "training_people": [
+            "par_1",
+            "par_11",
+            "par_12",
+            "par_16",
+            "par_17",
+            "par_19",
+            "par_2",
+            "par_3"
+          ],
+          "validation_people": [
+            "par_10",
+            "par_5",
+            "par_7"
+          ]
+        },
+        {
+          "training_people": [
+            "par_10",
+            "par_11",
+            "par_12",
+            "par_17",
+            "par_2",
+            "par_5",
+            "par_7"
+          ],
+          "validation_people": [
+            "par_1",
+            "par_16",
+            "par_19",
+            "par_3"
+          ]
+        }
+      ]
+    }
+  ],
+  "fixed_reference": "Re-fit the experiment016 SVR C10 + CatBoost depths3/5 ensemble on each outer training fold using original features.",
+  "selection": "Four outer person folds. Three inner person folds select minimum person-weighted MAE among registered configurations and optional mean of best three. No outer targets in selection.",
+  "features": "Prior pipeline plus sleep-stage fractions, sleep timing phase,7/14/28-day preceding physiology medians/deviations, preceding activity histories and raw overnight heart trajectories. No score/contributor/target history/questionnaire/identity/calendar date predictors.",
+  "cutoff": "End of completed sleep. All prior histories end strictly before it; activity ends no later than it. Heart samples only inside the completed night. Same-date alignment inherited without shifts.",
+  "source_license": "CC0-1.0; https://zenodo.org/records/10458511",
+  "metrics": "Equal person weights; MAE, RMSE, R2, agreement within \u00b15/\u00b110. Paired person bootstrap against the refit fixed reference.",
+  "fitting": "Weighted scaler and estimator for new candidates, training-fold median imputation only. Fixed reference preserves original unweighted scaling. Spline features and robust losses are selected inside inner folds.",
+  "gate": "At least10% lower outer MAE than the fixed reference, MAE<=4, R2>=0.5; not production validation.",
+  "production_enabled": false,
+  "data_sha256": "0981090217721efda0f693b3b36c40a463231d2e2f8b8139472e1d4280820aac",
+  "prior_prepared_sha256": "d6982a7691d9645f43182f0d59c6cdd4928413436d36576fe60b31842ee3b559",
+  "source_sha256": {
+    "data/external/ifh_readiness/extracted/par_1/oura/sleep.csv": "a6c3289d1ab7bf71d45fc21f0956648e1794ed9f4d46c907efe7fed6b868874c",
+    "data/external/ifh_readiness/extracted/par_1/oura/activity.csv": "f6b5f11ff595004e56dca081732d76314043b94900f2cf135a876b7ea5258a2a",
+    "data/external/ifh_readiness/extracted/par_1/oura/heart_rate.csv": "23806838212746e8f63eb61adbe8abb011dfef5b19eef108b6c5e9d8aa2ea884",
+    "data/external/ifh_readiness/extracted/par_10/oura/sleep.csv": "b30ff26c863d306a8af76ccf30c02f68afd5d743ad39c49202c60d4df896510c",
+    "data/external/ifh_readiness/extracted/par_10/oura/activity.csv": "5f4118f929448f1827ade0e18710d8d4e761f77e6031713395213875adebf8bd",
+    "data/external/ifh_readiness/extracted/par_10/oura/heart_rate.csv": "9de63fb5828ea9577221afba391d4f9bfb242b69e08813e012912fad0b4bdb1d",
+    "data/external/ifh_readiness/extracted/par_11/oura/sleep.csv": "7d1b4da4b3b0d23dc37dddb8f47f966dd5f492cedf33e182c76d9226a0388350",
+    "data/external/ifh_readiness/extracted/par_11/oura/activity.csv": "fdd08f926279e1ce91cc2b14e1dbadf99f833230368c5e621dad8f8ec66770f4",
+    "data/external/ifh_readiness/extracted/par_11/oura/heart_rate.csv": "b8939fc9f73d969f7dc47df1f7a5d8409abda84ceefcb320215ee866aa65be40",
+    "data/external/ifh_readiness/extracted/par_12/oura/sleep.csv": "1c91a768fe60f491f8cd0d81e25a42c212f076e43b55b6576d467cb509c51c37",
+    "data/external/ifh_readiness/extracted/par_12/oura/activity.csv": "fc8826cfe7a54ccf0f82993cec5f3080012431fef766b1b269ade9726b853f6c",
+    "data/external/ifh_readiness/extracted/par_12/oura/heart_rate.csv": "f8bd1f4cf99ddf411170fe655fa75fd3037bf20a31f01ed0ef146df3dc5f4de2",
+    "data/external/ifh_readiness/extracted/par_16/oura/sleep.csv": "5b56009934c64f1b33878a9012031bd295a6016e47598ff9f2fad00c9b454f1d",
+    "data/external/ifh_readiness/extracted/par_16/oura/activity.csv": "e42a0dacb3ac8315575b72fb44c813d1a16ace1e8779534371197cf8e6c7f8ae",
+    "data/external/ifh_readiness/extracted/par_16/oura/heart_rate.csv": "8377ae258049cd3df150fd61bd6f1b6761fd1ae330ea5114adef00c7fb51d196",
+    "data/external/ifh_readiness/extracted/par_17/oura/sleep.csv": "cddd2672456e63ba17ae76f9694c8928a58ac9bf54070dde3e51794343ca6dcc",
+    "data/external/ifh_readiness/extracted/par_17/oura/activity.csv": "7f3288bb54c32b4e9f5b3a47beead4df4927d34817aeb110edc289407a06179d",
+    "data/external/ifh_readiness/extracted/par_17/oura/heart_rate.csv": "e7f52afc49ee73922dee46dbb1114729346a70cb9725c36f75c8d462b5eb5b44",
+    "data/external/ifh_readiness/extracted/par_19/oura/sleep.csv": "cc244115c21790e4f2e2bb3bf2b04b1fec999d29ffe40e1ac410abc2a3e9ebbe",
+    "data/external/ifh_readiness/extracted/par_19/oura/activity.csv": "e71e04d037d1f64b6c703f766a21c7fd8e7db280882c89799522856ae5814d91",
+    "data/external/ifh_readiness/extracted/par_19/oura/heart_rate.csv": "f92601ec2a9a3ac61424b286f24df87f3fe53c6f429cd314d4315e413ae02950",
+    "data/external/ifh_readiness/extracted/par_2/oura/sleep.csv": "6b13f50fa229c6ef398b42f1a38ef4d9d0a3d1eba6945979297fc057072bd285",
+    "data/external/ifh_readiness/extracted/par_2/oura/activity.csv": "4a0c7a00c3f96933261ea0120bd0fe2a99b13685cf550b1b3ff00a67c7a7e013",
+    "data/external/ifh_readiness/extracted/par_2/oura/heart_rate.csv": "a5d6c2d7be5c5a2f20538379cb0aa286f76c8cc68289accaa8a350af73ac2f51",
+    "data/external/ifh_readiness/extracted/par_3/oura/sleep.csv": "11fe8f5dd2833dbc917cdf5e4f992aa451b62da22b6877c9bbc9dd1075435894",
+    "data/external/ifh_readiness/extracted/par_3/oura/activity.csv": "5cf64d1ccfca9565675166ec617f7be6860a67e9605f07c50f614bfec54fa35d",
+    "data/external/ifh_readiness/extracted/par_3/oura/heart_rate.csv": "d8b190b6c2aa6321e98f9660d5a38818410f0cb463df51ac3cb0ffbf20db7480",
+    "data/external/ifh_readiness/extracted/par_4/oura/sleep.csv": "64061a52c30e040a879bdc955cb13839785e7635daef17a7e32dce5005fc5caf",
+    "data/external/ifh_readiness/extracted/par_4/oura/activity.csv": "52c14e8de7dbf5c7a046befc11177f3cf4c141e830f63178ff2a1bc90d7f45de",
+    "data/external/ifh_readiness/extracted/par_4/oura/heart_rate.csv": "c322877f5a097a29e434bf85c27b60a6a6df1c755b03cf08dfffb3cc6e7ee6eb",
+    "data/external/ifh_readiness/extracted/par_5/oura/sleep.csv": "198f2a64388c184a7c580959eab6535e3ed832c9857a0e9d331ac2247368cfab",
+    "data/external/ifh_readiness/extracted/par_5/oura/activity.csv": "91e132c47d0af5797adab0ccefefc5869bcc554fc27853d81644a49049b594fe",
+    "data/external/ifh_readiness/extracted/par_5/oura/heart_rate.csv": "96fedd58ab3bacf494e08c5bd88cfecfd175935a37294b9bcdc14a9be41ae631",
+    "data/external/ifh_readiness/extracted/par_7/oura/sleep.csv": "cc14644f8d598324ea4824e780eb77f751ed5bcb92614530ee036fe1aa08a45e",
+    "data/external/ifh_readiness/extracted/par_7/oura/activity.csv": "8a906c824fd5a8ea9573329aef9040a083a0906db3600243142ff9a65cba5eb9",
+    "data/external/ifh_readiness/extracted/par_7/oura/heart_rate.csv": "90338466ce3cde401876b1db3ff6bd1415e43f3244fcede52ad4cf4202d6f20a",
+    "data/external/ifh_readiness/extracted/par_8/oura/sleep.csv": "77b89b1530f281ce86117aa0bef5eae9ef42328bf40de6057faad9ddba97f574",
+    "data/external/ifh_readiness/extracted/par_8/oura/activity.csv": "b4e4ac0d2a50496e0a243d1b1e9ddcacda361ce1767fecafef747922cc371a48",
+    "data/external/ifh_readiness/extracted/par_8/oura/heart_rate.csv": "231e0a30be004bc4982f697970c6bc56baf84c11da76fb1e38a8023578263515",
+    "data/external/ifh_readiness/extracted/par_9/oura/sleep.csv": "8c29fef24ef8e34e73c21e3c1c01af3d7c32bb98dadaca64aa305375eacbf7d3",
+    "data/external/ifh_readiness/extracted/par_9/oura/activity.csv": "571791eb8d4f8e0897939210e55b205ff17f6c2f6ec078f62fe2ce494bb7c83c",
+    "data/external/ifh_readiness/extracted/par_9/oura/heart_rate.csv": "13018d5e4c32a7e680ff35a2e6cfaf188e39862e54170e44c3ff1edfde173500"
+  },
+  "code_sha256": {
+    "src/neurasign_engine/readiness_refinement.py": "1a3fe8237e99f29b56a5767053e04030f7c8ec9f221e3a6353c78e0a4c238d40",
+    "src/neurasign_engine/readiness_refinement_training.py": "43675f23e43a7ea5ec2da3ef4c3bcbc0da072bb04caac3d19442537ac003fab0",
+    "src/neurasign_engine/reference_benchmark.py": "d01ca2c57bb4e15179705289bb53f3a40123291f7d168a2687a012410b60bcac",
+    "src/neurasign_engine/readiness_oura.py": "8143cf51770a30af5273178d50b0fbfb995e423cd2ddb27dc426efe805963e29"
+  }
+}

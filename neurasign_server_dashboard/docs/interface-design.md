@@ -37,6 +37,17 @@ The workspace answers four questions in order: how much data is arriving, what n
 
 Pagination organizes records already authorized and returned by the API. It is client-side presentation, not server pagination or a claim of production capacity. The current API still has a 100-employee pilot creation limit. Browser fixtures with 200 employees and 137 connections test layout and interaction; production support for hundreds also needs backend limits, bounded queries and load testing. API access rules, model artifacts, inference, consent and production boundaries are unchanged.
 
+## Self-explanatory demo
+
+The local `/demo` workspace has three visible sections: **Team signals**, **Manager preview**, and **Use cases**. A persistent source banner distinguishes UNIVERSE recordings, illustrative signals, manually set values, and received device data on every section. Back to login stays visible, including on a 320 px screen; Model engine is a secondary footer link.
+
+- **Team signals** opens with compact person rows and one selected signal chart. Metric names are written out, with a short explanation beside the selected reading and accessible help for details. Changing a person or signal updates this chart. Personal references, experimental formula estimates, recording metadata and the optional comparison chart expand on request.
+- **Presenter controls** contains source, speed and reset. Pause/resume stays visible beside the recording source. **Restart demo** explicitly resets both playback and example progress. Navigating between sections preserves the current source and playback state.
+- **Manager preview** starts with searchable rows and plain-language demo results. Counts also filter the list. No individual estimate panel opens until **View details** is selected; **Back to team** restores focus to that person's button. Existing calculation rules and missing-data suppression are unchanged.
+- **Use cases** offers three named examples with a short description. Break suggestions and check-ins produce local drafts explicitly marked as not sent. The incident walkthrough explains the sample problem, the user's role and one current action; progress is Investigate → Approve → Report. Detailed outputs and provider context expand separately. Existing human approvals and output provenance are preserved.
+
+This recorded demonstration has two sample profiles; it does not manufacture a large live workforce. The company workspace above provides the large-team roster. UI simplification does not change model artifacts or validate the demo's experimental interpretations.
+
 ## Browser checks
 
 From `neurasign_server_dashboard`, with the local Docker stack running:
@@ -45,6 +56,7 @@ From `neurasign_server_dashboard`, with the local Docker stack running:
 .venv/bin/python scripts/browser_monitoring_smoke.py
 .venv/bin/python scripts/browser_controls_smoke.py
 .venv/bin/python scripts/browser_manager_smoke.py
+.venv/bin/python scripts/browser_incident_preview_smoke.py
 .venv/bin/python scripts/browser_workspace_smoke.py
 .venv/bin/python scripts/browser_large_team_smoke.py
 .venv/bin/python scripts/browser_connections_smoke.py
@@ -52,4 +64,4 @@ From `neurasign_server_dashboard`, with the local Docker stack running:
 .venv/bin/python scripts/onboarding_smoke.py
 ```
 
-Monitoring and control checks share demo state; run those sequentially. The large-team check intercepts browser responses with 200 synthetic people across eight teams and blocks company writes; it does not seed employee measurements. Screenshots live in ignored `artifacts/`. Frontend tests cover filtering, sorting, pagination, partial-signal attention, independent legacy/canonical feeds, freshness, paused sharing and count/filter consistency alongside existing proxy and research boundaries.
+Monitoring, control and manager checks share demo state; run those sequentially. The incident-preview check intercepts state, WebSocket messages and controls to verify the review/approval UI without external provider calls; it does not test provider execution. The large-team check intercepts browser responses with 200 synthetic people across eight teams and blocks company writes; it does not seed employee measurements. Screenshots live in ignored `artifacts/`. Frontend tests cover filtering, sorting, pagination, partial-signal attention, independent legacy/canonical feeds, freshness, paused sharing and count/filter consistency alongside existing proxy and research boundaries.

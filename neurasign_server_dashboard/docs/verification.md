@@ -1,5 +1,20 @@
 # Verification record
 
+## Self-explanatory demo — 2026-09-27
+
+The local `/demo` now has visible Team signals, Manager preview and Use cases sections, a persistent data-source banner, compact person rows and one default chart. Advanced source/playback controls and technical details are collapsed. Manager estimates open only on request. The incident example explains the user's role and presents one next action, with detailed results available separately.
+
+- **33 frontend tests passed**, along with TypeScript compilation and the production web image build. The shared physiological chart implementation, inference rules and model artifacts are unchanged.
+- **Recorded monitoring browser acceptance passed**: one visible chart, full metric names, selected-person/signal navigation, collapsed presenter controls, accessible metric help with keyboard focus/return, persistent source labels and example navigation without starting workflows. All three primary tabs remain available from 320 to 1440 px without horizontal overflow.
+- **Control acceptance passed**: pause survives navigation; manual values do not become sensor measurements; example drafts remain local; partial live input leaves absent channels empty; Restart demo restores recorded playback and resets example progress.
+- **Manager acceptance passed**: no initially expanded person, explicit View details and Back to team focus return, search, status/count filtering, existing interpretation history, stale-estimate withholding, deep links, login return and mobile layout. These interactions produce no application writes.
+- **Incident UI acceptance passed using intercepted browser fixtures** for initial, review, approval and report states. It checks disclosures, provenance, keyboard focus and responsive layout. Three fixture control requests were intercepted; none reached the workflow API. Jev/Gemini provider execution was not retested for this presentation change.
+- **Company and model regressions passed**: the 200-profile/eight-team browser fixture still supports filters, pagination, modal details, paused-data suppression and mobile layouts; all four recorded research models still execute with reference/provenance display and error recovery.
+- Desktop/mobile screenshots were inspected for signals, the manager list/details, the use-case chooser and the incident example. These are implementation checks, not a first-time-user usability study.
+- Credential scanning passed; `.env` files remain ignored. The original presentation PDF/PPTX hashes are unchanged and the original presentation/logo directories are not part of these commits. No Google Cloud deployment was performed.
+
+The demo still uses two explicitly labeled sample profiles. Large-team fixtures verify company UI behavior; they do not change backend capacity limits or establish scientific validity for experimental interpretations. See [interface direction](interface-design.md) for navigation and verification commands.
+
 ## Clarity and large-team navigation — 2026-09-26
 
 The company overview now starts with actionable data-availability coverage. Managers can filter from summary counts, review connection issues with next steps, compare teams, and open employee measurements in a modal side panel without losing their list position. Navigation separates daily operations, personal privacy, and demo/research tools. People and phone connections both use bounded searchable lists.

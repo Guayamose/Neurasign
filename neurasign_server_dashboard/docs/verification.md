@@ -1,5 +1,17 @@
 # Verification record
 
+## Editorial interface redesign — 2026-09-26
+
+Company access, company monitoring, the recorded demo and Model engine share a black/ivory/orange design, SVG dot-matrix branding, large typography and flatter layouts. Secondary details expand on demand; demo examples are grouped under **Use cases**. See the [interface direction and navigation](interface-design.md).
+
+- **16 web tests passed**; TypeScript and the final production web image build passed.
+- Monitoring browser checks passed for physiological charts, person/signal selection, metric-help focus containment, source-preserving example navigation and mobile layout. Control checks passed for playback, manual indices, partial live measurements and local drafts.
+- Manager preview browser checks passed for existing filters, individual history, missing-data behavior, navigation and presentation boundaries. No interpretation logic changed.
+- Company browser acceptance passed for signup/verification, invitations, sharing, received measurements, charts, help, revocation and sign-out. Additional checks covered password visibility, test-account access, employee setup, readable phone QR codes and mobile form navigation. A regression assertion verifies that the two mobile chart time labels do not overlap.
+- Model engine browser checks passed for all four real predictions, references/fingerprints, failure recovery, record changes and desktop/mobile presentation. Evaluation evidence and input periods remain visible.
+- Final checks covered keyboard opening/Escape/focus return in the Use cases menu, the mobile access shortcut, 360/390/768 px layouts and screenshots of the main views. No browser errors were reported.
+- Credential scanning and whitespace checks passed. Provider credentials and generated screenshots remain ignored. No external Jev/Gemini requests or Google Cloud deployment were needed for this revision.
+
 ## Anonymous trained-model workspace — 2026-09-26
 
 The local `/models` workspace executes the unchanged selected research artifacts and compares their predictions with recorded references. It does not connect employee features to these models or replace the team demo's labeled formula estimates. Production access remains disabled. See [model execution and input contracts](model-engine.md).

@@ -77,6 +77,7 @@ The smoke scripts require the Docker stack. Browser checks require Chrome and Pl
 - [Google Cloud setup, deployment and acceptance](docs/gcloud-deployment.md)
 - [Recorded demo and AI example workflows](docs/demo-workspace.md)
 - [Trained model execution, preparation and evidence limits](docs/model-engine.md)
+- [Interface design and simplified navigation](docs/interface-design.md)
 - [Physiological dataset and processing](docs/dataset.md)
 - [Verification results and remaining limits](docs/verification.md)
 - [Phone app workspace](../neurasign_phone_app/README.md)

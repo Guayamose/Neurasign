@@ -26,14 +26,17 @@ async def main():
         await page.get_by_test_id('monitoring-play').click()
         paused = await state()
         assert not paused['playing']
-        await page.locator('.monitor-examples-nav > summary').click()
+        await expect(page.get_by_test_id('monitoring-play')).to_contain_text('Resume recording')
+        await page.get_by_test_id('tab-examples').click()
         await page.get_by_test_id('tab-focus').click()
         await page.get_by_test_id('tab-monitoring').click()
         await asyncio.sleep(1.1)
         assert (await state())['monitoring']['signal_seconds'] == paused['monitoring']['signal_seconds']
         await page.get_by_test_id('metric-temperature').click()
         await expect(page.get_by_test_id('metric-temperature')).to_have_attribute('aria-pressed','true')
+        await page.get_by_test_id('presenter-controls').locator('summary').click()
         await page.get_by_test_id('monitoring-source').select_option('manual')
+        await expect(page.get_by_test_id('demo-source-context')).to_contain_text('manual', ignore_case=True)
         slider=page.locator('#monitor-aoi-readiness')
         await expect(slider).to_be_visible()
         await slider.focus()
@@ -45,10 +48,11 @@ async def main():
         assert next(worker for worker in manual['workers'] if worker['id']=='aoi')['cognitive_state']['readiness']==99
         assert all(value is None for worker in manual['monitoring']['workers'] for value in worker['features'].values())
         for tab, action in [('wellbeing','Draft suggestion'),('focus','Draft agenda')]:
-            await page.locator('.monitor-examples-nav > summary').click()
+            await page.get_by_test_id('tab-examples').click()
             await page.get_by_test_id('tab-'+tab).click()
             await page.get_by_role('button',name=action,exact=True).first.click()
             await expect(page.get_by_text('Draft ready · not sent',exact=True)).to_be_visible()
+            await expect(page.get_by_test_id('demo-source-context')).to_contain_text('manual', ignore_case=True)
             await expect(page.get_by_role('link',name='Download draft',exact=True)).to_have_attribute('download')
             draft = unquote(await page.get_by_role('link',name='Download draft',exact=True).get_attribute('href'))
             assert 'Local example draft.' in draft and 'Relative readiness:' in draft
@@ -56,7 +60,9 @@ async def main():
             current=await state()
             assert current['workflow'] is None and current['mode']=='manual'
         await page.get_by_test_id('tab-monitoring').click()
+        await page.get_by_test_id('presenter-controls').locator('summary').click()
         await page.get_by_test_id('monitoring-source').select_option('live')
+        await expect(page.get_by_test_id('demo-source-context')).to_contain_text('device', ignore_case=True)
         live=await state()
         assert all(worker['status']=='waiting' for worker in live['monitoring']['workers'])
         await expect(page.get_by_test_id('monitoring-dashboard')).to_contain_text('Waiting for data')
@@ -66,7 +72,8 @@ async def main():
         await page.get_by_test_id('select-person-aoi').click()
         await page.get_by_test_id('metric-heart_rate').click()
         await expect(page.get_by_test_id('selected-physiology-chart')).to_contain_text('75')
-        await page.get_by_role('button',name='Restart replay',exact=True).click()
+        await page.get_by_role('button',name='Restart demo',exact=True).click()
+        await expect(page.get_by_test_id('demo-source-context')).to_contain_text('UNIVERSE')
         current=await state()
         assert current['source']['kind']=='universe' and current['playing'] and current['workflow'] is None
         assert not errors,json.dumps(errors)

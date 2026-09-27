@@ -1,0 +1,43 @@
+{
+  "title": "NEURASIGN / Quiet Connection",
+  "original_synthesis": true,
+  "external_samples": false,
+  "external_services": false,
+  "voice": false,
+  "seed": 20260927,
+  "sample_rate_hz": 48000,
+  "channels": 2,
+  "duration_seconds": 15.0,
+  "frames": 720000,
+  "encoding": "PCM signed 24-bit",
+  "integrated_lufs": -19.0,
+  "true_peak_dbtp": -8.14,
+  "loudness_range_lu": 2.6,
+  "sample_peak_dbfs": -8.142485048245785,
+  "clipped_samples": 0,
+  "final_250ms_rms_dbfs": -99.32440975001997,
+  "final_50ms_digital_silence": true,
+  "stereo_correlation": 0.7699540264151381,
+  "files": {
+    "neurasign-film-bed-15s.wav": {
+      "sha256": "05795ca7778af24b82cc350da90b6f4b679783d3c130d8a7bf7270ac26e5ba71",
+      "bytes": 4320102
+    },
+    "neurasign-film-bed-15s.m4a": {
+      "sha256": "e75614abe4fa88db48ab73345f6dbaacfa20bab809a1df0e1e4f4a45c190644c",
+      "bytes": 443205
+    },
+    "neurasign-cut-soft.wav": {
+      "sha256": "2fca6112a87e49bdb4166273f8832e21d87bd0dda83937049ab3acfa8918c5d3",
+      "bytes": 149862
+    },
+    "neurasign-transition-air.wav": {
+      "sha256": "8953fa245bb1eea137ab6ad593a2c352ed17ead35b7e9781349ad0f0c7c0a8bb",
+      "bytes": 244902
+    }
+  },
+  "script_sha256": "0326c29fc3bcbd83b461b98179b109cfb9ef5b78f577dbb4d3f438c871cb539b",
+  "numpy_version": "2.5.3",
+  "ffmpeg_version": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+  "normalization": "Measured two-pass ffmpeg loudnorm; -19 LUFS target; -1.5 dBTP ceiling; LRA7."
+}

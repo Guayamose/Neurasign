@@ -1,0 +1,30 @@
+{
+  "provider": "Google Gemini API",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Iapetus",
+  "request_sha256": "372be3941b2b6bf32fe7666a631c91d21f28e2df7d50ac56970bb97e70a3e029",
+  "source_sha256": "8da3f1513272f856a059649b680f47edad16c63a78c5059caa8fbb540bee0949",
+  "caption_text": "NeuraSign turns those signals into estimates of stress, fatigue, workload and readiness.",
+  "spoken_text": "NeuroSign turns those signals into estimates of stress, fatigue, workload and readiness.",
+  "style": "Warm, engaging, confident English narration with a vocal smile. Energetic conversational delivery, crisp articulation, purposeful forward momentum, brisk but not rushed. Short natural pauses at punctuation. No dramatic whisper, no shouting, no music.",
+  "source_rate_hz": 24000,
+  "source_duration_seconds": 6.08,
+  "usage": {
+    "promptTokenCount": 17,
+    "candidatesTokenCount": 195,
+    "totalTokenCount": 212,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 17
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 195
+      }
+    ],
+    "serviceTier": "standard"
+  }
+}

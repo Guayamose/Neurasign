@@ -1,0 +1,30 @@
+{
+  "provider": "Google Gemini API",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Iapetus",
+  "request_sha256": "05da6a5ed4a9913478a04902f92500e44f224f019166a5489e59a7a80011848f",
+  "source_sha256": "1f3c2caf6610d79b4e0c69ca423e22c83306c6f2d4185d174934a109059c6872",
+  "caption_text": "NeuraSign is designed for demanding workplaces with real risks. Construction sites. Industrial operations. Control rooms.",
+  "spoken_text": "NeuroSign is designed for demanding workplaces with real risks. Construction sites. Industrial operations. Control rooms.",
+  "style": "Warm, engaging, confident English narration with a vocal smile. Energetic conversational delivery, crisp articulation, purposeful forward momentum, brisk but not rushed. Short natural pauses at punctuation. No dramatic whisper, no shouting, no music.",
+  "source_rate_hz": 24000,
+  "source_duration_seconds": 8.2,
+  "usage": {
+    "promptTokenCount": 21,
+    "candidatesTokenCount": 263,
+    "totalTokenCount": 284,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 21
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 263
+      }
+    ],
+    "serviceTier": "standard"
+  }
+}

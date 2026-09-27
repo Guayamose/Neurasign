@@ -1,0 +1,30 @@
+{
+  "provider": "Google Gemini API",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Iapetus",
+  "request_sha256": "fafc949b452b248067971b6e14fa6672096670f623d4eceadaa427369370a36e",
+  "source_sha256": "bd6cb5ca086b27e57feb0b285838e3fbd6ac00b63bcc43f37a2d6f6c4b3819ed",
+  "caption_text": "Maya is the recommended match. You see who, and the reasons behind the recommendation.",
+  "spoken_text": "Maya is the recommended match. You see who, and the reasons behind the recommendation.",
+  "style": "Warm, engaging, confident English narration with a vocal smile. Energetic conversational delivery, crisp articulation, purposeful forward momentum, brisk but not rushed. Short natural pauses at punctuation. No dramatic whisper, no shouting, no music.",
+  "source_rate_hz": 24000,
+  "source_duration_seconds": 5.6,
+  "usage": {
+    "promptTokenCount": 18,
+    "candidatesTokenCount": 180,
+    "totalTokenCount": 198,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 18
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 180
+      }
+    ],
+    "serviceTier": "standard"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "review_type": "automated independent transcription and quality review of the complete final mix; not a human listening review",
+  "review_model": "gemini-2.5-flash",
+  "duration_seconds": 76,
+  "mix_sha256": "b0850e8d747edb2bf43a7b849dfd88eefad6778decf1b3d6dc01827cca4df153",
+  "narration_sha256": "e41035f16db6e0a1bd67cdf3094bab16dc21068361c3948dccc0fb652bdcc137",
+  "review": {
+    "transcript": "In an emergency, the right support can change everything. A patient arrives, three qualified doctors, one decision, who should respond? Behind each wristband is a different story. Heart rate, variability, movement. Neurosign turns those signals into estimates of stress, fatigue, workload, and readiness. Omar is already busy. Emma shows elevated fatigue. Maya is available and ready. The incident reaches Neurosign. It compares the team's signals, availability, and relevant skills. Maya is the recommended match. You see who and the reasons behind the recommendation. The coordinator confirms, Maya gets the alert and moves straight to the patient. This hospital is just one example. Neurosign is designed for demanding workplaces with real risks. Construction sites, industrial operations, control rooms. Neurosign. Understand your team, respond with confidence.",
+    "intelligibility": "Excellent. Narration is consistently clear and easily intelligible over the music.",
+    "delivery": "Consistent, professional, and well-paced. The voice maintains a clear and authoritative tone throughout.",
+    "music_transitions": "Smooth and well-managed. Music fades in and out appropriately, supporting the narration without overpowering it. No abrupt edits.",
+    "ending": "Smooth and professional. The narration concludes clearly, followed by a gentle music fade-out.",
+    "audible_defects": []
+  },
+  "spoken_word_sequence_matches_manifest": true,
+  "spoken_word_count": 124,
+  "transcribed_word_count": 124
+}

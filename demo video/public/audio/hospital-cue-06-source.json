@@ -1,0 +1,30 @@
+{
+  "provider": "Google Gemini API",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Iapetus",
+  "request_sha256": "cc20898719d4f9954c8c3048b9b10077b0a1ff1a5e7c9671a659629512669e1d",
+  "source_sha256": "f755d4cd0ab496d98e6cd160ae981eb28c609439bc4f6ecf3d408795f5d3818b",
+  "caption_text": "The incident reaches NeuraSign. It compares the team\u2019s signals, availability and relevant skills.",
+  "spoken_text": "The incident reaches NeuroSign. It compares the team\u2019s signals, availability and relevant skills.",
+  "style": "Warm, engaging, confident English narration with a vocal smile. Energetic conversational delivery, crisp articulation, purposeful forward momentum, brisk but not rushed. Short natural pauses at punctuation. No dramatic whisper, no shouting, no music.",
+  "source_rate_hz": 24000,
+  "source_duration_seconds": 5.92,
+  "usage": {
+    "promptTokenCount": 20,
+    "candidatesTokenCount": 190,
+    "totalTokenCount": 210,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 20
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 190
+      }
+    ],
+    "serviceTier": "standard"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "provider": "Google Gemini API",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Iapetus",
+  "request_sha256": "bc9d9c1ab08e70491d5cd26864a9170aa957f02f492304da36cfcbe45d49fbff",
+  "source_sha256": "a1a75f8eab6bc1df492e00e21506bd1e3d4a9bd62b21809a7b4280149727872a",
+  "caption_text": "In an emergency, the right support can change everything.",
+  "spoken_text": "In an emergency, the right support can change everything.",
+  "style": "Warm, engaging, confident English narration with a vocal smile. Energetic conversational delivery, crisp articulation, purposeful forward momentum, brisk but not rushed. Short natural pauses at punctuation. No dramatic whisper, no shouting, no music.",
+  "source_rate_hz": 24000,
+  "source_duration_seconds": 3.64,
+  "usage": {
+    "promptTokenCount": 12,
+    "candidatesTokenCount": 117,
+    "totalTokenCount": 129,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 12
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 117
+      }
+    ],
+    "serviceTier": "standard"
+  }
+}

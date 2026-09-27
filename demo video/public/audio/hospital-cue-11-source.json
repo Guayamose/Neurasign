@@ -1,0 +1,30 @@
+{
+  "provider": "Google Gemini API",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Iapetus",
+  "request_sha256": "50786e458053fbe1e469c5a695bebb5b214e02c8944c3624095ea836a245ddce",
+  "source_sha256": "9c01701d2b39afd1562c3465d7af296dffd3f672cda8dd3feee5b47c33edf7a1",
+  "caption_text": "NeuraSign. Understand your team. Respond with confidence.",
+  "spoken_text": "NeuroSign. Understand your team. Respond with confidence.",
+  "style": "Warm, engaging, confident English narration with a vocal smile. Energetic conversational delivery, crisp articulation, purposeful forward momentum, brisk but not rushed. Short natural pauses at punctuation. No dramatic whisper, no shouting, no music. Lively concise brand sign-off; keep all eight words within about three and a half seconds.",
+  "source_rate_hz": 24000,
+  "source_duration_seconds": 4.28,
+  "usage": {
+    "promptTokenCount": 12,
+    "candidatesTokenCount": 137,
+    "totalTokenCount": 149,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 12
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 137
+      }
+    ],
+    "serviceTier": "standard"
+  }
+}

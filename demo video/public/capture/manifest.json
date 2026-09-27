@@ -1,0 +1,166 @@
+{
+  "captured_at": "2026-09-27T08:04:12.362742+00:00",
+  "source": {
+    "kind": "universe",
+    "name": "UNIVERSE recorded signals",
+    "description": "Two real UNIVERSE Empatica recordings. Fictional worker identities; cognitive scores are unvalidated relative heuristics."
+  },
+  "snapshot_sha256": "e7f03bc4e99fce987a9283dd0616a43d1c66f0c35ac8c3a400f466e70e88c3d0",
+  "viewport": {
+    "width": 2560,
+    "height": 1440
+  },
+  "assets": [
+    {
+      "file": "manager-overview-2560.png",
+      "width": 2560,
+      "height": 1440,
+      "pixel_width": 2560,
+      "pixel_height": 1440
+    },
+    {
+      "file": "manager-overview-panel.png",
+      "crop_in_css_pixels": {
+        "x": 680,
+        "y": 258.109375,
+        "width": 1200,
+        "height": 728.40625
+      },
+      "pixel_width": 1200,
+      "pixel_height": 729
+    },
+    {
+      "file": "source-context.png",
+      "crop_in_css_pixels": {
+        "x": 680,
+        "y": 179.609375,
+        "width": 1200,
+        "height": 78.5
+      },
+      "pixel_width": 1200,
+      "pixel_height": 80
+    },
+    {
+      "file": "team-signals-2560.png",
+      "width": 2560,
+      "height": 1440,
+      "pixel_width": 2560,
+      "pixel_height": 1440
+    },
+    {
+      "file": "team-rows.png",
+      "crop_in_css_pixels": {
+        "x": 680,
+        "y": 388.5,
+        "width": 1200,
+        "height": 220.28125
+      },
+      "pixel_width": 1200,
+      "pixel_height": 221
+    },
+    {
+      "file": "alex-heart-rate-panel.png",
+      "crop_in_css_pixels": {
+        "x": 680,
+        "y": 636.78125,
+        "width": 1200,
+        "height": 720.453125
+      },
+      "pixel_width": 1200,
+      "pixel_height": 722
+    },
+    {
+      "file": "sam-hrv-2560.png",
+      "width": 2560,
+      "height": 1440,
+      "pixel_width": 2560,
+      "pixel_height": 1440
+    },
+    {
+      "file": "sam-hrv-panel.png",
+      "crop_in_css_pixels": {
+        "x": 680,
+        "y": 636.78125,
+        "width": 1200,
+        "height": 720.453125
+      },
+      "pixel_width": 1200,
+      "pixel_height": 722
+    },
+    {
+      "file": "manager-detail-2560.png",
+      "width": 2560,
+      "height": 1440,
+      "pixel_width": 2560,
+      "pixel_height": 1440
+    },
+    {
+      "file": "manager-detail-panel.png",
+      "crop_in_css_pixels": {
+        "x": 680,
+        "y": 496.515625,
+        "width": 1200,
+        "height": 661.109375
+      },
+      "pixel_width": 1200,
+      "pixel_height": 662
+    },
+    {
+      "file": "manager-overview-panel@2x.png",
+      "crop_in_css_pixels": {
+        "x": 680,
+        "y": 258.109375,
+        "width": 1200,
+        "height": 730.40625
+      },
+      "pixel_width": 2400,
+      "pixel_height": 1462
+    },
+    {
+      "file": "source-context@2x.png",
+      "crop_in_css_pixels": {
+        "x": 680,
+        "y": 179.609375,
+        "width": 1200,
+        "height": 78.5
+      },
+      "pixel_width": 2400,
+      "pixel_height": 160
+    },
+    {
+      "file": "team-rows@2x.png",
+      "crop_in_css_pixels": {
+        "x": 680,
+        "y": 388.5,
+        "width": 1200,
+        "height": 220.28125
+      },
+      "pixel_width": 2400,
+      "pixel_height": 442
+    },
+    {
+      "file": "alex-heart-rate-panel@2x.png",
+      "crop_in_css_pixels": {
+        "x": 680,
+        "y": 636.78125,
+        "width": 1200,
+        "height": 720.453125
+      },
+      "pixel_width": 2400,
+      "pixel_height": 1444
+    },
+    {
+      "file": "sam-hrv-panel@2x.png",
+      "crop_in_css_pixels": {
+        "x": 680,
+        "y": 636.78125,
+        "width": 1200,
+        "height": 720.453125
+      },
+      "pixel_width": 2400,
+      "pixel_height": 1444
+    }
+  ],
+  "application_writes": [],
+  "browser_errors": []
+}

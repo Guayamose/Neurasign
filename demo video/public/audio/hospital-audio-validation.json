@@ -1,0 +1,177 @@
+{
+  "duration_seconds": 76,
+  "score_seed": 2026092801,
+  "extension_seed": 2026092877,
+  "tempo_bpm": 96,
+  "voice_provider": "Google Gemini API",
+  "voice_model": "gemini-3.8-flash-tts",
+  "voice": "Iapetus",
+  "original_score_and_effects": true,
+  "third_party_music_or_samples": false,
+  "cue_count": 11,
+  "cue_overlaps": false,
+  "all_cues_fit_assigned_slots": true,
+  "music_duck_gain_under_voice": 0.42,
+  "narration_manifest_sha256": "835656a65816ee2cb46dcefc37e015f3ae616fcbfdc1e3fa3a552ff5fef33e7f",
+  "original_first_56_seconds_synthesis_unchanged": true,
+  "narration_extension_preservation": {
+    "backup": "review/hospital-original-audio",
+    "first_eight_cues_unchanged": true,
+    "first_56_seconds_pcm_identical": true,
+    "signoff_source_reused_from_original_cue": 9,
+    "new_generation_cues": [
+      9,
+      10
+    ],
+    "original_manifest_sha256": "8d9d61d3d5cc3ca48e4ce84b1d2007e827fc903601ff470905c85accac6d6868"
+  },
+  "music_bridge_seconds": [
+    56,
+    57.5
+  ],
+  "final_music_fade_seconds": [
+    74.97,
+    75.97
+  ],
+  "script_sha256": "cf419343ce02dcdb426886cd00c0113c1ee9ecd4c62d11a511bda9659b474e4b",
+  "outputs": {
+    "hospital-mix-76s.wav": {
+      "duration_seconds": 76.0,
+      "sample_rate_hz": 48000,
+      "channels": 2,
+      "integrated_lufs": -17.5,
+      "true_peak_dbtp": -3.97,
+      "loudness_range_lu": 3.9,
+      "sample_peak_dbfs": -3.9695376897952968,
+      "clipped_samples": 0,
+      "last_20ms_silent": true,
+      "sha256": "b0850e8d747edb2bf43a7b849dfd88eefad6778decf1b3d6dc01827cca4df153"
+    },
+    "hospital-narration-76s.wav": {
+      "duration_seconds": 76.0,
+      "sample_rate_hz": 48000,
+      "channels": 2,
+      "integrated_lufs": -14.81,
+      "true_peak_dbtp": -2.0,
+      "loudness_range_lu": 4.8,
+      "sample_peak_dbfs": -2.00064160585898,
+      "clipped_samples": 0,
+      "last_20ms_silent": true,
+      "sha256": "e41035f16db6e0a1bd67cdf3094bab16dc21068361c3948dccc0fb652bdcc137"
+    },
+    "hospital-score-76s.wav": {
+      "duration_seconds": 76.0,
+      "sample_rate_hz": 48000,
+      "channels": 2,
+      "integrated_lufs": -23.0,
+      "true_peak_dbtp": -9.08,
+      "loudness_range_lu": 6.3,
+      "sample_peak_dbfs": -9.083631457834382,
+      "clipped_samples": 0,
+      "last_20ms_silent": true,
+      "sha256": "4fbf67b8e7d5926ee81772f782294e0e89697d8871731cd16aa21747b1abccdc"
+    },
+    "hospital-effects-76s.wav": {
+      "duration_seconds": 76.0,
+      "sample_rate_hz": 48000,
+      "channels": 2,
+      "integrated_lufs": -45.63,
+      "true_peak_dbtp": -27.96,
+      "loudness_range_lu": 15.1,
+      "sample_peak_dbfs": -28.01130827705313,
+      "clipped_samples": 0,
+      "last_20ms_silent": true,
+      "sha256": "56765438a7040cda7656fff2aaa42a8b118ebc4d517673118c77baa4d5385b7b"
+    }
+  },
+  "aac_sha256": "ed9b00704419e411637d6d0c6249680e85beb411c996a594047a8a61bbc6cf4c",
+  "timeline": [
+    [
+      0,
+      6,
+      "calm establish"
+    ],
+    [
+      6,
+      14,
+      "quiet urgency"
+    ],
+    [
+      14,
+      25,
+      "inquisitive comparisons"
+    ],
+    [
+      25,
+      33,
+      "rhythmic connection"
+    ],
+    [
+      33,
+      43,
+      "rising focus"
+    ],
+    [
+      43,
+      50,
+      "resolved recommendation"
+    ],
+    [
+      50,
+      56,
+      "confirmation and movement"
+    ],
+    [
+      56,
+      61,
+      "hospital is one example"
+    ],
+    [
+      61,
+      71,
+      "broader demanding workplaces"
+    ],
+    [
+      71,
+      76,
+      "logo resolve"
+    ]
+  ],
+  "backup_integrity": {
+    "files_verified": 39,
+    "original_five_60s_masters_unchanged": true,
+    "manifest_sha256": "7ef9aa9f5ba9d07ff9d98ff0749a8c0955e02aa6126a987e14816d329be93efb"
+  },
+  "score_transition_continuity": [
+    {
+      "seconds": 56.0,
+      "adjacent_sample_step_linear": 0.0028630495071411133,
+      "local_20ms_max_step_linear": 0.008900880813598633
+    },
+    {
+      "seconds": 57.5,
+      "adjacent_sample_step_linear": 0.0011663436889648438,
+      "local_20ms_max_step_linear": 0.0040514469146728516
+    },
+    {
+      "seconds": 61.0,
+      "adjacent_sample_step_linear": 0.006295680999755859,
+      "local_20ms_max_step_linear": 0.0086899995803833
+    },
+    {
+      "seconds": 71.0,
+      "adjacent_sample_step_linear": 0.00018537044525146484,
+      "local_20ms_max_step_linear": 0.001280665397644043
+    },
+    {
+      "seconds": 74.97,
+      "adjacent_sample_step_linear": 0.00011169910430908203,
+      "local_20ms_max_step_linear": 0.00177764892578125
+    },
+    {
+      "seconds": 75.97,
+      "adjacent_sample_step_linear": 0.0,
+      "local_20ms_max_step_linear": 1.1920928955078125e-07
+    }
+  ]
+}

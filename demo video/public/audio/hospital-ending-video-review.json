@@ -1,0 +1,191 @@
+{
+  "review_type": "bounded automated audiovisual review of actual rendered ending only",
+  "model": "gemini-3.8-flash",
+  "global_time_range": [
+    56,
+    76
+  ],
+  "sampling_fps_requested": 3,
+  "video_sha256": "5f59157d5b29a2e68c9b1161edd8b9acf686006d5740333dbca83a008c0d0501",
+  "video_path": "review/hospital-revision/ending-20s.mp4",
+  "probe": {
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+        "profile": "High",
+        "codec_type": "video",
+        "codec_tag_string": "avc1",
+        "codec_tag": "0x31637661",
+        "width": 960,
+        "height": 540,
+        "coded_width": 960,
+        "coded_height": 540,
+        "closed_captions": 0,
+        "film_grain": 0,
+        "has_b_frames": 2,
+        "sample_aspect_ratio": "1:1",
+        "display_aspect_ratio": "16:9",
+        "pix_fmt": "yuv420p",
+        "level": 31,
+        "color_range": "tv",
+        "color_space": "bt709",
+        "color_transfer": "bt709",
+        "color_primaries": "bt709",
+        "chroma_location": "center",
+        "field_order": "progressive",
+        "refs": 1,
+        "is_avc": "true",
+        "nal_length_size": "4",
+        "id": "0x1",
+        "r_frame_rate": "30/1",
+        "avg_frame_rate": "30/1",
+        "time_base": "1/90000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 1800000,
+        "duration": "20.000000",
+        "bit_rate": "200928",
+        "bits_per_raw_sample": "8",
+        "nb_frames": "600",
+        "extradata_size": 51,
+        "disposition": {
+          "default": 1,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0,
+          "non_diegetic": 0,
+          "captions": 0,
+          "descriptions": 0,
+          "metadata": 0,
+          "dependent": 0,
+          "still_image": 0
+        },
+        "tags": {
+          "language": "und",
+          "handler_name": "VideoHandler",
+          "vendor_id": "[0][0][0][0]"
+        }
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_long_name": "AAC (Advanced Audio Coding)",
+        "profile": "LC",
+        "codec_type": "audio",
+        "codec_tag_string": "mp4a",
+        "codec_tag": "0x6134706d",
+        "sample_fmt": "fltp",
+        "sample_rate": "48000",
+        "channels": 2,
+        "channel_layout": "stereo",
+        "bits_per_sample": 0,
+        "initial_padding": 0,
+        "id": "0x2",
+        "r_frame_rate": "0/0",
+        "avg_frame_rate": "0/0",
+        "time_base": "1/48000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 962560,
+        "duration": "20.053333",
+        "bit_rate": "317375",
+        "nb_frames": "940",
+        "extradata_size": 2,
+        "disposition": {
+          "default": 1,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0,
+          "non_diegetic": 0,
+          "captions": 0,
+          "descriptions": 0,
+          "metadata": 0,
+          "dependent": 0,
+          "still_image": 0
+        },
+        "tags": {
+          "language": "und",
+          "handler_name": "SoundHandler",
+          "vendor_id": "[0][0][0][0]"
+        }
+      }
+    ],
+    "format": {
+      "filename": "demo video/review/hospital-revision/ending-20s.mp4",
+      "nb_streams": 2,
+      "nb_programs": 0,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "format_long_name": "QuickTime / MOV",
+      "start_time": "0.000000",
+      "duration": "20.053333",
+      "size": "1321026",
+      "bit_rate": "527005",
+      "probe_score": 100,
+      "tags": {
+        "major_brand": "isom",
+        "minor_version": "512",
+        "compatible_brands": "isomiso2avc1mp41",
+        "encoder": "Lavf61.7.100",
+        "comment": "Made with Remotion 4.0.529"
+      }
+    }
+  },
+  "review": {
+    "observed_duration_seconds": 20.0,
+    "transcript": "This hospital is just one example. NeuraSign is designed for demanding workplaces with real risks. Construction sites, industrial operations, control rooms. NeuraSign. Understand your team. Respond with confidence.",
+    "beats": [
+      {
+        "global_time": "56\u201361s",
+        "present": true,
+        "observation": "Displays the hospital illustration accompanied by 'Hospital care. One example.' and narration stating that the hospital scenario is just one example."
+      },
+      {
+        "global_time": "61\u201371s",
+        "present": true,
+        "observation": "Transitions to three illustrated cards representing 'Construction sites', 'Industrial operations', and 'Control rooms' beneath the header 'For demanding workplaces. Where the stakes are real.', synchronized with matching spoken narration."
+      },
+      {
+        "global_time": "71\u201376s",
+        "present": true,
+        "observation": "Resolves cleanly to the dark blue NeuraSign brand screen displaying the logo, company name, tagline 'Understand your team. Respond with confidence.', and supporting metadata, with aligned closing narration and musical resolution."
+      }
+    ],
+    "audio_quality": "High. The voiceover is clear, well-enunciated, and balanced against the ambient background score with no clipping, distortion, or competing frequency masking.",
+    "ending_quality": "Clean and complete. The closing brand card holds stably, narration completes naturally, and the musical bed resolves with a gentle decay without truncation or abrupt cuts.",
+    "material_issues": [],
+    "overall_assessment": "The final sequence fully aligns with the planned narrative beats. Visual layouts, typography, animations, and voiceover synchronization are precise and free of defects."
+  },
+  "ending_spoken_word_sequence_matches_manifest": true,
+  "ending_spoken_word_count": 28,
+  "direct_assistant_frame_inspection": {
+    "global_seconds": [
+      57,
+      61,
+      63,
+      66,
+      69,
+      71,
+      74,
+      75.5
+    ],
+    "finding": "Hospital example, construction/industrial/control-room panels and brand ending are visible; no observed text collisions or missing visual content in sampled frames."
+  }
+}

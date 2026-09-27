@@ -1,0 +1,33 @@
+{
+  "name": "neurasign-demo-video",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Original 76-second NEURASIGN film: a hospital example and a wider workplace vision.",
+  "scripts": {
+    "studio": "remotion studio src/index.ts --port=3100",
+    "render": "remotion render src/index.ts NeurasignHospital1080 exports/neurasign-hospital-76s-1080p.mp4 --codec=h264 --crf=16 --pixel-format=yuv420p --concurrency=4 --browser-executable=/usr/bin/google-chrome --chrome-mode=chrome-for-testing --color-space=bt709",
+    "still": "remotion still src/index.ts NeurasignHospital1080 review/hospital/poster.png --frame=290 --browser-executable=/usr/bin/google-chrome --chrome-mode=chrome-for-testing",
+    "typecheck": "tsc --noEmit",
+    "preview": "python3 scripts/preview-server.py",
+    "render:sample": "remotion render src/sample-index.tsx NeurasignSample exports/neurasign-style-sample-15s.mp4 --codec=h264 --crf=16 --pixel-format=yuv420p --concurrency=4 --browser-executable=/usr/bin/google-chrome --chrome-mode=chrome-for-testing --color-space=bt709",
+    "render:4k": "remotion render src/index.ts NeurasignHospital exports/neurasign-hospital-76s-4k.mp4 --codec=h264 --crf=16 --pixel-format=yuv420p --concurrency=8 --browser-executable=/usr/bin/google-chrome --chrome-mode=chrome-for-testing --color-space=bt709",
+    "render:draft": "remotion render src/index.ts NeurasignHospital1080 review/hospital/draft-76s.mp4 --codec=h264 --crf=22 --pixel-format=yuv420p --concurrency=4 --browser-executable=/usr/bin/google-chrome --chrome-mode=chrome-for-testing --color-space=bt709 --scale=0.5",
+    "storyboard": "node scripts/render-storyboard.mjs"
+  },
+  "dependencies": {
+    "@fontsource/manrope": "^5.3.0",
+    "@remotion/cli": "4.0.529",
+    "@remotion/media": "4.0.529",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "remotion": "4.0.529"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

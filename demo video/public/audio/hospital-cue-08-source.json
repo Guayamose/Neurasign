@@ -1,0 +1,30 @@
+{
+  "provider": "Google Gemini API",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Iapetus",
+  "request_sha256": "de44167bbfff51c91fc8ddf91dfb2db33d3ca858d071d737558cbd1629879c88",
+  "source_sha256": "36772d0af93d73e126194932a0b2663000d98943b9e624f08e7cb1f5821c3029",
+  "caption_text": "The coordinator confirms. Maya gets the alert, and moves straight to the patient.",
+  "spoken_text": "The coordinator confirms. Maya gets the alert, and moves straight to the patient.",
+  "style": "Warm, engaging, confident English narration with a vocal smile. Energetic conversational delivery, crisp articulation, purposeful forward momentum, brisk but not rushed. Short natural pauses at punctuation. No dramatic whisper, no shouting, no music.",
+  "source_rate_hz": 24000,
+  "source_duration_seconds": 4.64,
+  "usage": {
+    "promptTokenCount": 17,
+    "candidatesTokenCount": 149,
+    "totalTokenCount": 166,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 17
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 149
+      }
+    ],
+    "serviceTier": "standard"
+  }
+}

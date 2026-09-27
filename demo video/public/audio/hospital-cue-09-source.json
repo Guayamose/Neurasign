@@ -1,0 +1,30 @@
+{
+  "provider": "Google Gemini API",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Iapetus",
+  "request_sha256": "590d282f8fcfbb8b2f4d28141acad7b7ae02341279be62a7d7036c43525ec2df",
+  "source_sha256": "3726842a3c7b25d094f0aa53ae74234bcda2cdc54bfc942e780fb5ff6bab0bc0",
+  "caption_text": "This hospital is just one example.",
+  "spoken_text": "This hospital is just one example.",
+  "style": "Warm, engaging, confident English narration with a vocal smile. Energetic conversational delivery, crisp articulation, purposeful forward momentum, brisk but not rushed. Short natural pauses at punctuation. No dramatic whisper, no shouting, no music.",
+  "source_rate_hz": 24000,
+  "source_duration_seconds": 2.64,
+  "usage": {
+    "promptTokenCount": 8,
+    "candidatesTokenCount": 85,
+    "totalTokenCount": 93,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 8
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 85
+      }
+    ],
+    "serviceTier": "standard"
+  }
+}

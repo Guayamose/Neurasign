@@ -1,0 +1,30 @@
+{
+  "provider": "Google Gemini API",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Iapetus",
+  "request_sha256": "56e6ed09c6756515f9397a9a900d27a85c27ee6e83794d165f125253fba8f783",
+  "source_sha256": "4055a9cf6a4752ad5884b8bab7ec2059cd89f59e72efd2c0e5769a826e2a0ee2",
+  "caption_text": "Omar is already busy. Emma shows elevated fatigue. Maya is available and ready.",
+  "spoken_text": "Omar is already busy. Emma shows elevated fatigue. Maya is available and ready.",
+  "style": "Warm, engaging, confident English narration with a vocal smile. Energetic conversational delivery, crisp articulation, purposeful forward momentum, brisk but not rushed. Short natural pauses at punctuation. No dramatic whisper, no shouting, no music.",
+  "source_rate_hz": 24000,
+  "source_duration_seconds": 6.56,
+  "usage": {
+    "promptTokenCount": 17,
+    "candidatesTokenCount": 210,
+    "totalTokenCount": 227,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 17
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 210
+      }
+    ],
+    "serviceTier": "standard"
+  }
+}

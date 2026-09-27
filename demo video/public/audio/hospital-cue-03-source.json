@@ -1,0 +1,30 @@
+{
+  "provider": "Google Gemini API",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Iapetus",
+  "request_sha256": "78ebb0b044133f2e76284175e21828ca73022afff774d3e524408ca09ad1cffd",
+  "source_sha256": "7f9692cecb294316634adcb44ffd75247e182a8046b2b3fff48dfe5bec68c2b2",
+  "caption_text": "Behind each wristband is a different story. Heart rate. Variability. Movement.",
+  "spoken_text": "Behind each wristband is a different story. Heart rate. Variability. Movement.",
+  "style": "Warm, engaging, confident English narration with a vocal smile. Energetic conversational delivery, crisp articulation, purposeful forward momentum, brisk but not rushed. Short natural pauses at punctuation. No dramatic whisper, no shouting, no music.",
+  "source_rate_hz": 24000,
+  "source_duration_seconds": 5.92,
+  "usage": {
+    "promptTokenCount": 17,
+    "candidatesTokenCount": 190,
+    "totalTokenCount": 207,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 17
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 190
+      }
+    ],
+    "serviceTier": "standard"
+  }
+}

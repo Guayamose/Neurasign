@@ -1,0 +1,30 @@
+{
+  "provider": "Google Gemini API",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Iapetus",
+  "request_sha256": "c7e22fe741e5b151630b717198c7983c5fb925a0849ce6adcd49d01d4cf49eef",
+  "source_sha256": "e551382fce25b8eb2a2318fbb42688e932d71d9d127144b1ec311c478377e8d3",
+  "caption_text": "A patient arrives. Three qualified doctors. One decision: who should respond?",
+  "spoken_text": "A patient arrives. Three qualified doctors. One decision: who should respond?",
+  "style": "Warm, engaging, confident English narration with a vocal smile. Energetic conversational delivery, crisp articulation, purposeful forward momentum, brisk but not rushed. Short natural pauses at punctuation. No dramatic whisper, no shouting, no music.",
+  "source_rate_hz": 24000,
+  "source_duration_seconds": 5.16,
+  "usage": {
+    "promptTokenCount": 16,
+    "candidatesTokenCount": 166,
+    "totalTokenCount": 182,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 16
+      }
+    ],
+    "candidatesTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 166
+      }
+    ],
+    "serviceTier": "standard"
+  }
+}

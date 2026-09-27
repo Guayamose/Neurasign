@@ -2,7 +2,20 @@
 
 Research workspace for turning wearable signal windows into reproducible, testable interpretations. The product remains a general team monitoring platform; experiments define individual outputs and their evidence requirements.
 
-Start with the [model evidence card](MODEL_CARD.md) for the product's four intended outputs: stress, readiness, fatigue and workload. There is no measured 80% accuracy across those outputs. New [UNIVERSE stress](experiments/012-stress-results.md) and [SWELL stress](experiments/013-swell-stress-results.md) experiments use actual stress questionnaire labels, isolated from the historical models and application. The prespecified SWELL logistic model obtains 79.5% person/block-weighted accuracy and 75.5% balanced accuracy in development evaluation; its 17-person subset has high stress in only three people, and its sensors are chest ECG/finger conductance. The majority baseline gets 88.2% ordinary accuracy while detecting no high-stress cases. These limitations and the weaker model-selection result remain visible in the report. New experiments now use actual fatigue references and an Oura daily readiness target; see the results below.
+Start with the [model evidence card](MODEL_CARD.md) for stress, readiness, fatigue and workload. Each output has its own target, time scale and evaluation; there is no shared 80% accuracy claim. The research models remain separate from the dashboard's experimental formulas.
+
+## Latest improvement round
+
+Experiments 019–021 compare new models with fixed prior methods on identical, participant-disjoint outer folds. Inner folds select configurations without seeing the outer people; the previously scored test cohorts remain excluded. Experiment 022 uses a new external wrist dataset and reserves three people before model selection.
+
+- [019: readiness refinement](experiments/019-readiness-refinement-results.md): richer overnight trajectories and strictly preceding physiological context reduce MAE from **4.274 to 4.207/100** on the same nested folds, a small 1.6% change below the research gate. The older 3.98-point held-out result remains separate.
+- [020: fatigue refinement](experiments/020-fatigue-nested-results.md): 36 configurations across daily classification and regression. The new classifier scores **63.7% balanced accuracy**, below the fixed prior's **66.7%** on the same development folds. No established improvement.
+- [021: overall workload](experiments/021-workload-improvement-results.md): MAE falls from **16.04 to 13.02/100**, but a post-hoc rest/activity-only baseline reaches **13.22**. The gain attributable to physiology is not established. This uses the overall NASA-TLX target and complete tasks, not the previous mental-demand component or live windows.
+- [022: WESAD wrist condition recognition](experiments/022-wesad-stress-results.md): the development-selected ExtraTrees reaches **94.2% accuracy / 92.2% balanced accuracy** on three unseen people, using 60-second wrist windows. The prespecified fixed logistic reference performs better at 96.5% / 95.7%; no test-driven model switch was made. These are laboratory baseline-versus-TSST condition labels, not instantaneous employee stress, and the source license is scientific non-commercial.
+
+Install this round's dependencies with `.venv/bin/python -m pip install -r requirements-improvement.txt`. Follow each report's preparation, training and verification stages. Original evaluations and source fingerprints remain unchanged; completed runs refuse replacement.
+
+All **134 implementation tests** passed. Independent checks reproduce model predictions, participant exclusions, training-only preprocessing, inner selections and aggregate metrics. [Artifact fingerprints](experiments/improvement-round-artifacts.json) identify 33 saved artifact files, including fold models and constant references. Raw recordings, individual predictions and weights remain ignored. `scripts/plot_improvement_results.py` exports the [aggregate comparison](experiments/figures/019-022-results.png), with PDF/CSV copies under ignored `results/improvement-round/`.
 
 ## New fatigue and daily readiness training
 
@@ -71,13 +84,13 @@ Inputs are stored under `data/universe/extracted/UNIVERSE/`. The ignored `acquis
 | Jev interpreter | Submit feature summaries, units, recent trends and reference context to a fixed Choice prompt. | Does it classify held-out windows reliably at acceptable latency and cost? |
 | Personal change detection | Detect sustained departures from a person's previous reference distribution. | Can it identify measurable changes consistently, without assigning an unsupported cause? |
 
-The working hypothesis is a hybrid: deterministic signal processing and quality checks, followed by whichever interpreter performs well for a specific output and signal profile. Personal change detection is a complementary output, not a substitute for labeled state prediction. Combining classifiers is a later experiment, not an assumed improvement.
+The working hypothesis is a hybrid: deterministic signal processing and quality checks, followed by whichever interpreter performs well for a specific output and signal profile. Personal change detection is a complementary output, not a substitute for labeled state prediction. Ensembles are evaluated per target and are not an assumed improvement.
 
 ## First multi-output experiment
 
 The first bundle estimates six questionnaire ratings: mental effort (five levels), mental demand, physical demand, time pressure, perceived performance and effort (0–100). Missing labels are masked per output; the model does not fabricate absent answers or turn every target into a high/low category. The heads share a physiological input schema but are fitted separately.
 
-Stress, frustration, PANAS and affective-slider outputs are excluded from workplace biometric inference. The weighted NASA-TLX composite is excluded because it contains frustration. These exclusions do not remove source files from the research archive; they restrict what the engine predicts. No fatigue, recovery or productivity label is invented.
+Stress, frustration, PANAS and affective-slider outputs are excluded from workplace biometric inference. The weighted NASA-TLX composite is also excluded from that product path because it contains frustration. Separate anonymous research experiments evaluate published stress labels and the overall NASA-TLX score; these research artifacts remain production-disabled and are not loaded by the employee application. No fatigue, recovery or productivity label is invented.
 
 The prepared table has 43,062 overlapping windows from 598 labeled intervals. An immutable participant split uses 19 people for development and five for final scoring. Five-fold grouped validation compares ridge regression and histogram gradient boosting against a mean baseline. [Read the measured results and limitations](experiments/001-multioutput-results.md).
 

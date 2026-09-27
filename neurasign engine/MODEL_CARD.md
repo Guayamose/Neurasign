@@ -2,18 +2,58 @@
 
 NEURASIGN has trained research models and reproducible evaluation code. It does **not** have an independently validated model with 80% accuracy across stress, readiness, fatigue and workload. The company application does not load these research artifacts; the demo's workload, fatigue and readiness indices still use explicit experimental formulas.
 
-## The four product outputs
+## The four research targets
 
-| Product output | Available evidence | Current status |
+| Target | Available evidence | Current status |
 | --- | --- | --- |
-| Stress | Actual self-reported stress ratings in UNIVERSE and SWELL; new experiments 012 and 013 evaluate these labels directly | Trained research classifiers; insufficient evidence for general live wrist interpretation |
-| Workload | Separate questionnaire dimensions such as mental, physical and temporal demand and effort | Multiple trained research models; a result for one dimension does not validate general workload |
+| Stress | Self-reported stress in UNIVERSE/SWELL, plus separate WESAD baseline-versus-TSST condition labels | New wrist condition classifier: 94.2% accuracy / 92.2% balanced on three unseen people; not general live stress validation |
+| Workload | Separate questionnaire dimensions and an anonymous research benchmark for overall weighted NASA-TLX | A context-only baseline nearly matches the new overall model; reliable physiological discrimination remains unproven |
 | Fatigue | Observed fatigue questionnaires in MEFAR, FatigueSet, the Luo daily wearable study and DailySense | New trained models; no reliable general fatigue detector established |
 | Readiness | Oura's vendor-generated daily readiness score in IFH Affect | Daily score approximation: 3.98-point MAE; this does not validate live employee readiness |
 
 A common feature pipeline or shared neural encoder cannot create missing target answers. Each target needs its own reference definition and evaluation. These outputs cannot share one claimed accuracy number.
 
-## New fatigue and readiness experiments
+## Improvement round: experiments 019–022
+
+This round compares richer physiological histories, robust signal summaries, weighted preprocessing, nonlinear regressors, classifiers and ensembles. Experiments 019–021 use **nested participant-disjoint development evaluation**: models and thresholds are chosen in inner folds, then scored on different people in outer folds. Previously scored test participants stay excluded. These are paired comparisons on the same new folds, not direct improvements over older held-out scores from other people. Experiment 022 separately reserves previously unused WESAD participants.
+
+![Aggregate evaluation results for experiments 019–022, showing prior methods and constants beside the new procedures.](experiments/figures/019-022-results.png)
+
+The round passed 134 implementation tests, artifact replay checks and independent arithmetic/selection audits. [Fingerprints](experiments/improvement-round-artifacts.json) identify 33 saved artifact files, including constant references; fitted weights and participant-level evidence stay ignored. The figure can be regenerated with `scripts/plot_improvement_results.py` and the inventory with `scripts/report_improvement_artifacts.py` after verification.
+
+### Wrist stress-condition recognition: a strong new laboratory result
+
+[Experiment 022](experiments/022-wesad-stress-results.md) adds a new external dataset, WESAD. It uses only synchronized Empatica E4 wrist pulse, EDA, temperature and acceleration, without chest or EEG. Twelve development people and four participant-disjoint folds select among 32 configurations. The chosen ExtraTrees model is then evaluated once on **three untouched people, with 86 non-overlapping 60-second windows**.
+
+| Prespecified arm | Accuracy | Balanced accuracy | Baseline recall | TSST recall |
+| --- | ---: | ---: | ---: | ---: |
+| Always baseline | 66.3% | 50.0% | 100.0% | 0.0% |
+| Fixed logistic reference | 96.5% | 95.7% | 98.2% | 93.1% |
+| Development-selected ExtraTrees | **94.2%** | **92.2%** | **98.2%** | **86.2%** |
+
+The selected procedure did **not** beat the fixed logistic reference on these test people; the reference is not retroactively substituted as the selected winner. Mean per-person balanced accuracy for the selected model is 92.7%, with a descriptive person-bootstrap interval of 83.7–100%; three people cannot establish population reliability.
+
+This is **baseline-versus-TSST laboratory condition recognition**, not a prediction of actual instantaneous self-reported stress. Transitions and other protocol conditions are excluded; speech, posture, activity and temperature drift may contribute to separation. The result cannot be presented as an increase from the SWELL self-report score because the target and cohort differ. It does not establish transfer to other wearables, one-second inference or employee monitoring. The source permits scientific non-commercial use; these artifacts remain research-only and production-disabled.
+
+### Readiness: a small improvement, below the research gate
+
+[Experiment 019](experiments/019-readiness-refinement-results.md) compares 18 configurations using the original 50 features or 261 features with richer sleep, activity and strictly preceding physiological context. Across 14 development people and 2,788 days, MAE decreases from **4.274 to 4.207/100** against the refitted prior ensemble: a **1.6%** reduction. R² is 0.650 and agreement within ±10 points is 93.3%. This falls short of the predeclared ≥10% improvement and ≤4-point error gate. The earlier **3.98-point held-out MAE** remains a separate result; these different cohorts cannot be used to claim deterioration or improvement of that number.
+
+The selected-minus-prior MAE difference has a 95% person-bootstrap interval of **−0.336 to +0.208 points**; the small apparent gain is inconclusive.
+
+An independent source audit found nine raw sleep records with reversed endpoints, two of which enter this scored cohort. No timestamps were guessed or repaired after scoring; their raw overnight trajectories are missing. Excluding the two affected predictions leaves MAE 4.207 versus 4.271, essentially unchanged. Earlier anomalous records can also enter physiological histories, so this is a descriptive sensitivity, not a fully repaired causal-data experiment. All inner selections and outer-training constants were independently recomputed.
+
+### Fatigue: new search does not beat the fixed classifier
+
+[Experiment 020](experiments/020-fatigue-nested-results.md) evaluates 36 configurations across classification and regression, with past physiology deviations and compact intact-channel features. All 357 fatigue answers from 28 development people remain eligible; no middle ratings are discarded. The fixed prior ExtraTrees obtains **66.7% balanced accuracy**, versus **63.7%** for the newly selected procedure and 50% for a constant. This is not a measured improvement from the earlier 60.6% test result: the cohorts differ. The new regression reduces MAE from 18.86 to 18.50/100, but the paired uncertainty interval includes no improvement and R² remains negative. Both research gates fail.
+
+### Overall workload: much of the apparent gain comes from task context
+
+[Experiment 021](experiments/021-workload-improvement-results.md) predicts the actual weighted NASA-TLX total, verified against its six component ratings and 15 pairwise weights. This is a different target from the mental-demand component previously reported. In 19 development people and 167 completed tasks, the new procedure lowers MAE from **16.04 to 13.02/100**. However, reference-feature availability perfectly separates initial relaxation from active tasks. A separate **post-hoc context-only baseline**, using no physiology, reaches **13.22**. The model's 0.20-point gain over that diagnostic has a paired 95% interval of −0.66 to +1.01; physiological benefit is not established.
+
+During active tasks alone, the model has MAE 12.97 and R² 0.077. Its 82.7% balanced accuracy on the prespecified extreme low/high subset falls to **49.5%** when relaxation is excluded; the extreme subset also omits roughly half the task labels. The 82.7% figure must not be presented as general workload accuracy. These estimates require complete tasks and do not validate one-second or live workload. The composite remains outside the workplace product path.
+
+## Earlier reserved-person fatigue and readiness evaluations
 
 These experiments acquire actual reference labels and reserve entire people before model selection. All preprocessing and model selection use development people only. A saved, frozen selection precedes each final test. Reported accuracies give people equal weight; the reports also preserve raw confusion counts. The models remain separate from the application and its demo formulas.
 
@@ -76,6 +116,11 @@ From `neurasign engine/`:
 .venv/bin/python scripts/run_fatigue_daily.py verify
 .venv/bin/python scripts/run_dailysense.py verify
 .venv/bin/python scripts/audit_reference_benchmarks.py
+.venv/bin/python scripts/run_readiness_refinement.py verify
+.venv/bin/python scripts/audit_readiness_refinement.py
+.venv/bin/python scripts/run_fatigue_nested.py verify
+.venv/bin/python scripts/run_workload_improvement.py verify
+.venv/bin/python scripts/run_wesad_stress_022.py verify
 
 # Run the engine's implementation tests.
 .venv/bin/python -m unittest discover -s tests -v

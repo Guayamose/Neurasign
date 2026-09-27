@@ -1,0 +1,225 @@
+{
+  "description": "Fingerprints of verified, locally fitted research artifacts from experiments 019\u2013022. No raw data, individual predictions, fitted weights or credentials are published.",
+  "limitations": "Experiments 019\u2013021 revisit development cohorts with nested evaluation; 022 reserves three previously unused WESAD participants. Read each report for target and evidence limits. Model existence is not proof of live, clinical, cross-device or workplace validity.",
+  "artifact_count": 33,
+  "experiments": [
+    {
+      "experiment": 19,
+      "name": "readiness-refinement-v1",
+      "production_enabled": false,
+      "artifacts": [
+        {
+          "path": "models/readiness-refinement-v1/outer-0-fixed.joblib",
+          "bytes": 1201175,
+          "sha256": "88de7da51261b0f6c699105c6c6265aba9588e1f7ec69b63d6047332a6bbc450"
+        },
+        {
+          "path": "models/readiness-refinement-v1/outer-0-selected.joblib",
+          "bytes": 450304,
+          "sha256": "67dbb743c2570d5ef5c1e69a7ed703d83071ea47b6180144e539f29f7d35a58c"
+        },
+        {
+          "path": "models/readiness-refinement-v1/outer-1-fixed.joblib",
+          "bytes": 1163055,
+          "sha256": "de085e9dcbc41da4baa6b14a5bce08552b00f01e1d068607dee8b3464fc08ea4"
+        },
+        {
+          "path": "models/readiness-refinement-v1/outer-1-selected.joblib",
+          "bytes": 450344,
+          "sha256": "919dcb2b0f9456a4258fd78443b472e140408468551e1e24d70807c9ded2877f"
+        },
+        {
+          "path": "models/readiness-refinement-v1/outer-2-fixed.joblib",
+          "bytes": 1119248,
+          "sha256": "d339c33fff79270aa1de60e01a2f956dc54ecb5953c95b12f50cd6a5a76086c5"
+        },
+        {
+          "path": "models/readiness-refinement-v1/outer-2-selected.joblib",
+          "bytes": 186073,
+          "sha256": "f3fb295ea55033faf0be3f644ec0f8dbf00aa4a0899c78c9fd2e498406b07675"
+        },
+        {
+          "path": "models/readiness-refinement-v1/outer-3-fixed.joblib",
+          "bytes": 1239343,
+          "sha256": "c77b7258dd094de4eea83b1f860bc78e5548a2d6bd89e70adec65faab60730ab"
+        },
+        {
+          "path": "models/readiness-refinement-v1/outer-3-selected.joblib",
+          "bytes": 895676,
+          "sha256": "ffd02ec44537d624ef3ba60f6e7cb79e77ff442b565d5c1af9828a487b2f74f0"
+        },
+        {
+          "path": "models/readiness-refinement-v1/selected-development.joblib",
+          "bytes": 1641380,
+          "sha256": "51a4b8c023ae02d91156c8e57f9d796ffaa4df653b5c28c2e5dc0fa523d93078"
+        }
+      ],
+      "evidence_sha256": {
+        "results/readiness-refinement-v1/report.json": "9e8b2bc84303a9c17c45ff73f40b5f605a252abb0f4d430fd006cd2efecf0f44",
+        "results/readiness-refinement-v1/verification.json": "ab567dbaed28c172a79e514f92c16467f07cb3283fef03d94fdbefa5bd23c821",
+        "experiments/019-readiness-refinement-protocol.json": "5d4d9c4441c95e6d6655733bd238248a7ad6200be997e9a6eebd1de56b96ab5f",
+        "experiments/019-readiness-refinement-results.md": "53e0e654e068cff185c98f8445e85f34668c6462bf606df137290e767003a654"
+      }
+    },
+    {
+      "experiment": 20,
+      "name": "fatigue-nested-v1",
+      "production_enabled": false,
+      "artifacts": [
+        {
+          "path": "models/fatigue-nested-v1/classification/final-development.joblib",
+          "bytes": 85855,
+          "sha256": "7c38296e643e7783892855de216a736b130f8fbf76229c1f7d5592a5b03a2279"
+        },
+        {
+          "path": "models/fatigue-nested-v1/classification/fold-0.joblib",
+          "bytes": 3260337,
+          "sha256": "d106a8f1a39d1222e13d18bd0f67cc7065ae3e6a462f070724bf70611bbfd502"
+        },
+        {
+          "path": "models/fatigue-nested-v1/classification/fold-1.joblib",
+          "bytes": 1813478,
+          "sha256": "6a35ea939e9733728c99c3052f10dc050352ad047e7841498dc838df2e758517"
+        },
+        {
+          "path": "models/fatigue-nested-v1/classification/fold-2.joblib",
+          "bytes": 1721073,
+          "sha256": "e9cf22147cfdaa26c8aa36700a84f5f67be3e085d339ffebdfa1676eb4725273"
+        },
+        {
+          "path": "models/fatigue-nested-v1/classification/fold-3.joblib",
+          "bytes": 1671756,
+          "sha256": "1332f24329d64399af7fd1597af5c5d97b13b7f08f01eade7e2473ca5d2342a6"
+        },
+        {
+          "path": "models/fatigue-nested-v1/regression/final-development.joblib",
+          "bytes": 1650189,
+          "sha256": "333783aa0e2a26b76b8cab8cdfba2efb0827bf66432fa3ab264b8c0ff1e3065b"
+        },
+        {
+          "path": "models/fatigue-nested-v1/regression/fold-0.joblib",
+          "bytes": 1705774,
+          "sha256": "e457b20d1fa7ed1574ec8dc79ce7fcef54d13c08e8f589e47db06dca5121b6b2"
+        },
+        {
+          "path": "models/fatigue-nested-v1/regression/fold-1.joblib",
+          "bytes": 1929204,
+          "sha256": "83f471fdfe9bb0f9ef074f2f40aa6c7b3e5c87724977b80823e7195386dfd204"
+        },
+        {
+          "path": "models/fatigue-nested-v1/regression/fold-2.joblib",
+          "bytes": 1742462,
+          "sha256": "73f22e521b901cc7aed36253002d0248dd96ad585f7bc9b202d789322478303f"
+        },
+        {
+          "path": "models/fatigue-nested-v1/regression/fold-3.joblib",
+          "bytes": 1713118,
+          "sha256": "527d1660c105b920f149453c6656a5b8d14559f491e53a47d36ebfc0126ca432"
+        }
+      ],
+      "evidence_sha256": {
+        "results/fatigue-nested-v1/classification/report.json": "0a63286174d3ad17471d733409b59912182380c10e7834d089bfeaa7a1c3ba69",
+        "results/fatigue-nested-v1/regression/report.json": "5e098ccb436deb35e15caa6479802670756d863f0df41a98306cc0b28c4a7074",
+        "results/fatigue-nested-v1/verification.json": "97303a27422ccd47cfcaffa5d96d772a978709b249cce51b84a7b1016aa61e6e",
+        "experiments/020-fatigue-nested-protocol.json": "3a745936da8a961f1798401e9d53800593d995f69768916e9f1dcd973a609b5b",
+        "experiments/020-fatigue-nested-results.md": "734fc1062d7cd1891cc86192fc1c3eadae1ffcdd152dc1c4c69416294521f2b7"
+      }
+    },
+    {
+      "experiment": 21,
+      "name": "workload-improvement-v1",
+      "production_enabled": false,
+      "artifacts": [
+        {
+          "path": "models/workload-improvement-v1/fold0-constant.joblib",
+          "bytes": 3212,
+          "sha256": "42421bf8310287f55abb5faa5e926cf4c74857c9acfbb0da471119705329bb68"
+        },
+        {
+          "path": "models/workload-improvement-v1/fold0-fixed_prior.joblib",
+          "bytes": 7872,
+          "sha256": "e9dd925da21f655044d68342f690e0acc32997d5b75dcdb67d4ff0e6bc192d33"
+        },
+        {
+          "path": "models/workload-improvement-v1/fold0-selected.joblib",
+          "bytes": 1078470,
+          "sha256": "0729a38bb3ce34e8160ec4ab7fd3a2711ee5a6fc7b58ad31a40acd7a2fa453b1"
+        },
+        {
+          "path": "models/workload-improvement-v1/fold1-constant.joblib",
+          "bytes": 3189,
+          "sha256": "0fcaeda42cf236cc4d3f52ffd3723d3811f02bad552e402e0b61aac6c6a8d155"
+        },
+        {
+          "path": "models/workload-improvement-v1/fold1-fixed_prior.joblib",
+          "bytes": 7856,
+          "sha256": "21fcd968009541bcd5db480a23f3bf564e015f9e68eaa706fb9e7b9a73201fe4"
+        },
+        {
+          "path": "models/workload-improvement-v1/fold1-selected.joblib",
+          "bytes": 770045,
+          "sha256": "43f3647fd47d895942acb5a579d330a7887c9241cadb94965e2639f1758e57e0"
+        },
+        {
+          "path": "models/workload-improvement-v1/fold2-constant.joblib",
+          "bytes": 3258,
+          "sha256": "42efeb6eb32e6a55aee38bd48ad10b174cc8f5de44d8598b86dec45f678ffab4"
+        },
+        {
+          "path": "models/workload-improvement-v1/fold2-fixed_prior.joblib",
+          "bytes": 7920,
+          "sha256": "6d99ec2c876d9420a7ad7af54798d74c5397f57616b372a1f509b314f06ab486"
+        },
+        {
+          "path": "models/workload-improvement-v1/fold2-selected.joblib",
+          "bytes": 1186810,
+          "sha256": "e0ec3a6a7844de1f42186be6e6ccb934734f86c1f66f9917b4467bbf1bab86cd"
+        },
+        {
+          "path": "models/workload-improvement-v1/fold3-constant.joblib",
+          "bytes": 3405,
+          "sha256": "5e6f3b7af8e11776dcf5311b1106594777b839f003a5a3daffca77b944d28a9c"
+        },
+        {
+          "path": "models/workload-improvement-v1/fold3-fixed_prior.joblib",
+          "bytes": 8064,
+          "sha256": "17cf1705097d1d7c34e65d2d8f505266b875ceaf9f2a2436a40daf76f664a06c"
+        },
+        {
+          "path": "models/workload-improvement-v1/fold3-selected.joblib",
+          "bytes": 850433,
+          "sha256": "c3525a397689cfa48e8456582f9ea095254e258392f5e90d71abd2c5636b7096"
+        }
+      ],
+      "evidence_sha256": {
+        "results/workload-improvement-v1/report.json": "4de98649c5e37c31c268b1a7ec69cbc91854c5caf7d5f16da801ed7b8d741b61",
+        "results/workload-improvement-v1/verification.json": "b4ccd02d38a3d43d80fb2dd0d439264db1cb003d53fb398609cb83f1bbbc6bad",
+        "experiments/021-workload-improvement-protocol.json": "ecf40b3094c6ff8a6774d08c58c744dd25250840c7bbaea043cd85e33ad3b4cb",
+        "experiments/021-workload-improvement-results.md": "6666e2b31ccfe6f67a227e1eb759a26db3297ba10173721c160942d91444a054"
+      }
+    },
+    {
+      "experiment": 22,
+      "name": "wesad-stress-022",
+      "production_enabled": false,
+      "artifacts": [
+        {
+          "path": "models/wesad-stress-022/fixed_logit.joblib",
+          "bytes": 7740,
+          "sha256": "f5d64ca788903c2f985bfbf71ee5f08380a2b16506d96457a64bdc643c8ebcf5"
+        },
+        {
+          "path": "models/wesad-stress-022/selected.joblib",
+          "bytes": 1448611,
+          "sha256": "5f371bf71497f18789f4674d7f31c1d8281ec2aab3f41edcbf52d600c9af1159"
+        }
+      ],
+      "evidence_sha256": {
+        "results/wesad-stress-022/report.json": "55d2c3ca2bcbab1c5a3d2fc0d60a21f06609d04da1e04984b5a15f8b2e9a37a8",
+        "results/wesad-stress-022/verification.json": "4a5f63d37fb1149f9d9713ce25dcf2e1d6d6936cc2d4738c8e4821d422205f43",
+        "experiments/022-wesad-stress-protocol.json": "feb931fd7fcd95579435039f3e8b8988446bf6dd6d4bcf230e081c1fae3aff38",
+        "experiments/022-wesad-stress-results.md": "ca64bca1a8d466f1a23e39f2369862386984830cc785c37ac33dca9001647e49"
+      }
+    }
+  ]
+}

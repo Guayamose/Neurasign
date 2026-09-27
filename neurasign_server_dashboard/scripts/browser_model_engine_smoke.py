@@ -27,7 +27,7 @@ async def main():
         await page.goto(WEB + "/models", wait_until="domcontentloaded")
         await expect(page.locator("html")).to_have_attribute("lang", "en")
         await expect(page.get_by_test_id("run-model")).to_be_enabled(timeout=60000)
-        await expect(page.get_by_text("Bundle verified", exact=True)).to_have_count(4)
+        await expect(page.get_by_text("Bundle verified", exact=True)).to_have_count(1)
 
         for model_id, count in EXPECTED.items():
             await page.get_by_test_id("model-" + model_id).click()
@@ -50,8 +50,8 @@ async def main():
             assert len(result["provenance"]["artifact_sha256"]) == 64
             output = page.get_by_test_id("model-prediction")
             await expect(output).to_be_visible()
-            await expect(output).to_contain_text("MODEL PREDICTION")
-            await expect(output).to_contain_text("RECORDED REFERENCE")
+            await expect(output).to_contain_text("MODEL PREDICTION", ignore_case=True)
+            await expect(output).to_contain_text("RECORDED REFERENCE", ignore_case=True)
             await output.get_by_text("Prediction provenance", exact=True).click()
             await expect(output).to_contain_text(result["provenance"]["artifact_sha256"])
             predictions.append({

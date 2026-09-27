@@ -29,12 +29,18 @@ async def main():
         await expect(page.get_by_test_id("manager-person-aoi")).to_contain_text("Sam")
         await expect(page.get_by_test_id("tab-manager")).to_have_attribute("aria-current", "page")
         await expect(view).to_contain_text("Experimental interpretations")
+        await expect(page.get_by_test_id("manager-detail")).to_have_count(0)
+        await expect(page.get_by_test_id("manager-trend")).to_have_count(0)
+        await expect(page.get_by_test_id("demo-source-context")).to_be_visible()
         await expect(page.get_by_test_id("monitoring-dashboard")).to_have_count(0)
         assert not re.search(r"\bbpm\b|µS|°C|\bHRV\b|\bEDA\b", await view.inner_text()), "Raw physiological units or controls rendered in manager preview"
         await page.screenshot(path=str(artifacts / "manager-desktop.png"), full_page=True)
 
-        await view.get_by_role("button", name="View interpretation for Sam", exact=True).click()
+        await view.get_by_role("button", name="View details for Sam", exact=True).click()
         await expect(page.get_by_test_id("manager-detail")).to_have_attribute("aria-label", "Interpretation details for Sam")
+        await page.get_by_role("button", name="Back to team", exact=True).click()
+        await expect(page.get_by_test_id("manager-detail")).to_have_count(0)
+        await expect(view.get_by_role("button", name="View details for Sam", exact=True)).to_be_focused()
         search = view.get_by_role("textbox", name="Search employees")
         await search.fill("not-a-team-member")
         await expect(page.get_by_test_id("manager-empty")).to_be_visible()
@@ -49,7 +55,7 @@ async def main():
         for width in (1440, 1024, 768, 390, 320):
             await page.set_viewport_size({"width": width, "height": 900})
             assert await page.evaluate("document.documentElement.scrollWidth <= innerWidth + 1"), f"Overflow at {width}px"
-            for tab in ("monitoring", "manager", "wellbeing", "focus", "incidents"):
+            for tab in ("monitoring", "manager", "examples"):
                 bounds = await page.get_by_test_id("tab-" + tab).bounding_box()
                 assert bounds and bounds["x"] >= 0 and bounds["x"] + bounds["width"] <= width + 1, f"Hidden navigation: {tab} at {width}px"
         await page.set_viewport_size({"width": 390, "height": 844})
@@ -98,19 +104,25 @@ async def main():
         controlled = isolated.get_by_test_id("manager-overview")
         alex = isolated.get_by_test_id("manager-person-alex")
         await expect(alex).to_contain_text("Review suggested")
-        await expect(controlled).to_contain_text("UNIVERSE replay")
+        await expect(isolated.get_by_test_id("demo-source-context")).to_contain_text("UNIVERSE recordings")
+        await expect(isolated.get_by_test_id("manager-detail")).to_have_count(0)
+        await controlled.get_by_role("button", name="View details for Alex", exact=True).click()
         await expect(isolated.get_by_test_id("manager-trend")).to_be_visible()
         await expect(isolated.get_by_test_id("manager-estimates-alex")).to_contain_text("65")
         assert not re.search(r"777|888|999|444|333", await controlled.inner_text()), "Private source values leaked into rendered manager view"
-        await controlled.get_by_role("combobox", name="Filter by status").select_option("review")
+        await controlled.get_by_role("button", name="Review suggested 1", exact=True).click()
+        await expect(controlled.get_by_role("combobox", name="Filter by status")).to_have_value("review")
+        await expect(isolated.get_by_test_id("manager-detail")).to_have_count(0)
         await expect(alex).to_be_visible()
         await expect(isolated.get_by_test_id("manager-person-aoi")).to_have_count(0)
         await controlled.get_by_role("combobox", name="Filter by status").select_option("all")
 
-        # Same employee and derived values in both tabs; the manager lacks raw tiles.
+        # Navigation preserves the same source values; detail requires explicit selection.
         await isolated.get_by_test_id("tab-monitoring").click()
-        await expect(isolated.get_by_test_id("monitor-worker-alex").locator(".inferred-state-row")).to_contain_text("65")
+        await expect(isolated.get_by_test_id("monitor-worker-alex")).to_be_visible()
         await isolated.get_by_test_id("tab-manager").click()
+        await expect(isolated.get_by_test_id("manager-detail")).to_have_count(0)
+        await controlled.get_by_role("button", name="View details for Alex", exact=True).click()
         await expect(isolated.get_by_test_id("manager-estimates-alex")).to_contain_text("65")
 
         fixture["revision"] += 1

@@ -1,5 +1,7 @@
 # Verification record
 
+These dated entries record checks performed for particular revisions and application surfaces. They are not a cumulative current test count, and a later documentation edit does not imply those checks were rerun. Start with the [project overview](../../docs/PROJECT_OVERVIEW.md) for current capabilities, setup and outstanding validation; use the entries below for the evidence behind individual changes.
+
 ## Self-explanatory demo — 2026-09-27
 
 The local `/demo` now has visible Team signals, Manager preview and Use cases sections, a persistent data-source banner, compact person rows and one default chart. Advanced source/playback controls and technical details are collapsed. Manager estimates open only on request. The incident example explains the user's role and presents one next action, with detailed results available separately.

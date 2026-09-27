@@ -1,44 +1,91 @@
-# NEURASIGN
+<div align="center">
+  <img src="NeuraSign_Cobalto_logos/svg/principal/neurasign-imagotipo.svg" alt="NEURASIGN" width="300" />
+  <h1>Understand your team. Respond with confidence.</h1>
+  <p>Wearable signals, connected to a clearer picture of the team.</p>
+</div>
 
-A company workspace for monitoring received physiological signals from employees’ compatible wearables.
+NEURASIGN is a team-monitoring platform for demanding workplaces. It brings physiological measurements from supported wearables into one manager workspace, with the people, teams, signal history and connection status needed to understand the situation quickly.
 
-Watch the [76-second animated concept film](<demo video/exports/neurasign-hospital-76s-1080p.mp4>) or download its [4K version](<demo video/exports/neurasign-hospital-76s-4k.mp4>). The hospital is an illustrative example of the wider workplace concept; its signals and recommendations are scripted. [Video source and playback instructions](<demo video/README.md>) and the [pitch presentation](presentation/NeuraSign_Pitch.pdf) are included.
+The product is designed around a simple division: **the phone connects the wearable; the server processes and governs the data; the dashboard gives managers context.** Hospitals are one example. Construction sites, industrial operations and control rooms illustrate the wider vision.
 
-```text
-neurasign/
-├── neurasign_phone_app/          Native phone gateway, shared core and adapter contract
-├── neurasign_server_dashboard/   Company API, dashboard, demo, deployment and tests
-└── neurasign engine/             Signal interpretation research and experiment plans
+**[Watch the 76-second film](<demo video/exports/neurasign-hospital-76s-1080p.mp4>) · [4K download](<demo video/exports/neurasign-hospital-76s-4k.mp4>) · [Pitch deck](presentation/NeuraSign_Pitch.pdf) · [Project overview](docs/PROJECT_OVERVIEW.md)**
+
+## What we built
+
+| Component | What is implemented | Explore |
+| --- | --- | --- |
+| **Company workspace** | Company accounts, teams, scoped manager access, independent employee profiles, phone enrollment, searchable lists, filters, charts and connection attention. | [Server and dashboard](neurasign_server_dashboard/README.md) |
+| **NEURASIGN Link** | Native phone gateway: scan a company QR, connect supported measurement sources, preserve their values and timestamps, queue data securely, and upload it under an employee-scoped credential. | [Phone gateway](neurasign_phone_app/README.md) |
+| **Wearable abstraction** | A shared observation contract for standard BLE, experimental Polar streams, watch companions and vendor import routes. Available channels are discovered and recorded with provenance. | [Coverage and route status](neurasign_phone_app/docs/model-coverage.md) |
+| **Model research and execution** | Reproducible experiments for stress, readiness, fatigue and workload, plus a local workspace that executes selected fitted models on anonymous research records. | [Model evidence](<neurasign engine/MODEL_CARD.md>) |
+| **Interactive demonstration** | Signal exploration, a manager preview and guided use cases. The incident example connects Jev/Gemini outputs to explicit human review steps. | [Demo walkthrough](docs/PROJECT_OVERVIEW.md#try-the-project) |
+| **Presentation assets** | Original narrated animation, editable vector scenes, final 1080p/4K exports, pitch deck and cobalt brand assets. | [Film project](<demo video/README.md>) |
+
+```mermaid
+flowchart LR
+  W[Supported wearable] --> P[NEURASIGN Link on phone]
+  P --> A[Authenticated company API]
+  A --> D[Manager dashboard]
+  V[Authorized vendor imports] --> A
 ```
 
-The [engine research workspace](<neurasign engine/README.md>) contains verified UNIVERSE wrist data, offline model comparisons and a causal raw-signal interface. The latter processes timestamped sensor blocks through 60-second trailing windows with updates every 10 seconds, including motion and signal-quality checks. A separate [one-second evidence experiment](<neurasign engine/experiments/011-short-window-results.md>) compares retrained classifiers on matched 1s/60s raw windows; the one-second mental-demand results remain near the 50% constant reference. Its research models estimate questionnaire ratings; streaming computation does not establish instantaneous state accuracy.
+The company is the tenant. Teams define manager access; each enrolled phone is bound to one company and employee. The phone is a gateway, with connection and sharing controls; team analytics belong in the dashboard. [Read the onboarding and access contract.](neurasign_server_dashboard/docs/phone-onboarding.md)
 
-The local [Model engine workspace](neurasign_server_dashboard/docs/model-engine.md) at **`/models`** now executes saved models on anonymous recorded research inputs: experiment 022 for stress condition, 016 for daily readiness, 018 for daily fatigue and 021's matching evaluation-fold models for completed-task workload. It displays each computed prediction beside its recorded reference. Company employee data does not enter this service, the separate team demo retains labeled formula estimates, and production access remains disabled.
+## Try it in minutes
 
-The [model evidence card](<neurasign engine/MODEL_CARD.md>) maps the research to stress, readiness, fatigue and workload. It includes the trained benchmarks and their measured results, baselines, sensor limits and missing labels. There is no validated 80% model across the four research targets.
+**Just watch the story:** open the [included MP4](<demo video/exports/neurasign-hospital-76s-1080p.mp4>), or serve the film player with Python 3:
 
-Start locally, without any Google Cloud account:
+```sh
+python3 "demo video/scripts/preview-server.py"
+```
 
-```bash
+Open **http://localhost:3101**. This needs no wearable, dataset, cloud account or API key.
+
+**Explore the application:** with Docker and Docker Compose **2.24+** installed, run from the repository root:
+
+```sh
 docker compose up --build -d
 ```
 
-Open **http://localhost:3000** for company sign-in. The recorded hackathon demo is at **http://localhost:3000/demo**. Local Firebase tools for test users and email verification are at **http://localhost:4000**.
+| Open | What you can inspect |
+| --- | --- |
+| **http://localhost:3000** | Company workspace. Select **Sign in with test account**, or use `demo@neurasign.test` / `Neurasign2026!` in the local emulators. |
+| **http://localhost:3000/demo** | Interactive monitoring demo. A clean checkout uses the included, labeled synthetic fixture; locally imported UNIVERSE recordings replace it when available. |
+| **http://localhost:3000/models** | Model execution workspace. Predictions require the separately prepared research bundle described below. |
+| **http://localhost:4000** | Local Firebase Auth and Firestore tools. |
 
-To enable **http://localhost:3000/models**, run `make models-prepare` before starting the stack. This requires the engine's existing verified datasets and fitted artifacts; they are not included in Git. See [model preparation and input contracts](neurasign_server_dashboard/docs/model-engine.md).
+Company workspaces begin without physiological readings. Enroll a phone or use the documented, explicitly labeled recording-upload path to exercise ingestion. The film's patient, doctors, scores and recommendation are a scripted scenario; they are not a recording of the company application.
 
-See [server setup and verification](neurasign_server_dashboard/README.md). Root `make setup`, `make dev`, `make test`, `make build` and `make models-prepare` delegate to that folder. Use Docker or the development processes on ports 3000/8000, one at a time.
+The model datasets and fitted binaries are not in Git. On a prepared research workspace, run `make models-prepare` before starting the stack to export the bundle and create its server-only proxy token. Without preparation, the model workspace is unavailable; the company app and interactive demo still run. [Setup details](neurasign_server_dashboard/README.md) · [Research bundle preparation](neurasign_server_dashboard/docs/model-engine.md).
 
-[Google Cloud deployment preparation](neurasign_server_dashboard/docs/gcloud-deployment.md) uses an explicit future project/account and is offline by default. Nothing has been deployed to the terminal’s current account.
+## The AI, in plain English
 
-Existing provider credentials remain in `neurasign_server_dashboard/.env`; they are excluded from builds and cloud uploads. Do not copy them into the phone app or browser.
+There are three distinct parts:
 
-The connection is **wearable → Bluetooth → NEURASIGN Link → Internet → authenticated API → team dashboard**. The [native app](neurasign_phone_app/mobile/README.md) scans a company QR, discovers supported measurement services, collects multiple signals, stores unsent observations in SQLCipher and supports pause/disconnect. Implemented connectors include standard heart rate/beat intervals, thermometer, pulse oximeter and experimental Polar PMD raw streams. The server retains complete sample blocks. See the [exact connector scope and validation limits](neurasign_phone_app/docs/wearable-connectivity.md); no physical wearable has been validated.
+- **Physiological research models:** trained estimators evaluated against specific dataset references. The local `/models` workspace runs actual saved models and displays predictions beside those references.
+- **Jev and Gemini:** optional providers for the local incident example. Jev selects among eligible candidates; Gemini analyzes sample incident evidence and drafts artifacts. Results identify provider or fallback execution, and human review remains explicit.
+- **Company monitoring:** authenticated ingestion and presentation of received measurements. The research models are not silently applied to employees, and demo formula indices are labeled as estimates.
 
-The dashboard now separates employee profiles from login accounts. Owners create teams and assign manager permissions. Each phone connects to one employee/company through a single-use QR, with no employee dashboard login. See the [onboarding contract](neurasign_server_dashboard/docs/phone-onboarding.md) and [telemetry contract](neurasign_server_dashboard/docs/telemetry.md).
+Selected research results include **94.2% accuracy** for WESAD laboratory condition classification and **3.98-point mean absolute error out of 100** for daily Oura readiness approximation. The first uses three held-out people; the second uses four. Fatigue and workload have weaker or confounded evidence. These are different tasks and time scales, not one accuracy score for live employee monitoring. The [four-target results table](docs/PROJECT_OVERVIEW.md#research-results) includes all four targets, baselines and interpretation; the [model card](<neurasign engine/MODEL_CARD.md>) preserves the complete evidence.
 
-For watches that require an app on the wearable, [`watch_app/`](neurasign_phone_app/watch_app/README.md) adds a minimal Wear OS sensor companion and a paired Android-phone transport. It collects exposed Android sensors; optional Samsung bindings add continuous HR/IBI, PPG, EDA and temperature plus wearer-triggered ECG/SpO₂ when the official SDK, watch model, permissions and policy permit. The base Wear OS APK compiles; the Samsung SDK download requires a Samsung account and was not available in this environment. [The coverage matrix](neurasign_phone_app/docs/model-coverage.md) records this distinction and other vendor dependencies.
+## Current delivery status
 
-Run `make phone-setup` for the shared core, `make mobile-setup` for native dependencies, and `make test-all` for server/core/contracts. `make mobile-check` runs native lint and TypeScript checks. The native build guide explains Android APK installation, USB loopback forwarding and the outstanding physical-device/iOS validation.
+The local application, gateway implementations, interactive demo, research pipeline and film are present in this repository. UI verification includes a 200-profile/eight-team fixture; the current API retains explicit pilot bounds. That UI fixture is not a backend capacity benchmark. [Verification record](neurasign_server_dashboard/docs/verification.md) · [Pilot limits](neurasign_server_dashboard/docs/phone-onboarding.md).
 
-The [repository timeline](docs/repository-timeline.md) explains the ordered import commits. Environment files, credentials, raw research recordings, local databases and intermediate build artifacts are excluded from Git; the reviewed final film exports and narration assets are explicitly included. `.env.example` contains only empty credential fields and public configuration examples.
+The remaining deployment work is concrete: validate physical devices and vendor accounts, complete the outstanding native platform checks, deploy to the designated Google Cloud account, and verify operational capacity and interpretation quality for the intended workplace. **No physical wearable has been validated, and no Google Cloud deployment has been completed.** [Deployment preparation](neurasign_server_dashboard/docs/gcloud-deployment.md) uses an explicit target account/project; it does not use the terminal's active account implicitly.
+
+## Repository map
+
+| Path | Purpose |
+| --- | --- |
+| [`neurasign_server_dashboard/`](neurasign_server_dashboard/README.md) | Company API, web app, local demo, model service, deployment and tests. |
+| [`neurasign_phone_app/`](neurasign_phone_app/README.md) | Phone gateway, measurement contracts, BLE decoders and watch companions. |
+| [`neurasign engine/`](<neurasign engine/README.md>) | Dataset preparation, training, evaluation, reports and artifact fingerprints. |
+| [`demo video/`](<demo video/README.md>) | Editable animation, narration, music, player and final films. |
+| [`presentation/`](presentation/NeuraSign_Pitch.pdf) | Final PDF and editable PowerPoint deck. |
+| [`NeuraSign_Cobalto_logos/`](NeuraSign_Cobalto_logos/LEEME.md) | Supplied logo variants and brand tokens. |
+| [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md) | Product brief, walkthrough, implementation status and evidence map. |
+
+For source-level orientation, see [AGENTS.md](AGENTS.md). For local development and the applicable checks, use the [server](neurasign_server_dashboard/README.md), [native app](neurasign_phone_app/mobile/README.md) and [engine](<neurasign engine/README.md>) guides. The [repository timeline](docs/repository-timeline.md) records the original import history.
+
+Environment files, credentials, raw research recordings and intermediate artifacts remain excluded from Git. Reviewed final film exports and narration assets are explicitly included. `.env.example` contains public configuration examples and empty credential fields.

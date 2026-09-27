@@ -1,0 +1,300 @@
+{
+  "experiment": "006-jev-v1",
+  "created_utc": "2026-09-26T20:46:57.277190+00:00",
+  "model": "jev-1.13.0",
+  "endpoint": "https://api.typesafe.ai/v1/systemone",
+  "modes": [
+    "zero_shot",
+    "eight_shot"
+  ],
+  "seed": 20260926,
+  "requests": 1806,
+  "universe_rows": 472,
+  "swell_rows": 431,
+  "benchmark_code_sha256": "bbf7f3dd20237b84aac533b1fd6d217f8c3ecafa618bb9825056e9995bddd8aa",
+  "requests_sha256": "48880b85eb5fe63734316a8614f980de29d04b7ceb8bc73ac4aeac88eec93b8f",
+  "input_sha256": {
+    "data/prepared/causal-v3/windows.csv.gz": "f2459d6667e0d2650558045e9a54ff8ba673159e7cc9ea6ea979b7b46ec4fda3",
+    "data/prepared/swell-v1/minutes.csv.gz": "b684d64a18a046f065437c6fe9b16582ee524a6a267a4b8ff4db063d17731dcd",
+    "results/causal-v3/report.json": "6e43f65b4493600d1b9801819a4cc0843caa132859c3f1232f2112db5469fa54",
+    "results/swell-v1/report.json": "031720201b4b2ff583b263bea5ea355108283723380e3beb64756b38e3e8c02a",
+    "results/causal-v3/mental_effort-predictions.csv.gz": "84da0054cb57ad079200f04a6e4d500be76c0d6ec1a2dfd923893e864a818fe1",
+    "results/causal-v3/mental_demand-predictions.csv.gz": "68a1cbacdd670b0c98b5d822e704143dc243b21ea6a1fdfbfc52c2ec69a914bd",
+    "results/causal-v3/physical_demand-predictions.csv.gz": "23d317373547aff1946209d73068d39204bdfdba8bad2f164c2440ec182287b4",
+    "results/causal-v3/temporal_demand-predictions.csv.gz": "f0ca237cdcc1aead981df3b856cd120cddfa0b9ceddc0b399fc81e5d336cec4a",
+    "results/causal-v3/perceived_performance-predictions.csv.gz": "e7d7d9abd5c5e2a013febbf3e2f29a66adb9bf3d628c3eb2170906169523559e",
+    "results/causal-v3/effort-predictions.csv.gz": "8c5158fccdcfe0b2c76497ac01298aadd66e076bc7f8fe9bee7396a425de7294",
+    "results/swell-v1/mental_effort__selected.csv.gz": "e66c2b851b4c5fe3d60fbfc03aac7191c05dd41b13a7cd7c459ffd95815a2753",
+    "results/swell-v1/mental_effort__learned.csv.gz": "18f6513426c6ee45bf43dcfc1f9e2660b595814813233c63b7b9b6ccf802fc31",
+    "results/swell-v1/mental_effort__constant.csv.gz": "0aa2912052238c803fbb7da9a2064d9216c174c31546b6cda875f91e9e875f81",
+    "results/swell-v1/mental_effort__native_learned.csv.gz": "5de12078adc581509aa0b3909f7fbbbad78429fdfa2b6cef98427b1b266dc75c",
+    "results/swell-v1/mental_effort__prior_rest_learned.csv.gz": "2726594cd07f26436bf2981bc50f2f3105bb6b29c2f4b23776e778b342777008",
+    "results/swell-v1/mental_demand__selected.csv.gz": "d1bc9a0b762258c0599559d7d8f521fb2fa67e456c75eac058ba9f65660e1929",
+    "results/swell-v1/mental_demand__learned.csv.gz": "f755323bf788c02aa142850cd82a5ec9d933f01f355d0389e1108c2f0fac1995",
+    "results/swell-v1/mental_demand__constant.csv.gz": "30fbcabaf7c3db7bcf935b99d1ae1a93d58840d97333e27a6596d4e45d2ede79",
+    "results/swell-v1/mental_demand__native_learned.csv.gz": "df3f37b2d8a0bd63f894fcbf1d10d2a5ac1092290f851be128bc7e5ddcb69630",
+    "results/swell-v1/mental_demand__prior_rest_learned.csv.gz": "29d26d84f9d72fb4ed6119b4c07c21f2eba252cccaf265aef42c37de0dd84d3c",
+    "results/swell-v1/physical_demand__selected.csv.gz": "1ebb5c19d0d4016de909be3c82d77883f1e16abc487f212f07ccb26598c5f81b",
+    "results/swell-v1/physical_demand__learned.csv.gz": "059eaa3aa4f0bf2d5d0e6f1999083de6f264fe7d19d2245347b99dbef4f88286",
+    "results/swell-v1/physical_demand__constant.csv.gz": "1fc314475b79a515e462ef5ae0bd959132dbb85707cc69c44a8aaba74879ffc9",
+    "results/swell-v1/physical_demand__native_learned.csv.gz": "b180a1d1f709ea88a7a2051bfd7e735d8c7bb3c616ab1e9645ceac5a75058b0d",
+    "results/swell-v1/physical_demand__prior_rest_learned.csv.gz": "c6f63590ccd4ef50d93c8d23e7211f197b02790541599f1d343a18237e370fb6",
+    "results/swell-v1/temporal_demand__selected.csv.gz": "d8e61ec9583d88e5eb6443c16611880a884be0ec72f18fc6ebbebe9fbf12f640",
+    "results/swell-v1/temporal_demand__learned.csv.gz": "4823720ebc17007227abfa086c73470e945f1e84ff1ead4e91e7eb4cf3025aeb",
+    "results/swell-v1/temporal_demand__constant.csv.gz": "a7af3c40b74bc72718bb8fdca4502d4dc9e51c139b26256571ce4595ad972cbc",
+    "results/swell-v1/temporal_demand__native_learned.csv.gz": "30f9ac806b49bb3ce6ec7cdd263d2b1096ccd2f4b7ecc78cce20fe8341dd11ba",
+    "results/swell-v1/temporal_demand__prior_rest_learned.csv.gz": "79f10e94f7151c6e87b9ba190094519c15db67b1434f1cb90a3a492b7b9a37b8",
+    "results/swell-v1/perceived_performance__selected.csv.gz": "8c8142d124e49939d7ebd5621f451061e870b8fb0bfc994c29cc78925945f767",
+    "results/swell-v1/perceived_performance__learned.csv.gz": "32d98d4f5a912a7484888f0af8564a986357dbd8216f9a4899ed1bfaabbd8ae9",
+    "results/swell-v1/perceived_performance__constant.csv.gz": "00678f04a6c9d429e0c34f080fd828214fdf13e57a20c29f5683010c33b4a04e",
+    "results/swell-v1/perceived_performance__native_learned.csv.gz": "975f80cf442fa33ac2979a7012a96f580c99369335284dd469f5b5ca8f44c51d",
+    "results/swell-v1/perceived_performance__prior_rest_learned.csv.gz": "9d716bb61c4823a950b980368e599782c3f8d129b7f77e62617fd9bc9e8ba22c",
+    "results/swell-v1/effort__selected.csv.gz": "8870f7c1a5eec70338a0a8dc810ed356befc357bd6c3305424b8986ebea7b8da",
+    "results/swell-v1/effort__learned.csv.gz": "81377320275e9de04e14371c43235b1e417c3ec66c0f3ba62190bdf705ad9474",
+    "results/swell-v1/effort__constant.csv.gz": "cb45377e3e3f1a0b94f656ae1be4c92b1abfad6f53fa2fff62721885ae75aaad",
+    "results/swell-v1/effort__native_learned.csv.gz": "474172d82d559cc10159a6d128cdaa925a6a7120a67efe7c2f1a180e319c6a86",
+    "results/swell-v1/effort__prior_rest_learned.csv.gz": "9ef4ad78937d81db791b34091c45d302a97e644d898adec7ce66dd5930c96521"
+  },
+  "prepared_sha256": {
+    "swell-perceived_performance-local.csv.gz": "78cb679b8ce7efae9cad2d1c6f668ddc04ce2edde2b59ac90bfa037907eba5e2",
+    "swell-mental_effort-local.csv.gz": "f3e10a90e5e5581baa94cb8a4b6ebef5737292f84c1a5d238b9ef4882ed080e8",
+    "universe-temporal_demand-local.csv.gz": "3f49bc039f666169ba3b623706b6833aeb1a786595e28eba795f0f7b809cddd4",
+    "swell-sample.csv.gz": "3d408b454db84b029a573510159e723133e14eb867bf95a18ef3762b416af90c",
+    "swell-mental_demand-local.csv.gz": "63be304a3022f0a9da5e0c54677b8650245f3eaa44e7d9a8c979bd44353f1809",
+    "universe-mental_effort-local.csv.gz": "a4a5835f8d8efd3ebb6ee0d2569d981a56c8e10ac342627aee86fc62388f8afd",
+    "universe-physical_demand-local.csv.gz": "050b8159f008b7b01de35d549beddbab53bf3042d6a23918aec8d3507738a201",
+    "reference-audit.json": "2aac4730bdaf4e35815afe2823a924b17aa1349946dd3a6dfb45e9852f21aa63",
+    "universe-effort-local.csv.gz": "e536bfceac2ba2210531b0b9462f887d410b9b8f5260bb3d85be5f8ba5ab54b0",
+    "swell-effort-local.csv.gz": "eb3492644dff20d2f52fc3fffb509ae2c2e6393ad405ff3547c3e1227b72dcc0",
+    "swell-physical_demand-local.csv.gz": "b0e61cf75fd60a16805a6fa38ea5e4163290b923917eb9004f8018bf5e2e29ed",
+    "swell-temporal_demand-local.csv.gz": "49ef157baf74f10f5de4c3cb91d3aff9814d25ed2d9cce7fd6d0cfda975657d9",
+    "universe-mental_demand-local.csv.gz": "8a509336652a2f055fd85e0b09d67a9d3456d18e20a9bfd1004e54d0a90c907c",
+    "request-index.csv": "5cd9de7d7b31e51e2720dd811c5ccd1d85234761c1103a934e3ed602f9d57ac7",
+    "universe-sample.csv.gz": "ada5c63e50fc965bfb81d7f8989d1d1c252dc45ef95e31eef3dc15a96908fa1a",
+    "universe-perceived_performance-local.csv.gz": "4549bc45c4c31eb218fa7ee5a422607dacee247b1950fde6a9f9cff022857dbb"
+  },
+  "sampling": "UNIVERSE: one middle available window per questionnaire interval, 19 development people. SWELL: all 431 held-out minutes, five people.",
+  "examples": "Eight label-independently selected windows from eight other training people. Entire outer fold excluded for UNIVERSE; entire test excluded for SWELL.",
+  "selection": "Both prompts fixed before scoring. No test-driven prompt tuning, response replacement, fine-tuning or weight training.",
+  "questions": {
+    "universe": {
+      "mental_effort": {
+        "type": "choice",
+        "instructions": "Estimate the mental effort questionnaire rating for state.current using its physiological measurements. Choose the closest rating category on 1 to 5. Use state.labeled_reference_examples, when present, as examples from different people; their ratings do not describe state.current. Missing measurements are unknown, not zero. This is a forced-choice research benchmark: make your best estimate even when evidence is weak, and distribute probability across plausible categories. No medical diagnosis, emotion, fatigue, work assignment or objective productivity judgment is requested. ",
+        "criteria": {
+          "rating_1": "Negligible mental effort: closest recorded rating is 1 on the stated scale.",
+          "rating_2": "Low mental effort: closest recorded rating is 2 on the stated scale.",
+          "rating_3": "Moderate mental effort: closest recorded rating is 3 on the stated scale.",
+          "rating_4": "High mental effort: closest recorded rating is 4 on the stated scale.",
+          "rating_5": "Extremely high mental effort: closest recorded rating is 5 on the stated scale."
+        }
+      },
+      "mental_demand": {
+        "type": "choice",
+        "instructions": "Estimate the mental demand questionnaire rating for state.current using its physiological measurements. Choose the closest rating category on 0 to 100. Use state.labeled_reference_examples, when present, as examples from different people; their ratings do not describe state.current. Missing measurements are unknown, not zero. This is a forced-choice research benchmark: make your best estimate even when evidence is weak, and distribute probability across plausible categories. No medical diagnosis, emotion, fatigue, work assignment or objective productivity judgment is requested. ",
+        "criteria": {
+          "rating_0": "Negligible mental demand: closest recorded rating is 0 on the stated scale.",
+          "rating_10": "Very low mental demand: closest recorded rating is 10 on the stated scale.",
+          "rating_20": "Low mental demand: closest recorded rating is 20 on the stated scale.",
+          "rating_30": "Low mental demand: closest recorded rating is 30 on the stated scale.",
+          "rating_40": "Moderately low mental demand: closest recorded rating is 40 on the stated scale.",
+          "rating_50": "Moderate mental demand: closest recorded rating is 50 on the stated scale.",
+          "rating_60": "Moderately high mental demand: closest recorded rating is 60 on the stated scale.",
+          "rating_70": "High mental demand: closest recorded rating is 70 on the stated scale.",
+          "rating_80": "High mental demand: closest recorded rating is 80 on the stated scale.",
+          "rating_90": "Very high mental demand: closest recorded rating is 90 on the stated scale.",
+          "rating_100": "Extremely high mental demand: closest recorded rating is 100 on the stated scale."
+        }
+      },
+      "physical_demand": {
+        "type": "choice",
+        "instructions": "Estimate the physical demand questionnaire rating for state.current using its physiological measurements. Choose the closest rating category on 0 to 100. Use state.labeled_reference_examples, when present, as examples from different people; their ratings do not describe state.current. Missing measurements are unknown, not zero. This is a forced-choice research benchmark: make your best estimate even when evidence is weak, and distribute probability across plausible categories. No medical diagnosis, emotion, fatigue, work assignment or objective productivity judgment is requested. ",
+        "criteria": {
+          "rating_0": "Negligible physical demand: closest recorded rating is 0 on the stated scale.",
+          "rating_10": "Very low physical demand: closest recorded rating is 10 on the stated scale.",
+          "rating_20": "Low physical demand: closest recorded rating is 20 on the stated scale.",
+          "rating_30": "Low physical demand: closest recorded rating is 30 on the stated scale.",
+          "rating_40": "Moderately low physical demand: closest recorded rating is 40 on the stated scale.",
+          "rating_50": "Moderate physical demand: closest recorded rating is 50 on the stated scale.",
+          "rating_60": "Moderately high physical demand: closest recorded rating is 60 on the stated scale.",
+          "rating_70": "High physical demand: closest recorded rating is 70 on the stated scale.",
+          "rating_80": "High physical demand: closest recorded rating is 80 on the stated scale.",
+          "rating_90": "Very high physical demand: closest recorded rating is 90 on the stated scale.",
+          "rating_100": "Extremely high physical demand: closest recorded rating is 100 on the stated scale."
+        }
+      },
+      "temporal_demand": {
+        "type": "choice",
+        "instructions": "Estimate the time pressure questionnaire rating for state.current using its physiological measurements. Choose the closest rating category on 0 to 100. Use state.labeled_reference_examples, when present, as examples from different people; their ratings do not describe state.current. Missing measurements are unknown, not zero. This is a forced-choice research benchmark: make your best estimate even when evidence is weak, and distribute probability across plausible categories. No medical diagnosis, emotion, fatigue, work assignment or objective productivity judgment is requested. ",
+        "criteria": {
+          "rating_0": "Negligible time pressure: closest recorded rating is 0 on the stated scale.",
+          "rating_10": "Very low time pressure: closest recorded rating is 10 on the stated scale.",
+          "rating_20": "Low time pressure: closest recorded rating is 20 on the stated scale.",
+          "rating_30": "Low time pressure: closest recorded rating is 30 on the stated scale.",
+          "rating_40": "Moderately low time pressure: closest recorded rating is 40 on the stated scale.",
+          "rating_50": "Moderate time pressure: closest recorded rating is 50 on the stated scale.",
+          "rating_60": "Moderately high time pressure: closest recorded rating is 60 on the stated scale.",
+          "rating_70": "High time pressure: closest recorded rating is 70 on the stated scale.",
+          "rating_80": "High time pressure: closest recorded rating is 80 on the stated scale.",
+          "rating_90": "Very high time pressure: closest recorded rating is 90 on the stated scale.",
+          "rating_100": "Extremely high time pressure: closest recorded rating is 100 on the stated scale."
+        }
+      },
+      "perceived_performance": {
+        "type": "choice",
+        "instructions": "Estimate the recorded self-rated performance questionnaire rating for state.current using its physiological measurements. Choose the closest rating category on 0 to 100. Use state.labeled_reference_examples, when present, as examples from different people; their ratings do not describe state.current. Missing measurements are unknown, not zero. This is a forced-choice research benchmark: make your best estimate even when evidence is weak, and distribute probability across plausible categories. No medical diagnosis, emotion, fatigue, work assignment or objective productivity judgment is requested. For this source the numeric performance direction is unverified: preserve the recorded rating convention without claiming that higher means better. ",
+        "criteria": {
+          "rating_0": "Negligible recorded self-rated performance: closest recorded rating is 0 on the stated scale.",
+          "rating_10": "Very low recorded self-rated performance: closest recorded rating is 10 on the stated scale.",
+          "rating_20": "Low recorded self-rated performance: closest recorded rating is 20 on the stated scale.",
+          "rating_30": "Low recorded self-rated performance: closest recorded rating is 30 on the stated scale.",
+          "rating_40": "Moderately low recorded self-rated performance: closest recorded rating is 40 on the stated scale.",
+          "rating_50": "Moderate recorded self-rated performance: closest recorded rating is 50 on the stated scale.",
+          "rating_60": "Moderately high recorded self-rated performance: closest recorded rating is 60 on the stated scale.",
+          "rating_70": "High recorded self-rated performance: closest recorded rating is 70 on the stated scale.",
+          "rating_80": "High recorded self-rated performance: closest recorded rating is 80 on the stated scale.",
+          "rating_90": "Very high recorded self-rated performance: closest recorded rating is 90 on the stated scale.",
+          "rating_100": "Extremely high recorded self-rated performance: closest recorded rating is 100 on the stated scale."
+        }
+      },
+      "effort": {
+        "type": "choice",
+        "instructions": "Estimate the general effort questionnaire rating for state.current using its physiological measurements. Choose the closest rating category on 0 to 100. Use state.labeled_reference_examples, when present, as examples from different people; their ratings do not describe state.current. Missing measurements are unknown, not zero. This is a forced-choice research benchmark: make your best estimate even when evidence is weak, and distribute probability across plausible categories. No medical diagnosis, emotion, fatigue, work assignment or objective productivity judgment is requested. ",
+        "criteria": {
+          "rating_0": "Negligible general effort: closest recorded rating is 0 on the stated scale.",
+          "rating_10": "Very low general effort: closest recorded rating is 10 on the stated scale.",
+          "rating_20": "Low general effort: closest recorded rating is 20 on the stated scale.",
+          "rating_30": "Low general effort: closest recorded rating is 30 on the stated scale.",
+          "rating_40": "Moderately low general effort: closest recorded rating is 40 on the stated scale.",
+          "rating_50": "Moderate general effort: closest recorded rating is 50 on the stated scale.",
+          "rating_60": "Moderately high general effort: closest recorded rating is 60 on the stated scale.",
+          "rating_70": "High general effort: closest recorded rating is 70 on the stated scale.",
+          "rating_80": "High general effort: closest recorded rating is 80 on the stated scale.",
+          "rating_90": "Very high general effort: closest recorded rating is 90 on the stated scale.",
+          "rating_100": "Extremely high general effort: closest recorded rating is 100 on the stated scale."
+        }
+      }
+    },
+    "swell": {
+      "mental_effort": {
+        "type": "choice",
+        "instructions": "Estimate the mental effort questionnaire rating for state.current using its physiological measurements. Choose the closest rating category on 0 to 15. Use state.labeled_reference_examples, when present, as examples from different people; their ratings do not describe state.current. Missing measurements are unknown, not zero. This is a forced-choice research benchmark: make your best estimate even when evidence is weak, and distribute probability across plausible categories. No medical diagnosis, emotion, fatigue, work assignment or objective productivity judgment is requested. Mental effort here is the exported RSME value, not a five-level category. ",
+        "criteria": {
+          "rating_0": "Negligible mental effort: closest recorded rating is 0 on the stated scale.",
+          "rating_1": "Very low mental effort: closest recorded rating is 1 on the stated scale.",
+          "rating_2": "Very low mental effort: closest recorded rating is 2 on the stated scale.",
+          "rating_3": "Low mental effort: closest recorded rating is 3 on the stated scale.",
+          "rating_4": "Low mental effort: closest recorded rating is 4 on the stated scale.",
+          "rating_5": "Moderately low mental effort: closest recorded rating is 5 on the stated scale.",
+          "rating_6": "Moderately low mental effort: closest recorded rating is 6 on the stated scale.",
+          "rating_7": "Moderate mental effort: closest recorded rating is 7 on the stated scale.",
+          "rating_8": "Moderate mental effort: closest recorded rating is 8 on the stated scale.",
+          "rating_9": "Moderately high mental effort: closest recorded rating is 9 on the stated scale.",
+          "rating_10": "Moderately high mental effort: closest recorded rating is 10 on the stated scale.",
+          "rating_11": "High mental effort: closest recorded rating is 11 on the stated scale.",
+          "rating_12": "High mental effort: closest recorded rating is 12 on the stated scale.",
+          "rating_13": "Very high mental effort: closest recorded rating is 13 on the stated scale.",
+          "rating_14": "Very high mental effort: closest recorded rating is 14 on the stated scale.",
+          "rating_15": "Extremely high mental effort: closest recorded rating is 15 on the stated scale."
+        }
+      },
+      "mental_demand": {
+        "type": "choice",
+        "instructions": "Estimate the mental demand questionnaire rating for state.current using its physiological measurements. Choose the closest rating category on 0 to 10. Use state.labeled_reference_examples, when present, as examples from different people; their ratings do not describe state.current. Missing measurements are unknown, not zero. This is a forced-choice research benchmark: make your best estimate even when evidence is weak, and distribute probability across plausible categories. No medical diagnosis, emotion, fatigue, work assignment or objective productivity judgment is requested. ",
+        "criteria": {
+          "rating_0": "Negligible mental demand: closest recorded rating is 0 on the stated scale.",
+          "rating_1": "Very low mental demand: closest recorded rating is 1 on the stated scale.",
+          "rating_2": "Low mental demand: closest recorded rating is 2 on the stated scale.",
+          "rating_3": "Low mental demand: closest recorded rating is 3 on the stated scale.",
+          "rating_4": "Moderately low mental demand: closest recorded rating is 4 on the stated scale.",
+          "rating_5": "Moderate mental demand: closest recorded rating is 5 on the stated scale.",
+          "rating_6": "Moderately high mental demand: closest recorded rating is 6 on the stated scale.",
+          "rating_7": "High mental demand: closest recorded rating is 7 on the stated scale.",
+          "rating_8": "High mental demand: closest recorded rating is 8 on the stated scale.",
+          "rating_9": "Very high mental demand: closest recorded rating is 9 on the stated scale.",
+          "rating_10": "Extremely high mental demand: closest recorded rating is 10 on the stated scale."
+        }
+      },
+      "physical_demand": {
+        "type": "choice",
+        "instructions": "Estimate the physical demand questionnaire rating for state.current using its physiological measurements. Choose the closest rating category on 0 to 10. Use state.labeled_reference_examples, when present, as examples from different people; their ratings do not describe state.current. Missing measurements are unknown, not zero. This is a forced-choice research benchmark: make your best estimate even when evidence is weak, and distribute probability across plausible categories. No medical diagnosis, emotion, fatigue, work assignment or objective productivity judgment is requested. ",
+        "criteria": {
+          "rating_0": "Negligible physical demand: closest recorded rating is 0 on the stated scale.",
+          "rating_1": "Very low physical demand: closest recorded rating is 1 on the stated scale.",
+          "rating_2": "Low physical demand: closest recorded rating is 2 on the stated scale.",
+          "rating_3": "Low physical demand: closest recorded rating is 3 on the stated scale.",
+          "rating_4": "Moderately low physical demand: closest recorded rating is 4 on the stated scale.",
+          "rating_5": "Moderate physical demand: closest recorded rating is 5 on the stated scale.",
+          "rating_6": "Moderately high physical demand: closest recorded rating is 6 on the stated scale.",
+          "rating_7": "High physical demand: closest recorded rating is 7 on the stated scale.",
+          "rating_8": "High physical demand: closest recorded rating is 8 on the stated scale.",
+          "rating_9": "Very high physical demand: closest recorded rating is 9 on the stated scale.",
+          "rating_10": "Extremely high physical demand: closest recorded rating is 10 on the stated scale."
+        }
+      },
+      "temporal_demand": {
+        "type": "choice",
+        "instructions": "Estimate the time pressure questionnaire rating for state.current using its physiological measurements. Choose the closest rating category on 0 to 10. Use state.labeled_reference_examples, when present, as examples from different people; their ratings do not describe state.current. Missing measurements are unknown, not zero. This is a forced-choice research benchmark: make your best estimate even when evidence is weak, and distribute probability across plausible categories. No medical diagnosis, emotion, fatigue, work assignment or objective productivity judgment is requested. ",
+        "criteria": {
+          "rating_0": "Negligible time pressure: closest recorded rating is 0 on the stated scale.",
+          "rating_1": "Very low time pressure: closest recorded rating is 1 on the stated scale.",
+          "rating_2": "Low time pressure: closest recorded rating is 2 on the stated scale.",
+          "rating_3": "Low time pressure: closest recorded rating is 3 on the stated scale.",
+          "rating_4": "Moderately low time pressure: closest recorded rating is 4 on the stated scale.",
+          "rating_5": "Moderate time pressure: closest recorded rating is 5 on the stated scale.",
+          "rating_6": "Moderately high time pressure: closest recorded rating is 6 on the stated scale.",
+          "rating_7": "High time pressure: closest recorded rating is 7 on the stated scale.",
+          "rating_8": "High time pressure: closest recorded rating is 8 on the stated scale.",
+          "rating_9": "Very high time pressure: closest recorded rating is 9 on the stated scale.",
+          "rating_10": "Extremely high time pressure: closest recorded rating is 10 on the stated scale."
+        }
+      },
+      "perceived_performance": {
+        "type": "choice",
+        "instructions": "Estimate the recorded self-rated performance questionnaire rating for state.current using its physiological measurements. Choose the closest rating category on 0 to 10. Use state.labeled_reference_examples, when present, as examples from different people; their ratings do not describe state.current. Missing measurements are unknown, not zero. This is a forced-choice research benchmark: make your best estimate even when evidence is weak, and distribute probability across plausible categories. No medical diagnosis, emotion, fatigue, work assignment or objective productivity judgment is requested. Higher performance means better self-rated performance, not objective productivity. ",
+        "criteria": {
+          "rating_0": "Negligible recorded self-rated performance: closest recorded rating is 0 on the stated scale.",
+          "rating_1": "Very low recorded self-rated performance: closest recorded rating is 1 on the stated scale.",
+          "rating_2": "Low recorded self-rated performance: closest recorded rating is 2 on the stated scale.",
+          "rating_3": "Low recorded self-rated performance: closest recorded rating is 3 on the stated scale.",
+          "rating_4": "Moderately low recorded self-rated performance: closest recorded rating is 4 on the stated scale.",
+          "rating_5": "Moderate recorded self-rated performance: closest recorded rating is 5 on the stated scale.",
+          "rating_6": "Moderately high recorded self-rated performance: closest recorded rating is 6 on the stated scale.",
+          "rating_7": "High recorded self-rated performance: closest recorded rating is 7 on the stated scale.",
+          "rating_8": "High recorded self-rated performance: closest recorded rating is 8 on the stated scale.",
+          "rating_9": "Very high recorded self-rated performance: closest recorded rating is 9 on the stated scale.",
+          "rating_10": "Extremely high recorded self-rated performance: closest recorded rating is 10 on the stated scale."
+        }
+      },
+      "effort": {
+        "type": "choice",
+        "instructions": "Estimate the general effort questionnaire rating for state.current using its physiological measurements. Choose the closest rating category on 0 to 10. Use state.labeled_reference_examples, when present, as examples from different people; their ratings do not describe state.current. Missing measurements are unknown, not zero. This is a forced-choice research benchmark: make your best estimate even when evidence is weak, and distribute probability across plausible categories. No medical diagnosis, emotion, fatigue, work assignment or objective productivity judgment is requested. ",
+        "criteria": {
+          "rating_0": "Negligible general effort: closest recorded rating is 0 on the stated scale.",
+          "rating_1": "Very low general effort: closest recorded rating is 1 on the stated scale.",
+          "rating_2": "Low general effort: closest recorded rating is 2 on the stated scale.",
+          "rating_3": "Low general effort: closest recorded rating is 3 on the stated scale.",
+          "rating_4": "Moderately low general effort: closest recorded rating is 4 on the stated scale.",
+          "rating_5": "Moderate general effort: closest recorded rating is 5 on the stated scale.",
+          "rating_6": "Moderately high general effort: closest recorded rating is 6 on the stated scale.",
+          "rating_7": "High general effort: closest recorded rating is 7 on the stated scale.",
+          "rating_8": "High general effort: closest recorded rating is 8 on the stated scale.",
+          "rating_9": "Very high general effort: closest recorded rating is 9 on the stated scale.",
+          "rating_10": "Extremely high general effort: closest recorded rating is 10 on the stated scale."
+        }
+      }
+    }
+  },
+  "output": "Choice categories, no interpolation: UNIVERSE effort 1..5, TLX 0..100 step10; SWELL TLX 0..10 step1, RSME 0..15 step1.",
+  "scoring": "Error per observation, average within block then person then people. UNIVERSE mental effort exact rounded level; other outputs within10. SWELL within1 native point.",
+  "failures": "Report coverage and paired complete-case metrics; failed API answers never replaced by local estimates. No confidence filtering of primary metrics.",
+  "transport": "Pinned HTTPS host, no redirects; four workers; at most three attempts for 429/5xx/network errors, 30s timeout. No resampling of valid answers.",
+  "limitations": [
+    "Previously inspected research benchmarks, not a fresh validation cohort.",
+    "Repeated task/block labels do not validate instantaneous states.",
+    "UNIVERSE performance scale direction unverified; rate numeric convention only.",
+    "SWELL sensor placement and unverified RMSSD/SCL native units limit wrist transfer.",
+    "Provider pretraining exposure to these public datasets cannot be excluded.",
+    "Jev internal confidence is not calibrated accuracy for physiological estimates."
+  ]
+}

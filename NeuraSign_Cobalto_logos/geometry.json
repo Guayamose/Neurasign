@@ -1,0 +1,24 @@
+{
+  "unit": 2,
+  "width": 64,
+  "rise": 42,
+  "vertical_edge": 136,
+  "translation": [
+    76,
+    62
+  ],
+  "corner_radius": 3,
+  "bounds": [
+    140,
+    240
+  ],
+  "centroid": [
+    70,
+    120
+  ],
+  "horizontal_gap": 12,
+  "clearspace": 32,
+  "wordmark_ink_height": 128,
+  "symbol_wordmark_gap": 100,
+  "slope_degrees": 33.274887984834926
+}

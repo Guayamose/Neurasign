@@ -1,0 +1,22 @@
+{
+  "brand": "NeuraSign",
+  "concept": "05",
+  "status": "approved",
+  "approved_on": "2026-09-26",
+  "palette": {
+    "id": "A",
+    "slug": "cobalto",
+    "name": "Cobalto",
+    "ink": "#131A2A",
+    "accent": "#2854E8",
+    "paper": "#F5F7FC",
+    "dark": "#0D1321",
+    "on_dark": "#6C8BFF",
+    "contrast": {
+      "ink_on_paper": 16.21,
+      "accent_on_paper": 5.56,
+      "white_on_accent": 5.96,
+      "light_accent_on_dark": 5.98
+    }
+  }
+}

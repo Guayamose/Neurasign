@@ -1,19 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Activity, ArrowRight, Check, CheckCheck, ChevronDown, CircleAlert, Clock3, FileCheck2, FileText, GitBranch, LoaderCircle, Search, ShieldCheck, Sparkles, UserRound, X } from "lucide-react";
+import { ArrowRight, Check, CheckCheck, ChevronDown, CircleAlert, Clock3, FileCheck2, FileText, GitBranch, LoaderCircle, Search, ShieldCheck, Sparkles, UserRound, X } from "lucide-react";
 import type { Snapshot, SubTask, Worker } from "@/lib/types";
 import type { useDashboard } from "@/lib/use-dashboard";
 import "./incident-case.css";
 
 const stages = [
-  { title: "Find the cause", purpose: "AI drafts · a person reviews", ids: ["gather", "diagnose"], Icon: Search },
-  { title: "Approve the plan", purpose: "A person makes the decision", ids: ["decide"], Icon: ShieldCheck },
-  { title: "Check & report", purpose: "AI checks sample recovery data", ids: ["verify", "document"], Icon: FileCheck2 },
+  { title: "Investigate", purpose: "AI drafts; a person reviews", ids: ["gather", "diagnose"], Icon: Search },
+  { title: "Approve", purpose: "A person approves the plan", ids: ["decide"], Icon: ShieldCheck },
+  { title: "Report", purpose: "AI checks the sample outcome", ids: ["verify", "document"], Icon: FileCheck2 },
 ];
 const stepLabels: Record<string, string> = {
-  gather: "Collect evidence", diagnose: "Review diagnosis", decide: "Approve recovery plan",
-  verify: "Check sample telemetry", document: "Write incident report",
+  gather: "Collect evidence", diagnose: "Review findings", decide: "Approve recovery plan",
+  verify: "Check sample recovery data", document: "Write incident report",
 };
 
 function personFor(task: SubTask, state: Snapshot) {
@@ -104,7 +104,7 @@ function Stage({ index, state, open }: { index: number; state: Snapshot; open: (
       const task = tasks[row];
       return <div className="ic-step" key={id}>
         <div className="ic-step-heading"><span>{stepLabels[id]}</span>{task?.status === "completed" && <Check size={13} />}</div>
-        {task ? <><div className="ic-step-owner">{task.assignment.kind === "AI" || task.assignment.kind === "HUMAN_AI" ? <Sparkles size={13} /> : <UserRound size={13} />}<strong>{assignee(task, state)}</strong></div><button data-testid={`workflow-step-${id}`} className={`ic-step-output ${task.execution?.provider === "local_fallback" ? "is-fallback" : ""}`} onClick={() => open(id)}>{task.execution?.status === "running" ? <LoaderCircle size={12} className="ic-spin" /> : null}<span>{stepStatus(task)}{task.execution?.provider === "local_fallback" ? " · fallback" : ""}</span><ArrowRight size={12} /></button></> : <p className="ic-step-preview">{id === "decide" ? "Qualified human approval" : id === "diagnose" ? "Human review of AI evidence" : "AI evidence work"}</p>}
+        {task ? <><div className="ic-step-owner">{task.assignment.kind === "AI" || task.assignment.kind === "HUMAN_AI" ? <Sparkles size={13} /> : <UserRound size={13} />}<strong>{assignee(task, state)}</strong></div><p className="ic-step-status">{stepStatus(task)}{task.execution?.provider === "local_fallback" ? " · local fallback" : ""}</p><button data-testid={`workflow-step-${id}`} className={`ic-step-output ${task.execution?.provider === "local_fallback" ? "is-fallback" : ""}`} onClick={() => open(id)}>{task.execution?.status === "running" ? <LoaderCircle size={12} className="ic-spin" /> : <FileText size={14} />}<span>{task.output ? "View result" : "View step details"}</span><ArrowRight size={14} /></button></> : <p className="ic-step-preview">{id === "decide" ? "A person approves the recovery plan" : id === "diagnose" ? "A person reviews the AI findings" : "AI prepares the evidence"}</p>}
       </div>;
     })}</div>
   </section>;
@@ -132,48 +132,53 @@ export default function IncidentStory({ dashboard }: { dashboard: ReturnType<typ
   const completedSteps = work?.subtasks.filter(task => task.status === "completed").length ?? 0;
   const totalSteps = work?.subtasks.length ?? 5;
 
-  let actionTitle = "Let AI prepare the investigation";
-  let actionDescription = "Start the sample case. AI gathers evidence and a team member reviews the diagnosis.";
-  let action: ReactNode = <button data-testid="start-incident" className="ic-primary" disabled={!state || pending || connection === "offline"} onClick={() => void control({ action: "trigger_incident" })}>{pending ? <LoaderCircle size={16} className="ic-spin" /> : <Search size={16} />}Start investigation<ArrowRight size={16} /></button>;
+  let actionTitle = "Try an incident response";
+  let actionDescription = "Start the investigation, review the findings, then approve the example plan.";
+  let action: ReactNode = <button data-testid="start-incident" className="ic-primary" disabled={!state || pending || connection === "offline"} onClick={() => void control({ action: "trigger_incident" })}>{pending ? <LoaderCircle size={16} className="ic-spin" /> : <Search size={16} />}Start example<ArrowRight size={16} /></button>;
   if (finished) {
-    actionTitle = "Case complete";
-    actionDescription = "The reviewed plan has been checked against sample recovery data. The incident report is ready.";
+    actionTitle = "Example complete";
+    actionDescription = "The approved plan was checked against recorded recovery data. Read the report to see the findings and sample outcome.";
     action = <button className="ic-primary" onClick={() => setSelectedId("document")}><FileText size={16} />Read incident report<ArrowRight size={16} /></button>;
   } else if (approval) {
     actionTitle = "Approve the recovery plan";
-    actionDescription = `${decider} owns this decision. Read the diagnosis before approving sample recovery checks.`;
+    actionDescription = `${decider} owns this decision. Read the findings, then approve the plan to continue to the sample recovery checks.`;
     action = <button data-testid="approve-decision" className="ic-primary" disabled={disabled} onClick={() => void control({ action: "approve_decision" })}>{pending ? <LoaderCircle size={16} className="ic-spin" /> : <ShieldCheck size={16} />}Approve recovery plan</button>;
   } else if (review) {
-    actionTitle = "The diagnosis needs a human review";
-    actionDescription = `${reviewer} is the assigned reviewer. Read the analysis, then confirm the diagnosis.`;
-    action = <button data-testid="complete-diagnosis" className="ic-primary" disabled={disabled} onClick={() => void control({ action: "complete_diagnosis" })}>{pending ? <LoaderCircle size={16} className="ic-spin" /> : <Check size={16} />}Confirm diagnosis<ArrowRight size={16} /></button>;
+    actionTitle = "Review the findings";
+    actionDescription = `${reviewer} is the assigned reviewer. Open the findings below, then confirm to continue.`;
+    action = <button data-testid="complete-diagnosis" className="ic-primary" disabled={disabled} onClick={() => void control({ action: "complete_diagnosis" })}>{pending ? <LoaderCircle size={16} className="ic-spin" /> : <Check size={16} />}Confirm findings<ArrowRight size={16} /></button>;
   } else if (work) {
-    actionTitle = failed ? "Analysis needs attention" : evaluating ? "Finding an eligible reviewer" : working?.id === "gather" ? "Gemini is collecting evidence" : working?.id === "diagnose" ? "Gemini is drafting the diagnosis" : working?.id === "verify" ? "Checking sample recovery data" : working?.id === "document" ? "Writing the incident report" : current?.status === "delayed" ? "Waiting for an eligible owner" : "Preparing the next step";
-    actionDescription = failed ? "Open the step details to see what happened." : evaluating ? "The example checks skills, availability, and experimental signal estimates." : current?.status === "delayed" ? "No person meets the example’s routing rules. The assignment updates as the demo plays." : working?.id === "verify" || working?.id === "document" ? "Your approval is recorded. The result will appear when the AI request completes." : "You will review the diagnosis before anyone approves a recovery plan.";
-    action = failed || current?.status === "delayed" ? <button className="ic-secondary" onClick={() => setSelectedId((failed ?? current)?.id ?? null)}>View assignment<ArrowRight size={15} /></button> : <span className="ic-running"><LoaderCircle size={17} className="ic-spin" />{evaluating ? "Routing in progress" : "Work in progress"}</span>;
+    actionTitle = failed ? "Analysis needs attention" : evaluating ? "Finding a reviewer" : working?.id === "gather" ? "Collecting sample evidence" : working?.id === "diagnose" ? "Drafting the findings" : working?.id === "verify" ? "Checking sample recovery data" : working?.id === "document" ? "Writing the incident report" : current?.status === "delayed" ? "Waiting for a reviewer" : "Preparing the next step";
+    actionDescription = failed ? "Open the step details to see what happened." : evaluating ? "The example is checking who meets its assignment rules. No action is needed yet." : current?.status === "delayed" ? "No one currently meets the example’s assignment rules. This updates as the demo plays." : working?.id === "verify" || working?.id === "document" ? "Your approval is recorded. The result will appear here when it is ready." : "No action is needed yet. The findings will appear here for your review.";
+    action = failed || current?.status === "delayed" ? <button className="ic-secondary" onClick={() => setSelectedId((failed ?? current)?.id ?? null)}>View details<ArrowRight size={15} /></button> : <span className="ic-running" role="status"><LoaderCircle size={17} className="ic-spin" />{evaluating ? "Checking assignments" : "In progress"}</span>;
   }
 
   return <div className="incident-case">
-    <header className="ic-heading"><div><span className="ic-example-badge"><Sparkles size={12} />Example workflow</span><h1>Incident response</h1><p>See how team signals could support an AI-assisted response.</p></div>{finished && <button className="ic-text-button" data-testid="start-incident" disabled={pending || connection === "offline"} onClick={() => { setSelectedId(null); void control({ action: "trigger_incident" }); }}>Start another case<ArrowRight size={14} /></button>}</header>
+    <header className="ic-heading"><div><span className="ic-example-badge"><Sparkles size={12} />Interactive example</span><h1>Incident response</h1><p>A sample checkout outage. AI investigates; a person reviews the findings and approves the response.</p></div>{finished && <button className="ic-text-button" data-testid="start-incident" disabled={pending || connection === "offline"} onClick={() => { setSelectedId(null); void control({ action: "trigger_incident" }); }}>Start another case<ArrowRight size={14} /></button>}</header>
     <section className="ic-scenario" aria-label="Example scenario">
-      <div className="ic-scenario-problem"><span className="ic-scenario-icon"><CircleAlert size={21} /></span><div><span className="ic-kicker">WHAT HAPPENED</span><h2>Checkout is slow</h2><p>Requests time out after a deployment.</p></div></div>
-      <div className="ic-scenario-input"><Activity size={18} /><div><span className="ic-kicker">INPUT</span><strong>Sample logs + team signals</strong><span>Experimental routing estimates</span></div></div>
-      <div className="ic-scenario-outcome"><FileCheck2 size={18} /><div><span className="ic-kicker">GOAL</span><strong>A reviewed recovery plan</strong><span>Every decision stays with a person</span></div></div>
+      <div className="ic-scenario-problem"><span className="ic-scenario-icon"><CircleAlert size={21} /></span><div><span className="ic-kicker">THE PROBLEM</span><h2>Customers cannot complete checkout</h2><p>Requests time out after a software update.</p></div></div>
+      <div className="ic-scenario-outcome"><FileCheck2 size={18} /><div><span className="ic-kicker">YOUR ROLE IN THIS EXAMPLE</span><strong>Review and approve</strong><span>AI prepares the evidence. You make the decision.</span></div></div>
     </section>
     {error && <div className="ic-notice" role="alert"><span>{error}</span><button className="ic-icon-button" aria-label="Dismiss error" onClick={clearError}><X size={17} /></button></div>}
     {connection === "offline" && <div className="ic-notice" role="status">Connection lost. Showing the last received state; reconnecting automatically.</div>}
     {!state ? <div className="ic-loading"><LoaderCircle className="ic-spin" size={23} /><span>Loading the example…</span></div> : <>
       <section className={`ic-next-action ${finished ? "is-complete" : approval || review ? "needs-review" : ""}`} aria-label="Current action" data-testid="incident-current-action">
         <div className="ic-action-main"><span className="ic-action-icon">{finished ? <CheckCheck size={23} /> : approval ? <ShieldCheck size={23} /> : review ? <UserRound size={23} /> : <Search size={23} />}</span><div><span className="ic-kicker">{finished ? "OUTCOME" : !work ? "START HERE" : approval || review ? "YOUR NEXT ACTION" : "HAPPENING NOW"}</span><h2>{actionTitle}</h2><p>{actionDescription}</p></div><div className="ic-action-control">{action}{evaluating && (approval || review) && <small>Updating the assignment…</small>}</div></div>
-        {artifact?.output && <div className="ic-artifact-preview"><div><span className="ic-artifact-label">{artifact.execution?.provider === "local_fallback" ? <><Clock3 size={13} />Local fallback output</> : <><Sparkles size={13} />{finished ? "Incident report" : "Diagnosis draft"} · Gemini</>}</span><p>{excerpt(artifact.output)}</p></div><button className="ic-text-button" onClick={() => setSelectedId(artifact.id)}>{finished ? "Read full report" : "Read full analysis"}<ArrowRight size={14} /></button></div>}
-        {!work && <div className="ic-capacity-preview"><span>Demo team</span>{state.workers.map(worker => <span key={worker.id}><UserRound size={12} /><strong>{worker.name}</strong>{capacity(worker)}</span>)}<small>Estimates are not validated measures of capacity.</small></div>}
-        {work && current && !finished && <div className="ic-owner-context"><UserRound size={14} /><span>{routeContext(approval && decision ? decision : diagnosis?.status === "active" ? diagnosis : current, state)}</span></div>}
+        {artifact?.output && <div className="ic-artifact-preview"><div><span className="ic-artifact-label">{artifact.execution?.provider === "local_fallback" ? <><Clock3 size={13} />Local fallback output</> : <><Sparkles size={13} />{finished ? "Incident report" : "Draft findings"} · Gemini</>}</span><p>{excerpt(artifact.output)}</p></div>{!finished && <button className="ic-text-button" onClick={() => setSelectedId(artifact.id)}>Read findings<ArrowRight size={14} /></button>}</div>}
       </section>
-      {changed && <div className="ic-route-change" data-testid="capacity-change"><GitBranch size={16} /><span>Diagnosis review reassigned: <strong>{familiar(changed.assignment.previous_label ?? "")}</strong><ArrowRight size={13} /><strong>{assignee(changed, state)}</strong></span><small>Collected evidence is kept.</small></div>}
-      <div className="ic-workflow-heading"><h2>The response, step by step</h2><span>{work ? `${completedSteps} of ${totalSteps} steps complete` : "Starts when you’re ready"}</span></div>
-      <div className="ic-stages" aria-label="Incident response stages">{stages.map((stage, index) => <Stage key={stage.title} index={index} state={state} open={setSelectedId} />)}</div>
-      <details className="ic-how-it-works"><summary><span><Sparkles size={15} />What do Jev and Gemini do here?</span><ChevronDown size={15} /></summary><div className="ic-service-roles"><div><GitBranch size={18} /><strong>Jev · choose a reviewer</strong><p>Matches the sample task to eligible people. Local rules check every assignment.</p><span>{state.provider.active === "jev" ? "Jev routing active" : "Local routing active"}</span></div><div><Sparkles size={18} /><strong>Gemini · prepare evidence</strong><p>Drafts the diagnosis, checks sample recovery data, and writes a report.</p><span>{state.ai?.configured || state.provider.google_configured ? "Gemini configured" : "Local fallback available"}</span></div><div><ShieldCheck size={18} /><strong>People · review & approve</strong><p>A person confirms the diagnosis and approves the recovery plan.</p><span>Human approval required</span></div></div><p className="ic-method-note">Signal-based routing is experimental. This example does not establish an employee’s capacity or fitness for work. Each output shows whether it came from Gemini or a local fallback.</p></details>
-      <footer className="ic-footer"><span><ShieldCheck size={13} />Sample scenario · no production changes</span><span>Signal estimates are experimental.</span></footer>
+      <ol className="ic-progress" aria-label="Response progress">{stages.map((stage, index) => {
+        const tasks = stage.ids.map(id => work?.subtasks.find(task => task.id === id));
+        const done = tasks.every(task => task?.status === "completed");
+        const active = tasks.some(task => task?.status === "active" || task?.status === "delayed");
+        return <li key={stage.title} className={done ? "is-complete" : active ? "is-current" : ""} aria-current={active ? "step" : undefined}><span className="ic-progress-number">{done ? <Check size={17} /> : index + 1}</span><div><strong>{stage.title}</strong><span>{done ? "Complete" : active ? "In progress" : work ? "Up next" : stage.purpose}</span></div></li>;
+      })}</ol>
+      <details className="ic-step-details"><summary><span>All steps & results<small>{work ? `${completedSteps} of ${totalSteps} steps complete` : "Explore the example"}</small></span><ChevronDown size={17} /></summary><div className="ic-stages" aria-label="Incident response stages">{stages.map((stage, index) => <Stage key={stage.title} index={index} state={state} open={setSelectedId} />)}</div></details>
+      <details className="ic-how-it-works"><summary><span><Sparkles size={15} />How this example works</span><ChevronDown size={15} /></summary><div className="ic-service-roles"><div><GitBranch size={18} /><strong>Jev · choose a reviewer</strong><p>Matches the sample task to eligible people. Local rules check every assignment.</p><span>{state.provider.active === "jev" ? "Jev routing active" : "Local routing active"}</span></div><div><Sparkles size={18} /><strong>Gemini · prepare evidence</strong><p>Uses sample logs to draft findings, check recorded recovery data, and write a report.</p><span>{state.ai?.configured || state.provider.google_configured ? "Gemini configured" : "Local fallback available"}</span></div><div><ShieldCheck size={18} /><strong>People · review & approve</strong><p>A person confirms the findings and approves the recovery plan.</p><span>Human approval required</span></div></div>
+        {work && current && !finished && <div className="ic-owner-context"><UserRound size={14} /><span>{routeContext(approval && decision ? decision : diagnosis?.status === "active" ? diagnosis : current, state)}</span></div>}
+        {changed && <div className="ic-route-change" data-testid="capacity-change"><GitBranch size={16} /><span>Review reassigned: <strong>{familiar(changed.assignment.previous_label ?? "")}</strong><ArrowRight size={13} /><strong>{assignee(changed, state)}</strong></span><small>Collected evidence is kept.</small></div>}
+        <div className="ic-capacity-preview"><span>Example assignment inputs</span>{state.workers.map(worker => <span key={worker.id}><UserRound size={12} /><strong>{worker.name}</strong>{capacity(worker)}</span>)}<small>Experimental estimates; not validated measures of capacity.</small></div>
+        <p className="ic-method-note">Signal-based routing is experimental. This example does not establish an employee’s capacity or fitness for work. Each output shows whether it came from Gemini or a local fallback.</p></details>
+      <footer className="ic-footer"><span><ShieldCheck size={13} />Sample incident · no production system is changed</span></footer>
     </>}
     {selected && state && <OutputDialog task={selected} state={state} close={() => setSelectedId(null)} />}
   </div>;

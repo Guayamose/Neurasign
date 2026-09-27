@@ -25,7 +25,7 @@ async def main(require_live=False):
         await page.request.post(API+'/api/control', data={'action':'reset'})
         await page.goto(WEB+'/demo', wait_until='domcontentloaded')
         await expect(page.get_by_test_id('monitoring-dashboard')).to_be_visible(timeout=30000)
-        await page.locator('.monitor-examples-nav > summary').click()
+        await page.get_by_test_id('tab-examples').click()
         await page.get_by_test_id('tab-incidents').click()
         await expect(page.get_by_test_id('start-incident')).to_be_enabled(timeout=10000)
         start_box = await page.get_by_test_id('start-incident').bounding_box()
@@ -57,6 +57,7 @@ async def main(require_live=False):
         assert task(snapshot,'diagnose')['status'] == 'active'
         if require_live:
             assert task(snapshot,'diagnose')['assignment']['provider'] == 'jev'
+        await page.locator('.ic-step-details > summary').click()
         await page.get_by_test_id('workflow-step-diagnose').click()
         await expect(page.get_by_test_id('output-dialog')).to_be_visible()
         await expect(page.get_by_test_id('evidence-result')).not_to_be_empty()

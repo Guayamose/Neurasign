@@ -4,6 +4,8 @@ NEURASIGN brings a team’s received physiological measurements into one company
 
 The **company application is `/`**. The existing recorded hackathon demo and its Jev/Gemini example workflows are at **`/demo`**, available only in local development. Company workspaces start empty and never invent employee readings or cognitive scores.
 
+The local **Model engine at `/models`** runs saved fitted models on anonymous research records and compares their predictions with recorded references. It uses experiments **022** (60-second stress condition), **016** (daily Oura readiness), **018** (daily fatigue) and **021** (completed-task workload, with the matching evaluation-fold model). The team demo's indices remain labeled formula estimates. Employee telemetry is outside this research service, which is disabled in production. See [model execution and evidence limits](docs/model-engine.md).
+
 ## Run locally
 
 From this folder or the parent workspace:
@@ -14,10 +16,13 @@ docker compose up --build -d
 
 - Company workspace: **http://localhost:3000**
 - Recorded demo: **http://localhost:3000/demo**
+- Model engine: **http://localhost:3000/models**
 - Local Firebase tools: **http://localhost:4000**
 - Local API docs: **http://localhost:8000/docs**
 
-Docker starts the web app, API, Firebase Auth emulator and Firestore emulator. No Google Cloud account is required or used. All host ports bind to loopback. **Quick access:** click **Sign in with test account** on the login page, or use `demo@neurasign.test` / `Neurasign2026!`. The verified account and its test workspace are created automatically in the local emulators. The demo header’s **Back to login** link returns to sign-in, including when a previous session is active. These test credentials are not enabled in production.
+Docker starts the web app, API, internal model service, Firebase Auth emulator and Firestore emulator. No Google Cloud account is required or used. All host ports bind to loopback. **Quick access:** click **Sign in with test account** on the login page, or use `demo@neurasign.test` / `Neurasign2026!`. The verified account and its test workspace are created automatically in the local emulators. The demo header’s **Back to login** link returns to sign-in, including when a previous session is active. These test credentials are not enabled in production.
+
+For model inference, run **`make models-prepare` before starting Docker**. It exports the engine's existing verified artifacts and research inputs, then creates a private local proxy token. These files remain ignored; missing bundles appear as unavailable. A clean clone needs the verified research data and completed training artifacts described in the [model setup guide](docs/model-engine.md).
 
 To create your own account: the emulator does not send real email. Open Authentication in the local Firebase tools, edit that test user and mark their email verified, then click **I have verified my email** in NEURASIGN. You can also use the verification URL printed by the local Auth emulator.
 
@@ -28,12 +33,12 @@ Emulator data is exported on graceful shutdown into the `emulator-state` Docker 
 For hot reload (Python 3.11+, Node 22, npm, Docker; optional `uv`):
 
 ```bash
-docker compose stop api web
+docker compose stop api web models
 make setup
 make dev
 ```
 
-`make dev` starts the local emulators and the API/web development processes. `Ctrl+C` stops the latter; `docker compose stop emulator` stops the emulators. The API privately loads the existing `.env`; do not overwrite it with `.env.example`. Jev/Gemini credentials are used only by the local incident example and are never included in frontend or cloud build uploads.
+`make dev` starts the local emulators and the API/web development processes, plus the model service when the engine's Python environment is available. Run `make models-prepare` first to use the models. `Ctrl+C` stops the development processes; `docker compose stop emulator` stops the emulators. The API privately loads the existing `.env`; do not overwrite it with `.env.example`. Jev/Gemini credentials are used only by the local incident example and are never included in frontend or cloud build uploads.
 
 ## Deploy when the new account arrives
 
@@ -48,7 +53,7 @@ python3 scripts/deploy_gcloud.py \
 
 This produces reviewed configuration under `var/deploy/`. Only an explicit `--apply` provisions resources and deploys. Every gcloud invocation supplies its account and project; the script never changes the active gcloud configuration.
 
-Cloud Run runs the web ingress and private API sidecar together. Firebase Auth verifies users; Firestore persists company data. Production rejects emulator/SQLite configuration and disables the legacy demo/API. The phone workspace includes the native NEURASIGN Link application with BLE heart-rate transport and encrypted storage. Cloud deployment, physical wearable compatibility and operational acceptance must be verified on the future account before a company rollout.
+Cloud Run runs the web ingress and private API sidecar together. Firebase Auth verifies users; Firestore persists company data. Production rejects emulator/SQLite configuration and disables the legacy demo/API and Model engine. The production deployment does not include the research model service. The phone workspace includes the native NEURASIGN Link application with BLE heart-rate transport and encrypted storage. Cloud deployment, physical wearable compatibility and operational acceptance must be verified on the future account before a company rollout.
 
 ## Verify
 
@@ -71,6 +76,7 @@ The smoke scripts require the Docker stack. Browser checks require Chrome and Pl
 - [Wearable adapters, independent observations and server normalization](docs/telemetry.md)
 - [Google Cloud setup, deployment and acceptance](docs/gcloud-deployment.md)
 - [Recorded demo and AI example workflows](docs/demo-workspace.md)
+- [Trained model execution, preparation and evidence limits](docs/model-engine.md)
 - [Physiological dataset and processing](docs/dataset.md)
 - [Verification results and remaining limits](docs/verification.md)
 - [Phone app workspace](../neurasign_phone_app/README.md)

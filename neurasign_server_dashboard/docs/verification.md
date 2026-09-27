@@ -1,5 +1,17 @@
 # Verification record
 
+## Anonymous trained-model workspace — 2026-09-26
+
+The local `/models` workspace executes the unchanged selected research artifacts and compares their predictions with recorded references. It does not connect employee features to these models or replace the team demo's labeled formula estimates. Production access remains disabled. See [model execution and input contracts](model-engine.md).
+
+- **150 API tests passed**, including server-token access, production isolation, strict record-only schemas and streamed request size limits.
+- **11 model-service tests passed**, replaying all **1,033** original evaluation records, preserving each workload record's held-out fold and rejecting modified artifacts before loading them.
+- **16 web tests passed**, including Docker's internal-versus-browser origin regression; TypeScript and the final Docker web/API/model builds passed.
+- **Browser acceptance passed** against the running Docker stack: all four real model executions, visible reference values and artifact fingerprints, result clearing on record changes, invalid employee input rejection, service errors and recovery, company/demo navigation, mobile layout and no JavaScript errors. Run `scripts/browser_model_engine_smoke.py`; screenshots are ignored under `artifacts/model-engine-*.png`.
+- Credential scanning passed. The model bundle, private proxy token and generated screenshots remain ignored. The token is absent from versionable source and client assets; its local file uses mode 0600.
+
+These checks verify software execution and reproducibility. They add no new scientific validation, physical-wearable acceptance or production deployment claim.
+
 ## Demo navigation and local test login
 
 The demo now has a visible **Back to login** link, including on mobile. It returns to sign-in even with an existing company session. The local login displays a verified emulator-only test account and a **Sign in with test account** shortcut. Its test workspace is created on API startup without adding physiological readings.

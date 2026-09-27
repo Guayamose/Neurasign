@@ -1,6 +1,6 @@
 # NEURASIGN model evidence
 
-NEURASIGN has trained research models and reproducible evaluation code. It does **not** have an independently validated model with 80% accuracy across stress, readiness, fatigue and workload. The company application does not load these research artifacts; the demo's workload, fatigue and readiness indices still use explicit experimental formulas.
+NEURASIGN has trained research models and reproducible evaluation code. It does **not** have an independently validated model with 80% accuracy across stress, readiness, fatigue and workload. The local dashboard's **Model engine at `/models`** now executes saved models on anonymous recorded research inputs. The company telemetry path remains separate, and the team demo's workload, fatigue and readiness indices still use explicit experimental formulas.
 
 ## The four research targets
 
@@ -12,6 +12,19 @@ NEURASIGN has trained research models and reproducible evaluation code. It does 
 | Readiness | Oura's vendor-generated daily readiness score in IFH Affect | Daily score approximation: 3.98-point MAE; this does not validate live employee readiness |
 
 A common feature pipeline or shared neural encoder cannot create missing target answers. Each target needs its own reference definition and evaluation. These outputs cannot share one claimed accuracy number.
+
+## Local dashboard integration
+
+| Model engine card | Executed artifact | Matching research inputs |
+| --- | --- | --- |
+| Stress condition | 022 development-selected ExtraTrees | 86 reserved-person, 60-second WESAD windows |
+| Daily readiness | 016 selected SVR + two CatBoost ensemble | 684 reserved-person days, with completed sleep and preceding history |
+| Daily fatigue | 018 selected cardiac ExtraTrees classifier | 96 reserved-person daily recordings |
+| Task workload | 021 selected model for each outer evaluation fold | 167 complete tasks, each scored by the model that excluded that person |
+
+Every previously scored row is available; examples are not selected by their label or prediction error. The service verifies original artifact and input hashes, runs inference and compares its output with the saved evaluation. Recorded references are displayed alongside predictions and never enter the predictor columns. Evaluation percentages are not confidence scores for individual records.
+
+The interface accepts only existing anonymous record IDs. It does not accept employee features or populate employee state cards, and production access remains disabled. Daily and completed-task models do not become live-window models through this integration. From the repository root, run `make models-prepare` with the verified research files already present; see [setup, API boundary and verification](../neurasign_server_dashboard/docs/model-engine.md).
 
 ## Improvement round: experiments 019–022
 
@@ -55,7 +68,7 @@ During active tasks alone, the model has MAE 12.97 and R² 0.077. Its 82.7% bala
 
 ## Earlier reserved-person fatigue and readiness evaluations
 
-These experiments acquire actual reference labels and reserve entire people before model selection. All preprocessing and model selection use development people only. A saved, frozen selection precedes each final test. Reported accuracies give people equal weight; the reports also preserve raw confusion counts. The models remain separate from the application and its demo formulas.
+These experiments acquire actual reference labels and reserve entire people before model selection. All preprocessing and model selection use development people only. A saved, frozen selection precedes each final test. Reported accuracies give people equal weight; the reports also preserve raw confusion counts. The local Model engine executes selected 016 and 018 artifacts on their recorded research inputs; company observations and the team demo's formulas remain separate.
 
 | Experiment | Reference / time scale | Reserved evaluation | Main result | Interpretation |
 | --- | --- | --- | --- | --- |

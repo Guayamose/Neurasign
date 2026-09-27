@@ -9,9 +9,11 @@ neurasign/
 └── neurasign engine/             Signal interpretation research and experiment plans
 ```
 
-The [engine research workspace](<neurasign engine/README.md>) contains verified UNIVERSE wrist data, offline model comparisons and a causal raw-signal interface. The latter processes timestamped sensor blocks through 60-second trailing windows with updates every 10 seconds, including motion and signal-quality checks. A separate [one-second evidence experiment](<neurasign engine/experiments/011-short-window-results.md>) compares retrained classifiers on matched 1s/60s raw windows; the one-second mental-demand results remain near the 50% constant reference. Its research models estimate questionnaire ratings; streaming computation does not establish instantaneous state accuracy. The engine is not integrated into the company application.
+The [engine research workspace](<neurasign engine/README.md>) contains verified UNIVERSE wrist data, offline model comparisons and a causal raw-signal interface. The latter processes timestamped sensor blocks through 60-second trailing windows with updates every 10 seconds, including motion and signal-quality checks. A separate [one-second evidence experiment](<neurasign engine/experiments/011-short-window-results.md>) compares retrained classifiers on matched 1s/60s raw windows; the one-second mental-demand results remain near the 50% constant reference. Its research models estimate questionnaire ratings; streaming computation does not establish instantaneous state accuracy.
 
-The [model evidence card](<neurasign engine/MODEL_CARD.md>) maps the research to stress, readiness, fatigue and workload. It includes the newly trained stress benchmarks and their measured results, baselines, sensor limits and missing labels. There is no validated 80% model across the four product outputs.
+The local [Model engine workspace](neurasign_server_dashboard/docs/model-engine.md) at **`/models`** now executes saved models on anonymous recorded research inputs: experiment 022 for stress condition, 016 for daily readiness, 018 for daily fatigue and 021's matching evaluation-fold models for completed-task workload. It displays each computed prediction beside its recorded reference. Company employee data does not enter this service, the separate team demo retains labeled formula estimates, and production access remains disabled.
+
+The [model evidence card](<neurasign engine/MODEL_CARD.md>) maps the research to stress, readiness, fatigue and workload. It includes the trained benchmarks and their measured results, baselines, sensor limits and missing labels. There is no validated 80% model across the four research targets.
 
 Start locally, without any Google Cloud account:
 
@@ -21,7 +23,9 @@ docker compose up --build -d
 
 Open **http://localhost:3000** for company sign-in. The recorded hackathon demo is at **http://localhost:3000/demo**. Local Firebase tools for test users and email verification are at **http://localhost:4000**.
 
-See [server setup and verification](neurasign_server_dashboard/README.md). Root `make setup`, `make dev`, `make test` and `make build` delegate to that folder. Use Docker or the development processes on ports 3000/8000, one at a time.
+To enable **http://localhost:3000/models**, run `make models-prepare` before starting the stack. This requires the engine's existing verified datasets and fitted artifacts; they are not included in Git. See [model preparation and input contracts](neurasign_server_dashboard/docs/model-engine.md).
+
+See [server setup and verification](neurasign_server_dashboard/README.md). Root `make setup`, `make dev`, `make test`, `make build` and `make models-prepare` delegate to that folder. Use Docker or the development processes on ports 3000/8000, one at a time.
 
 [Google Cloud deployment preparation](neurasign_server_dashboard/docs/gcloud-deployment.md) uses an explicit future project/account and is offline by default. Nothing has been deployed to the terminal’s current account.
 

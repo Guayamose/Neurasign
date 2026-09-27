@@ -1,0 +1,43 @@
+{
+  "version": "010-personalization-across-sessions",
+  "status": "registered before inspecting session label counts or new model outcomes",
+  "seed": 20260926,
+  "question": "Does learning from an individual's first laboratory session improve low/high mental workload classification in their second session using wrist physiology only?",
+  "population": "Original 19 UNIVERSE development participants only. Original five UNIVERSE test participants and Mobile held-out data remain excluded. A person needs labeled Lab1 and Lab2 windows for the paired comparison. Lab1 from other development people may contribute to generic training.",
+  "split": "Lab1 only for fitting, feature preprocessing and model selection; Lab2 for evaluation. Use the original five participant folds to exclude each evaluation person's whole fold from generic training. No shuffled neighboring-window train/test split.",
+  "targets": {
+    "mental_effort": "Primary: original questionnaire 1-2 = low, 4-5 = high; exclude neutral 3 and missing labels, with coverage reported.",
+    "mental_demand": "Secondary: original NASA-TLX Mental Demand <=100/3 = low, >=200/3 = high; exclude the middle range and missing labels. Do not use the composite NASA-TLX score."
+  },
+  "inputs": {
+    "source": "Frozen causal transfer-v1/universe.csv.gz, 60-second trailing physiology windows every 10 seconds.",
+    "all": "28 established PPG/HR/EDA/temperature/movement features.",
+    "history": "The same 28 features plus their 28 existing causal past-reference deviations. No questionnaire labels enter these references; each session has its own past reference.",
+    "excluded": ["EEG", "stress/emotion/frustration labels or predictors", "task names or difficulty", "person/session identifiers as predictors", "timestamps", "future observations", "Lab2 labels in fitting or selection"]
+  },
+  "arms": {
+    "generic": "Train on Lab1 of people outside the evaluation person's participant fold.",
+    "personal": "Train only on the evaluation person's Lab1.",
+    "hybrid": "Train on generic Lab1 plus own Lab1, allocating half the sample weight to own calibration and half to other people before class balancing.",
+    "generic_constant": "Predict the majority class of generic Lab1, weighted equally by person and task.",
+    "personal_constant": "Predict the majority class of own Lab1, weighted equally by task."
+  },
+  "models": {
+    "primary_fixed_comparison": "All 28 features, logistic regression C=1, same algorithm in all three learned arms.",
+    "training_selected_comparison": "For generic, select on three person-disjoint folds within generic Lab1. For personal, select on up to three stratified task-disjoint folds within own Lab1. Hybrid uses generic-selected configuration without consulting Lab2.",
+    "candidate_profiles": ["all", "history"],
+    "candidate_algorithms": ["logit0.1", "logit1", "logit10", "rbf0.1", "rbf1", "rbf10", "extra", "cat4"],
+    "selection_metric": "Equal-person/equal-task class-balanced accuracy on Lab1 validation windows; deterministic ties retain candidate order.",
+    "single_class_calibration": "Personal models fall back to the observed class. If there are fewer than two Lab1 tasks per class, skip personal tuning and use the fixed configuration; report these cases and the adequately calibrated subgroup separately.",
+    "fitting": "At most 20 uniformly sampled windows per task. Fit imputation/scaling inside every training split. Equal person/task weights, adjusted to equal total weight for low/high training classes; hybrid assigns 50% to own person before class balancing. Evaluate every eligible Lab2 window.",
+    "model_parameters": "Logistic max_iter=2000. SVC RBF gamma=scale without probability calibration. ExtraTrees 150 trees, max_depth=6, min_samples_leaf=5. CatBoost 200 iterations, depth=4, learning_rate=.04, l2_leaf_reg=10. Fixed decision threshold: class probability or sigmoid margin >=.5; scores are not calibrated confidence."
+  },
+  "evaluation": {
+    "report": ["equal-person/equal-task accuracy", "weighted low/high recall and balanced accuracy", "mean within-person balanced accuracy for people with both Lab2 classes", "per-person outcomes and class counts", "paired participant bootstrap versus generic and personal constant", "scored-label coverage", "calibration tasks and non-double-counted evidence minutes"],
+    "subgroup": "Report all paired people first; separately those with at least two Lab1 tasks per class. Any further restriction must be explicit and cannot replace the primary population.",
+    "bootstrap": "10000 paired person resamples, seed 20260926. Exploratory intervals, not corrected for multiple comparisons or prior reuse of development data.",
+    "research_signal": "Prespecified provisional signal: selected personal or hybrid arm reaches >=.70 within-person balanced accuracy, >=.05 improvement over generic, and positive 95% paired improvement intervals against generic and personal constant, with at least 10 people having both Lab2 classes. This is not production validation."
+  },
+  "limitations": "Lab2 has appeared in earlier development experiments, so this is a new session-separated development comparison, not an untouched external test. Labels describe entire tasks, not instantaneous ground truth. Neutral examples are excluded by design; the experiment cannot validate their classification. Calibration uses complete labeled Lab1 tasks, not an assumed short onboarding procedure. No changes to the employee app or dashboard are authorized by this experiment.",
+  "stop": "Complete the fixed and Lab1-selected comparisons for both targets, audit leakage/metrics, document actual results. Do not tune or change cutoffs based on Lab2 outcomes."
+}

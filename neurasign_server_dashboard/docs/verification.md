@@ -1,5 +1,20 @@
 # Verification record
 
+## Cobalto identity and large-team interface — 2026-09-26
+
+The approved logo and favicon now accompany the cobalt/navy palette across access, company monitoring, the recorded demo and Model engine. Main operational headings are compact, body copy is 14–16 px, metadata is at least 12 px and main controls are at least 44 px high. Company overview and People & teams use searchable, filtered and paginated rosters with 25/50 rows per page.
+
+- **23 web tests passed**, including seven roster checks for combined filters, stable sorting, pagination, paused-data suppression, canonical status precedence and mixed-source/backfill freshness. TypeScript checking and the production web image build passed.
+- **100-person browser fixture passed**: paging, name/team/data-status/sharing filters, ordering, summary labels, paused receipts, selected-person focus/return, polling/reordering/removal and mobile layouts. Fixtures only intercept browser responses; company writes are blocked. This verifies UI behavior, not backend load capacity.
+- **Full workspace browser acceptance passed**: signup/verification, invitations, employee isolation, sharing, device authorization, measurement receipt, charts, mobile, revocation and sign-out.
+- **Recorded demo, controls and manager browser checks passed**: metrics/help, playback/source handling, local drafts, individual history, missing-data states, navigation and responsive layout. No external Jev/Gemini calls were needed.
+- **Model engine browser acceptance passed** for all four real recorded predictions, reference values, artifact provenance, invalid-input rejection and failure recovery. Inference artifacts and interpretation rules are unchanged.
+- Desktop/mobile screenshots of access, company roster, demo and models were reviewed. Additional access-page checks at 390/768 px confirmed no horizontal overflow. The logo and favicon return HTTP 200 and exactly match the approved copied SVG assets.
+- Credential scanning passed across **431** source, artifact and client-build files; `.env` files remain ignored. Whitespace checks passed. The local Docker web service was rebuilt and restarted; no Google Cloud deployment was performed.
+- The user's 17-slide presentation was reviewed read-only. Original PDF and PPTX SHA-256 hashes were unchanged after review. Its original files are not included in these application commits.
+
+See [interface direction](interface-design.md) for navigation and the client-side pagination boundary. Screenshots remain ignored under `artifacts/`, including `company-large-roster-{desktop,mobile}.png` and `cobalt-login-{desktop,390,768}.png`.
+
 ## Editorial interface redesign — 2026-09-26
 
 Company access, company monitoring, the recorded demo and Model engine share a black/ivory/orange design, SVG dot-matrix branding, large typography and flatter layouts. Secondary details expand on demand; demo examples are grouped under **Use cases**. See the [interface direction and navigation](interface-design.md).

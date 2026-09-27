@@ -1,0 +1,22 @@
+{
+  "version": "012-anonymous-offline-self-report-stress",
+  "registered_before": "New label preparation, model selection and Lab2 outcome scoring. Source header availability and prior non-stress development results were already known.",
+  "scope": "Anonymous public-dataset academic benchmark of recorded self-report answers only. No employee assessment, diagnosis, product integration, readiness or fatigue inference.",
+  "seed": 20260926,
+  "target": "Original UNIVERSE Mental stress level: Likert 1-2 low, 4-5 high; neutral 3, absent and malformed answers excluded with coverage. No synthesized labels or questionnaire predictors.",
+  "source": "Frozen transfer-v1/universe.csv.gz, 28 existing causal physiological features, 60-second trailing windows at existing 10-second endpoints. Original verified Task_Labels.csv answers joined through causal-v3/provenance.json unit_id, participant, session and segment.",
+  "population": "Original 19 development participants only. Never open original five test participants or Mobile reserved labels. Paired evaluation requires labeled Lab1 and Lab2 windows. Any available development person's Lab1 may supply general training.",
+  "split": "Fit preprocessing, classifiers and select configurations using Lab1 only. Score Lab2 once. General training excludes the evaluation person's entire pre-existing transfer participant fold. Personal uses own Lab1; hybrid adds own Lab1 to general training.",
+  "predictors": "Only the exact 28 transfer_features.FEATURES. No past-reference deviations, other questionnaires, task/condition, participant/session identifiers, timestamps or future measurements as predictors.",
+  "arms": ["generic_constant", "personal_constant", "generic_fixed", "personal_fixed", "hybrid_fixed", "generic_selected", "personal_selected", "hybrid_selected"],
+  "fixed": "Logistic regression C=1 for each learned arm.",
+  "selected": "Candidates in deterministic order logit1, rbf1, extra, cat4. General selects on up to three whole-person Lab1 folds; personal on up to three stratified whole-task Lab1 folds with at least two tasks per class. Hybrid uses the general-selected algorithm. No Lab2-based changes.",
+  "parameters": "Reuse experiment 011 legacy60 classifier implementation: imputer, RobustScaler and tanh fitted within each training split; logit C=1 max_iter=2000; RBF SVC C=1 gamma=scale; ExtraTrees 150 trees max_depth=6 min_samples_leaf=5; CatBoost 200 iterations depth=4 learning_rate=.04 l2_leaf_reg=10. Six workers maximum.",
+  "weighting": "At most 20 uniform fitting windows per task; equal person then task weights. Hybrid gives half weight to own person and half to others before equal low/high class balancing, matching experiment 010. Evaluation uses all eligible windows, equal task then person weights.",
+  "fallbacks": "One training class yields an explicitly identified constant artifact. Insufficient personal inner folds use logit1. Empty general training is an explicit unsupported comparison, never silently replaced by personal training.",
+  "decision": "Fixed score >=0.5 means high. Scores are uncalibrated ranking/probability outputs, not measured confidence or an individual's live stress truth.",
+  "evaluation": "Report all paired people and active-task-only results excluding relaxation_video. Report ordinary person/task-weighted accuracy, weighted balanced accuracy, within-person balanced accuracy only for people with both classes, class recalls, task/window/participant counts, constant baselines, source missing/neutral coverage and single-class fallbacks. Include independently recomputed metrics and prediction replay.",
+  "claim_gate": "No general reliability or 80% accuracy claim is permitted from this reused development benchmark. Fewer than ten paired people with both Lab2 classes is explicitly inadequate even if ordinary accuracy is high. Any future claim requires fresh independent target-domain validation.",
+  "limitations": "Lab2 was used in prior non-stress development experiments. Task answers label entire intervals, not individual seconds. The experiment excludes neutral labels and is not a four-output model. Physical demand is not fatigue and no readiness reference exists.",
+  "preservation": "Only new experiment012/stress-v1 files; save production_enabled=false artifacts, input/code/source hashes and old-artifact hashes. Completed preparation, selection and evaluation refuse overwrite. Stop after frozen comparisons, report and verification."
+}

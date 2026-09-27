@@ -1,0 +1,15 @@
+{
+  "experiment": "013-swell-observed-stress",
+  "registered_before": "New model fitting, predictions or performance inspection; source stress range 0 to 10 is already known.",
+  "question": "Do physiological workbook features distinguish low versus high self-reported stress in people excluded from fitting?",
+  "source": "Original user-provided SWELL workbook, verified against experiment 005 hash. Stress is the actual questionnaire column, not the experimental condition. It is a block-level rating repeated across minutes.",
+  "population": "Original 20 development participants from experiment 005 only. Its five original test people remain excluded. Report how many development people, blocks and minutes retain low/high stress and physiological measurements.",
+  "label": "Low Stress <=10/3, high Stress >=20/3 on the exported 0-10 scale. Middle and absent ratings excluded, with counts. These are research cutoffs, not clinical thresholds; no neutral-state performance claim.",
+  "inputs": "Only HR, RMSSD and SCL in original workbook units. These originate from chest ECG and finger conductance, not a wrist wearable. No condition, identity, timestamp, camera, keyboard, posture or other questionnaire input. At least one feature must be observed.",
+  "evaluation": "Outer five participant-disjoint folds among original development people. Inner up to three participant-disjoint folds select a model using outer-training people only. Preprocessing is fitted anew inside each fit. Every retained minute is evaluated once out of fold. No neighboring-minute random split.",
+  "models": "Fixed logistic C=1 plus a selected candidate among logistic C=1, RBF SVM C=1, ExtraTrees (150 trees, depth6, leaf5) and CatBoost (200 iterations, depth4, learning rate0.04, L2=10), with the same preprocessing as experiment010. Include outer-training weighted-majority baseline. Equal people and blocks, then class balancing for learned fitting.",
+  "metrics": "Person/block-weighted ordinary accuracy, pooled balanced accuracy, both class recalls, macro F1, confusion matrix and within-person balanced accuracy for people with both classes. Report baseline beside learned results. Selection uses pooled balanced accuracy; deterministic ties retain algorithm order.",
+  "integrity": "Freeze protocol and source/code hashes before fitting. Save outer and inner identities, choices, predictions and fitted research artifacts. Independently recompute metrics and replay predictions; changing evaluation labels must not affect inference. Do not repeat or tune after outer outcomes.",
+  "limits": "Research development comparison with repeated block-level labels, not independent external validation, instantaneous stress ground truth, wrist transfer or a production employee interpretation. No promised80percent threshold, no relabeling other constructs as stress. No app integration.",
+  "artifacts": "Only new swell-stress-v1 data, results and models; previous files unchanged. Artifacts have production_enabled=false. Dataset remains subject to its original research-use license."
+}

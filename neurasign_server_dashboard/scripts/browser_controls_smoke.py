@@ -17,7 +17,7 @@ async def main():
         errors=[]
         page.on('pageerror',lambda error: errors.append(str(error)))
         await page.request.post(API+'/api/control',data={'action':'reset'})
-        await page.goto(WEB+'/demo',wait_until='domcontentloaded')
+        await page.goto(WEB+'/signals',wait_until='domcontentloaded')
         await expect(page.get_by_test_id('monitoring-play')).to_be_enabled(timeout=30000)
 
         async def state():

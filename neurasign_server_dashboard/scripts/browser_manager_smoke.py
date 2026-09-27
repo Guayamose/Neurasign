@@ -22,7 +22,7 @@ async def main():
         page = await browser.new_page(viewport={"width": 1440, "height": 1000})
         page.on("pageerror", lambda error: errors.append(str(error)))
         page.on("request", lambda request: writes.append(request.url) if request.method not in ("GET", "HEAD", "OPTIONS") else None)
-        await page.goto(WEB + "/demo#manager", wait_until="domcontentloaded")
+        await page.goto(WEB + "/signals#manager", wait_until="domcontentloaded")
         view = page.get_by_test_id("manager-overview")
         await expect(view).to_be_visible(timeout=30000)
         await expect(page.get_by_test_id("manager-person-alex")).to_be_visible()
@@ -100,7 +100,7 @@ async def main():
 
         await isolated.route("**/api/state", state_route)
         await isolated.route_web_socket(re.compile(r"/ws(?:\?|$)"), socket_route)
-        await isolated.goto(WEB + "/demo#manager", wait_until="domcontentloaded")
+        await isolated.goto(WEB + "/signals#manager", wait_until="domcontentloaded")
         controlled = isolated.get_by_test_id("manager-overview")
         alex = isolated.get_by_test_id("manager-person-alex")
         await expect(alex).to_contain_text("Review suggested")

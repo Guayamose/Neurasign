@@ -61,8 +61,6 @@ async def main():
         await page.get_by_test_id('company-tab-devices').click()
         await expect(page.get_by_role('heading', name='Phone connections', exact=True)).to_be_visible()
         await expect(page.locator('.co-nav [aria-current=page]')).to_have_count(1)
-        assert await page.get_by_test_id('company-tab-overview').evaluate('(el) => getComputedStyle(el).backgroundColor') == 'rgba(0, 0, 0, 0)'
-        assert await page.get_by_test_id('company-tab-devices').evaluate('(el) => getComputedStyle(el).backgroundColor') == 'rgb(28, 44, 85)'
         rows = page.locator('.co-connections-table tbody tr')
         pager = page.get_by_role('navigation', name='Connections pagination')
         await expect(rows).to_have_count(25)

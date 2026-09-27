@@ -2,6 +2,7 @@
 Only local Auth/Firestore emulators; fixtures explicitly use recording source.
 """
 import asyncio
+import hashlib
 from datetime import datetime, timezone
 from pathlib import Path
 import secrets
@@ -63,24 +64,30 @@ async def main():
         source=call('POST','/gateway/sources',gateway['credential'],{'client_source_id':'smoke-heart-rate','name':'Recorded HRS','adapter':{'id':'test-recording','version':'1.0.0'},'transport':'recording','capabilities':[{'metric':'heart_rate','unit':'bpm','delivery_mode':'stream','measurement_kind':'sample','method':'recorded-fixture','timestamp_basis':'source_record'}]},201)['source']['id']
         row={'id':'onboard-measurement-1','source_id':source,'metric':'heart_rate','value':76,'unit':'bpm','measured_at':datetime.now(timezone.utc).isoformat()}
         assert call('POST','/observations',gateway['credential'],{'schema_version':2,'observations':[row]})['accepted']==1
-        assert call('GET',base+'/dashboard',manager['token'])['members'][0]['signals'][0]['latest']['value']==76
+        for actor in (owner, manager):
+            private = call('GET',base+'/dashboard',actor['token'])['members'][0]
+            assert private['signals'] == [] and private['latest'] is None and not private['measurements_access']
+            assert private['connection']['status'] == 'current'
+            series = hashlib.sha256(f'{source}:heart_rate'.encode()).hexdigest()
+            call('GET',base+f'/members/{person["id"]}/observations?series_id={series}',actor['token'],expected=403)
         await page.get_by_test_id('company-tab-overview').click()
-        card=page.get_by_test_id(f'company-person-{person["id"]}')
-        await expect(card).to_contain_text('DEMO RECORDING',timeout=15000)
-        await card.get_by_role('button',name='View signals for Alex Morgan').click()
-        detail=page.get_by_test_id('company-selected-signals')
-        await expect(detail).to_contain_text('76')
+        card=page.get_by_test_id(f'ops-person-{person["id"]}')
+        await expect(card).to_contain_text('Data received',timeout=15000)
+        await card.get_by_role('button',name='View Alex Morgan',exact=True).click()
+        detail=page.get_by_role('dialog',name='Alex Morgan',exact=True)
+        await expect(detail).to_contain_text('Physiological measurements are protected')
+        await expect(detail.locator('.data-chart, .co-chart-value')).to_have_count(0)
         await expect(card).to_contain_text('Operations')
         await page.screenshot(path=str(artifacts/'onboard-signals-mobile.png'))
         call('PATCH','/gateway/sharing',gateway['credential'],{'enabled':False})
         await expect(card).to_contain_text('Sharing paused',timeout=15000)
-        await expect(detail).to_contain_text('Sharing is paused')
-        await expect(detail).not_to_contain_text('76')
+        await expect(detail).to_contain_text('Sharing paused')
+        await expect(detail.locator('.data-chart, .co-chart-value')).to_have_count(0)
         call('POST','/observations',gateway['credential'],{'schema_version':2,'observations':[row]},403)
         call('DELETE','/gateway/connection',gateway['credential'])
         call('GET','/gateway/status',gateway['credential'],expected=401)
         assert not errors,errors
         await browser.close()
-    print('PASS: browser team/employee creation, QR rendering, preview, scoped claim/recovery/reuse, cross-company isolation, manager grant, recorded telemetry, dashboard refresh, pause, revocation and responsive layout.')
+    print('PASS: browser team/employee creation, QR rendering, preview, scoped claim/recovery/reuse, cross-company isolation, manager grant, recorded telemetry receipt with protected values, dashboard refresh, pause, revocation and responsive layout.')
 
 if __name__=='__main__': asyncio.run(main())

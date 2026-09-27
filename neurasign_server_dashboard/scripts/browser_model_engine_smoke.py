@@ -90,7 +90,7 @@ async def main():
         await page.screenshot(path=str(artifacts / "model-engine-mobile.png"), full_page=True)
 
         await page.set_viewport_size({"width": 1440, "height": 1000})
-        await page.goto(WEB + "/demo", wait_until="domcontentloaded")
+        await page.goto(WEB + "/signals", wait_until="domcontentloaded")
         await expect(page.get_by_test_id("monitoring-dashboard")).to_be_visible(timeout=30000)
         await page.get_by_role("link", name="Model engine", exact=True).click()
         await expect(page).to_have_url(WEB + "/models")
@@ -117,7 +117,7 @@ async def main():
         assert not errors, json.dumps(errors)
         await browser.close()
     print(json.dumps(predictions, indent=2))
-    print("PASS: four real model executions, recorded references and hashes, strict inputs, stale-result clearing, service failures/recovery, company/demo navigation and mobile layout.")
+    print("PASS: four real model executions, recorded references and hashes, strict inputs, stale-result clearing, service failures/recovery, company/signal-explorer navigation and mobile layout.")
 
 
 if __name__ == "__main__":

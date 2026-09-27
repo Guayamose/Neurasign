@@ -42,7 +42,7 @@ async def main():
         await owner.get_by_label('Company name').fill('Northstar Team')
         await owner.get_by_role('button', name='Create workspace', exact=True).click()
         await expect(owner.get_by_test_id('company-workspace')).to_be_visible(timeout=15000)
-        await expect(owner.get_by_role('heading', name='Start with your people.')).to_be_visible()
+        await expect(owner.get_by_role('heading', name='Bring your team into view.')).to_be_visible()
         # Compatibility coverage for existing employee logins; new phone-only
         # onboarding has its own browser/native acceptance suite.
         from workspace_smoke import auth_call
@@ -75,26 +75,41 @@ async def main():
         assert call('POST', '/readings', credential, {'readings': rows})['accepted'] == 12
         await owner.get_by_test_id('company-tab-overview').click()
         sam_id = hashlib.sha256(sam['uid'].encode()).hexdigest()
-        card = owner.get_by_test_id(f'company-person-{sam_id}')
-        await expect(card).to_contain_text('DEMO RECORDING', timeout=15000)
-        await card.get_by_role('button', name='View signals for Sam').click()
-        await expect(owner.get_by_role('heading', name='Signal detail · Sam')).to_be_visible()
-        await expect(card).to_contain_text('Current')
-        await owner.get_by_role('button', name='HRV', exact=True).click()
-        await owner.locator('.co-chart-value summary').click()
-        await expect(owner.locator('.co-chart-value')).to_contain_text('successive beat intervals')
+        card = owner.get_by_test_id(f'ops-person-{sam_id}')
+        await expect(card).to_contain_text('Data received', timeout=15000)
+        await expect(card.get_by_role('button', name='View signals for Sam')).to_have_count(0)
+        manager_snapshot = call('GET', f'/organizations/{org}/dashboard', owner_token)['members'][0]
+        assert not manager_snapshot['measurements_access'] and manager_snapshot['latest'] is None
+        assert not manager_snapshot['signals'] and all(value is None for value in manager_snapshot['features'].values())
+        call('GET', f'/organizations/{org}/members/{sam_id}/history', owner_token, expected=403)
+        await card.get_by_role('button', name='View Sam', exact=True).click()
+        person_detail = owner.get_by_role('dialog', name='Sam', exact=True)
+        await expect(person_detail).to_contain_text('Physiological measurements are protected')
+        await expect(person_detail.locator('.data-chart, .co-chart-value')).to_have_count(0)
         await owner.screenshot(path=str(artifacts / 'company-desktop.png'))
+        await person_detail.get_by_role('button', name='Close person details').click()
         await owner.set_viewport_size({'width': 390, 'height': 844})
-        # ResizeObserver must reduce the live time axis before its labels collide.
-        time_ticks = owner.locator('.data-chart > svg > text').filter(has_text=re.compile(r'\d{1,2}:\d{2}'))
+        await owner.screenshot(path=str(artifacts / 'company-mobile.png'))
+        assert await owner.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), 'Manager mobile overflow'
+        # Physiological charts remain available to the employee for their own readings.
+        await employee.get_by_test_id('company-tab-overview').click()
+        own_card = employee.get_by_test_id(f'company-person-{sam_id}')
+        await expect(employee.locator('.co-roster-row')).to_have_count(1)
+        await expect(own_card).to_contain_text('DEMO RECORDING', timeout=15000)
+        await own_card.get_by_role('button', name='View signals for Sam').click()
+        await expect(employee.get_by_role('heading', name='Signal detail · Sam')).to_be_visible()
+        await employee.get_by_role('button', name='HRV', exact=True).click()
+        await employee.locator('.co-chart-value summary').click()
+        await expect(employee.locator('.co-chart-value')).to_contain_text('successive beat intervals')
+        await employee.set_viewport_size({'width': 390, 'height': 844})
+        time_ticks = employee.locator('.data-chart > svg > text').filter(has_text=re.compile(r'\d{1,2}:\d{2}'))
         await expect(time_ticks).to_have_count(2)
         time_bounds = await time_ticks.evaluate_all('nodes => nodes.map(node => { const r = node.getBoundingClientRect(); return {left: r.left, right: r.right, width: r.width}; })')
         assert all(bounds['width'] > 0 for bounds in time_bounds), 'Time labels must be rendered'
         assert time_bounds[0]['right'] < time_bounds[1]['left'], 'Mobile chart time labels overlap'
-        await owner.screenshot(path=str(artifacts / 'company-mobile.png'))
-        assert await owner.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), 'Mobile overflow'
-        await employee.get_by_test_id('company-tab-overview').click()
-        await expect(employee.locator('.co-roster-row')).to_have_count(1)
+        await employee.screenshot(path=str(artifacts / 'company-own-signals-mobile.png'))
+        assert await employee.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), 'Employee mobile overflow'
+        await employee.get_by_test_id('company-selected-signals').get_by_role('button', name='Back to list').click()
         await employee.get_by_test_id('company-tab-sharing').click()
         await employee.get_by_role('button', name='Pause sharing', exact=True).click()
         await expect(card).to_contain_text('Sharing paused', timeout=15000)
@@ -103,14 +118,12 @@ async def main():
         await employee.get_by_role('button', name='Revoke Example recording').click()
         await expect(employee.get_by_role('button', name='Revoke Example recording')).not_to_be_visible()
         call('POST', '/readings', credential, {'readings': rows}, expected=401)
-        await owner.get_by_test_id('company-selected-signals').get_by_role('button', name='Back to list').click()
-        await expect(owner.get_by_test_id('company-selected-signals')).not_to_be_visible()
         await owner.get_by_role('button', name='Sign out', exact=True).click()
         await expect(owner.get_by_role('heading', name='Sign in.')).to_be_visible()
         await expect(owner.get_by_test_id('company-workspace')).not_to_be_visible()
         assert not errors, errors
         await browser.close()
-    print('PASS: browser signup/email verification, workspace creation, invitation, isolated employee session, sharing, device authorization, labeled measurements, charts/help, mobile layout, revocation and sign-out; no browser errors.')
+    print('PASS: browser signup/email verification, workspace creation, invitation, isolated employee session, sharing, device authorization, manager redaction and operational details, employee-only charts/help, mobile layout, revocation and sign-out; no browser errors.')
 
 
 if __name__ == '__main__':

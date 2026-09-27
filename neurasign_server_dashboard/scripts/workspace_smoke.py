@@ -2,6 +2,7 @@
 
 Never targets production; test accounts and measurements are local only.
 """
+import argparse
 from datetime import datetime, timedelta, timezone
 import hashlib
 import os
@@ -49,6 +50,9 @@ def call(method, path, token=None, body=None, expected=200):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--skip-restart', action='store_true', help='Exercise durable reads without restarting the shared API service.')
+    args = parser.parse_args()
     config = call('GET', '/config')
     assert config['firebase']['projectId'] == PROJECT and config['emulator_url'] == AUTH, 'Only local demo emulators are allowed.'
     call('GET', '/me', expected=401)
@@ -71,28 +75,34 @@ def main():
     team = call('GET', base + '/dashboard', owner['token'])
     assert len(team['members']) == 1
     sam = next(member for member in team['members'] if member['name'] == 'Sam')
-    assert sam['features']['heart_rate'] == 74 and sam['features']['eda'] is None and sam['latest']['source'] == 'recording'
-    assert len(call('GET', base + '/dashboard', employee['token'])['members']) == 1
+    assert not sam['measurements_access'] and sam['latest'] is None and not sam['signals']
+    assert all(value is None for value in sam['features'].values())
+    assert sam['connection']['status'] == 'current' and sam['connection']['last_received_at']
+    own = call('GET', base + '/dashboard', employee['token'])['members']
+    assert len(own) == 1 and own[0]['features']['heart_rate'] == 74 and own[0]['latest']['source'] == 'recording'
+    call('GET', base + f'/members/{sam["id"]}/history', owner['token'], expected=403)
     owner_id = hashlib.sha256(owner['uid'].encode()).hexdigest()
     call('GET', base + f'/members/{owner_id}/history', employee['token'], expected=403)
-    # Restart the API process, not the database. The company/history must survive.
-    subprocess.run(['docker', 'compose', 'restart', 'api'], cwd=ROOT, check=True, capture_output=True)
-    for _ in range(40):
-        try:
-            response = httpx.get(WEB + '/api/v1/config', timeout=2)
-            if response.status_code == 200:
-                break
-        except httpx.HTTPError:
-            pass
-        time.sleep(.5)
-    assert len(call('GET', base + f'/members/{sam["id"]}/history', owner['token'])['readings']) == 2
+    if not args.skip_restart:
+        # Restart the API process, not the database. The company/history must survive.
+        subprocess.run(['docker', 'compose', 'restart', 'api'], cwd=ROOT, check=True, capture_output=True)
+        for _ in range(40):
+            try:
+                response = httpx.get(WEB + '/api/v1/config', timeout=2)
+                if response.status_code == 200:
+                    break
+            except httpx.HTTPError:
+                pass
+            time.sleep(.5)
+    assert len(call('GET', base + f'/members/{sam["id"]}/history', employee['token'])['readings']) == 2
     call('PATCH', base + '/me/sharing', employee['token'], {'enabled': False})
     assert next(person for person in call('GET', base + '/dashboard', owner['token'])['members'] if person['id'] == sam['id'])['latest'] is None
     call('POST', '/readings', device['credential'], {'readings': [row]}, 403)
     assert call('DELETE', base + '/me/readings', employee['token'])['deleted'] == 2
     call('DELETE', base + f'/devices/{device["device"]["id"]}', owner['token'])
     call('POST', '/readings', device['credential'], {'readings': [row]}, 401)
-    print('PASS: real Auth + Firestore emulators; verified identity, tenant isolation, roles, sharing, ingestion, idempotency, original timestamps, deletion, revocation and API restart persistence. No cloud account used.')
+    persistence = 'durable readback; restart intentionally skipped' if args.skip_restart else 'API restart persistence'
+    print(f'PASS: real Auth + Firestore emulators; owner privacy, employee self-access, identity/tenant scopes, sharing, ingestion, idempotency, timestamps, deletion, revocation and {persistence}. No cloud account used.')
 
 
 if __name__ == '__main__':

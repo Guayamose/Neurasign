@@ -67,39 +67,50 @@ async def main():
     assert config['firebase']['projectId'] == 'demo-neurasign' and config['emulator_url']
     assert RAW.is_dir(), 'Download UNIVERSE first; this test never substitutes synthetic data.'
     fixture = recording()
-    owner = test_user('RawSignals')
-    org = call('POST', '/organizations', owner['token'], {'name': 'UNIVERSE raw transport test'}, 201)['id']
+    admin, employee = test_user('RawSignalsAdmin'), test_user('RawSignals')
+    org = call('POST', '/organizations', admin['token'], {'name': 'UNIVERSE raw transport test'}, 201)['id']
     base = f'/organizations/{org}'
-    call('PATCH', base + '/me/sharing', owner['token'], {'enabled': True})
-    gateway = call('POST', base + '/devices', owner['token'], {'name': 'UNIVERSE recording test', 'source': 'recording'}, 201)
+    # The chart session is the employee's own account; management roles do not grant measurement access.
+    invitation = call('POST', base + '/invitations', admin['token'], {'email': employee['email'], 'role': 'employee'}, 201)['token']
+    call('POST', '/invitations/accept', employee['token'], {'token': invitation})
+    call('PATCH', base + '/me/sharing', employee['token'], {'enabled': True})
+    gateway = call('POST', base + '/devices', employee['token'], {'name': 'UNIVERSE recording test', 'source': 'recording'}, 201)
     with tempfile.NamedTemporaryFile(mode='w', suffix='.json') as file:
         json.dump(fixture, file, allow_nan=False)
         file.flush()
         result = subprocess.run(['node', 'tests/raw-transport-smoke.mjs', file.name], cwd=PHONE, check=True, capture_output=True, text=True,
             env={**os.environ, 'NEURASIGN_TEST_ORIGIN': WEB, 'NEURASIGN_TEST_GATEWAY_CREDENTIAL': gateway['credential']})
         assert json.loads(result.stdout)['uploaded'] == 7
-    person = call('GET', base + '/dashboard', owner['token'])['members'][0]
+    person = call('GET', base + '/dashboard', employee['token'])['members'][0]
+    redacted = call('GET', base + '/dashboard', admin['token'])['members'][0]
+    assert redacted['latest'] is None and not redacted['signals'] and not redacted['measurements_access']
+    assert redacted['connection']['last_received_at']
+    call('GET', base + f'/members/{person["id"]}/history', admin['token'], expected=403)
     signals = {item['metric']: item for item in person['signals']}
     outsider = test_user('OutsideRaw')
     for expected in fixture['measurements']:
         signal = signals[expected['metric']]
         assert 'samples' not in signal['latest'], 'Dashboard snapshots must remain bounded.'
         path = base + f'/members/{person["id"]}/observations?series_id={signal["series_id"]}'
-        rows = call('GET', path, owner['token'])['observations']
+        rows = call('GET', path, employee['token'])['observations']
         assert len(rows) == 1, 'Retry created duplicate frames.'
         assert rows[0]['samples'] == expected['samples']
         assert rows[0]['sample_offsets_ms'] == expected['sample_offsets_ms']
         assert rows[0]['source_record_id'] == expected['source_record_id']
         call('GET', path, outsider['token'], expected=403)
+        call('GET', path, admin['token'], expected=403)
     async with async_playwright() as p:
         browser = await p.chromium.launch(channel='chrome', headless=True, args=['--no-sandbox'])
         page = await browser.new_page(viewport={'width': 1440, 'height': 1000})
         errors = []
         page.on('pageerror', lambda error: errors.append(str(error)))
         await page.goto(WEB, wait_until='domcontentloaded')
-        await page.get_by_label('Work email').fill(owner['email'])
-        await page.get_by_label('Password', exact=True).fill(owner['password'])
+        await page.get_by_label('Work email').fill(employee['email'])
+        await page.get_by_label('Password', exact=True).fill(employee['password'])
         await page.get_by_role('button', name='Sign in', exact=True).click()
+        await expect(page.get_by_test_id('company-workspace')).to_be_visible(timeout=15000)
+        card = page.get_by_test_id(f'company-person-{person["id"]}')
+        await card.get_by_role('button', name=re.compile('View signals for')).click()
         panel = page.get_by_test_id('canonical-signals')
         await expect(panel).to_be_visible(timeout=15000)
         await expect(panel).to_contain_text('DEMO RECORDING')
@@ -112,12 +123,12 @@ async def main():
         artifacts = ROOT / 'artifacts'
         artifacts.mkdir(exist_ok=True)
         await page.screenshot(path=str(artifacts / 'raw-signals.png'), full_page=True)
-        call('PATCH', base + '/me/sharing', owner['token'], {'enabled': False})
-        await expect(panel.get_by_role('img')).to_have_count(0, timeout=15000)
+        call('PATCH', base + '/me/sharing', employee['token'], {'enabled': False})
+        await expect(page.get_by_test_id('company-selected-signals').get_by_role('img')).to_have_count(0, timeout=15000)
         assert not errors, errors
         await browser.close()
-    assert call('DELETE', base + '/me/readings', owner['token'])['deleted'] == 7
-    call('DELETE', base + f'/devices/{gateway["device"]["id"]}', owner['token'])
+    assert call('DELETE', base + '/me/readings', employee['token'])['deleted'] == 7
+    call('DELETE', base + f'/devices/{gateway["device"]["id"]}', employee['token'])
     print('PASS: seven actual UNIVERSE channels, complete arrays/timing, lost-response retry, tenant isolation, Firestore history, browser curves, mobile layout and pause/deletion. Recording replay; no physical wearable claim.')
 
 

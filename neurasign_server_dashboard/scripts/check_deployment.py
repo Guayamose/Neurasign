@@ -19,7 +19,8 @@ def check(base):
     assert config['enabled'] and not config['emulator_url'] and not config['demo_available']
     get('/api/v1/me', 401)
     get('/api/state', 404)
-    get('/demo', 404)
+    for path in ('/demo', '/signals', '/models', '/api/model-engine/catalog'):
+        get(path, 404)
     get('/', 200)
     print('PASS: HTTPS workspace available, unauthenticated data access rejected, emulators and legacy demo disabled.')
 

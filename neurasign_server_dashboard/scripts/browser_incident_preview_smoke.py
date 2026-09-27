@@ -91,7 +91,7 @@ async def main():
         # Intercept every API path so an unexpected write cannot reach the server.
         await page.route('**/api/**', api_route)
         await page.route_web_socket('**/ws', lambda socket: socket.send(json.dumps({'type': 'snapshot', 'data': fixture(phase)})))
-        await page.goto(WEB + '/demo', wait_until='domcontentloaded')
+        await page.goto(WEB + '/signals', wait_until='domcontentloaded')
         await page.get_by_test_id('tab-examples').click()
         await page.get_by_test_id('tab-incidents').click()
         await expect(page.get_by_test_id('start-incident')).to_have_text('Start example')

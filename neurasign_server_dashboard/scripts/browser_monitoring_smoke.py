@@ -20,7 +20,7 @@ async def main():
         page.on('pageerror', lambda error: errors.append(str(error)))
         response = await page.request.post(API+'/api/control', data={'action':'reset'})
         assert response.ok
-        await page.goto(WEB+'/demo', wait_until='domcontentloaded')
+        await page.goto(WEB+'/signals', wait_until='domcontentloaded')
         await expect(page.get_by_test_id('monitoring-dashboard')).to_be_visible(timeout=30000)
         await expect(page.get_by_test_id('monitor-worker-alex')).to_be_visible()
         await expect(page.get_by_test_id('monitor-worker-aoi')).to_be_visible()
@@ -100,7 +100,7 @@ async def main():
         await page.get_by_role('button', name='Close metric help').click()
         assert not errors, json.dumps(errors)
         await browser.close()
-    print('PASS: English recorded monitoring at /demo; recorded profiles, physiological graphs/units, employee selection, one-chart first screen, collapsed presenter settings, full metric names, accessible metric definitions, shared-source examples, mobile layout and no browser errors.', flush=True)
+    print('PASS: English recorded signal explorer at /signals; recorded profiles, physiological graphs/units, employee selection, one-chart first screen, collapsed presenter settings, full metric names, accessible metric definitions, shared-source examples, mobile layout and no browser errors.', flush=True)
 
 
 if __name__ == '__main__':

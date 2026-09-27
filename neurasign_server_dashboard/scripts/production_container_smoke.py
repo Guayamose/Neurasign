@@ -37,7 +37,7 @@ def main():
             time.sleep(.5)
         config = httpx.get(base + '/api/v1/config').json()
         assert config['enabled'] and not config['demo_available'] and not config['emulator_url']
-        for path, expected in [('/', 200), ('/api/v1/me', 401), ('/demo', 404), ('/api/state', 404), ('/docs', 404)]:
+        for path, expected in [('/', 200), ('/api/v1/me', 401), ('/demo', 404), ('/signals', 404), ('/models', 404), ('/api/model-engine/catalog', 404), ('/api/state', 404), ('/docs', 404)]:
             response = httpx.get(base + path, timeout=10)
             assert response.status_code == expected, (path, response.status_code)
         response = httpx.post(base + '/api/v1/readings', content='x' * 131073)

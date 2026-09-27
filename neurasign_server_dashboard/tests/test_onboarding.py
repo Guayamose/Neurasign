@@ -74,7 +74,9 @@ def test_employees_need_no_login_and_qr_connects_to_the_right_company(setup):
     src = source(client, connection).json()['source']['id']
     assert upload(client, connection, row(src)).status_code == 200
     employee = snapshot(client, org)['members'][0]
-    assert employee['id'] == person and employee['signals'][0]['latest']['value'] == 74
+    assert employee['id'] == person and employee['signals'] == []
+    assert employee['connection']['status'] == 'current' and not employee['measurements_access']
+    assert list(store.get(f'organizations/{org}/signal_state/{person}')['latest'].values())[0]['value'] == 74
     assert len(store.list(f'organizations/{org}/employees/{person}/observations')) == 1
     assert client.get('/api/v1/me', headers=headers(connection['credential'])).status_code == 401
 
@@ -161,6 +163,10 @@ def test_team_transfer_hides_prior_history_including_delayed_uploads(setup, monk
     person = create_person(client, org, team_a)
     manager(client, org, [team_a])
     manager(client, org, [team_b], 'outsider')
+    # Explicit capability grants are separate from roles and still respect capture-team scope.
+    for who in ('owner', 'manager', 'outsider'):
+        membership_path = f'organizations/{org}/members/{digest(PEOPLE[who].uid)}'
+        store.atomic(lambda tx, key=membership_path: tx.put(key, {**tx.get(key), 'can_view_measurements': True}))
     phone = claim(client, enrollment(client, org, person).json()['token'])
     src = source(client, phone).json()['source']['id']
     def sample(id):

@@ -18,7 +18,7 @@ from .workspace import (
     member, member_path,
 )
 
-from .company_access import employee_data_path, require_employee, can_view_measurement, team_at, capture_allowed
+from .company_access import employee_data_path, require_employee, require_measurements, can_view_measurement, team_at, capture_allowed
 
 router = APIRouter(prefix='/api/v1', tags=['Wearable telemetry'])
 
@@ -408,6 +408,7 @@ def signal_snapshot(person, state, sources, now):
 def observation_history(org: str, person_id: str, user: User, store: Store, series_id: str = Query(pattern=r'^[a-f0-9]{64}$')):
     actor = member(store, org, user)
     person = require_employee(store, org, actor, person_id)
+    require_measurements(actor, person)
     if not person['sharing']:
         return {'observations': []}
     # Firestore uses the observations series_id + timestamp composite index.

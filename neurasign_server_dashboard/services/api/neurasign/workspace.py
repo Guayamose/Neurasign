@@ -18,7 +18,8 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from .identity import Identity, bearer, get_store, identity, workspace_config
 from .company_access import (employee, employee_data_path, save_employee, own_employee, self_employee, employees,
-    can_view, can_manage, is_self, require_employee, can_view_measurement, team_at, set_sharing, capture_allowed, require_team)
+    can_view, can_manage, is_self, require_employee, can_view_measurement, can_view_capture, can_view_measurements,
+    require_measurements, team_at, set_sharing, capture_allowed, require_team)
 
 router = APIRouter(prefix='/api/v1', tags=['Company workspace'])
 User = Annotated[Identity, Depends(identity)]
@@ -61,7 +62,7 @@ def audit(tx, org, actor, action, target=None):
 
 
 def new_member(user, role):
-    return {'id': digest(user.uid), 'name': user.name, 'email': user.email, 'role': role, 'active': True, 'team_ids': [], 'joined_at': time.time()}
+    return {'id': digest(user.uid), 'name': user.name, 'email': user.email, 'role': role, 'active': True, 'team_ids': [], 'can_view_measurements': False, 'joined_at': time.time()}
 
 
 def device_access(tx, authorization, require_sharing=True):
@@ -181,7 +182,7 @@ def me(user: User, store: Store):
 @router.post('/organizations', status_code=201)
 def create_company(body: CompanyInput, user: User, store: Store):
     org = uuid4().hex
-    company = {'id': org, 'name': body.name, 'created_at': time.time(), 'retention_days': RETENTION_DAYS, 'member_count': 1, 'employee_count': 0, 'team_count': 0}
+    company = {'id': org, 'name': body.name, 'is_demo': False, 'created_at': time.time(), 'retention_days': RETENTION_DAYS, 'member_count': 1, 'employee_count': 0, 'team_count': 0}
     def create(tx):
         account_path = f'accounts/{digest(user.uid)}'
         account = tx.get(account_path) or {'organizations': []}
@@ -287,6 +288,7 @@ def visible_signal(person, latest):
 def dashboard(org: str, user: User, store: Store):
     from .telemetry import catalog, signal_snapshot
     actor = member(store, org, user)
+    organization = store.get(f'organizations/{org}')
     people = [person for person in employees(store, org) if can_view(actor, person)]
     device_paths = [f'organizations/{org}/devices/{device_id}' for person in people for device_id in person.get('device_ids', [])]
     devices = [device for device in store.get_many(device_paths).values() if device and not device['revoked']]
@@ -298,12 +300,12 @@ def dashboard(org: str, user: User, store: Store):
     now = time.time()
     for person in people:
         legacy_latest = latest.get(f'organizations/{org}/latest/{person["id"]}')
-        if legacy_latest and not can_view_measurement(actor, person, legacy_latest):
+        if legacy_latest and not can_view_capture(actor, person, legacy_latest):
             legacy_latest = None
         value = visible_signal(person, legacy_latest)
         state = states.get(f'organizations/{org}/signal_state/{person["id"]}')
         if state:
-            state = {**state, 'latest': {key: row for key, row in state['latest'].items() if can_view_measurement(actor, person, row)}}
+            state = {**state, 'latest': {key: row for key, row in state['latest'].items() if can_view_capture(actor, person, row)}}
         value['signals'] = signal_snapshot(person, state,
                                           [source for source in sources if source['member_id'] == person['id']], now)
         if person['sharing'] and value['signals']:
@@ -311,11 +313,35 @@ def dashboard(org: str, user: User, store: Store):
                 value['status'] = 'current'
             elif value['status'] != 'current' and any(signal['latest'] for signal in value['signals']):
                 value['status'] = 'stale'
+        current_count = sum(signal['status'] == 'current' for signal in value['signals']) or int(value['status'] == 'current')
+        issues = [signal['status'] for signal in value['signals'] if signal['status'] in ('waiting', 'delayed', 'permission_required')]
+        # A period summary or unsupported capability is not a failed connection.
+        # Only an actual legacy feed (or no registered signals yet) adds its fallback.
+        if value['latest'] and now - value['latest']['timestamp'] > 60:
+            issues.append('delayed')
+        elif not value['signals'] and value['status'] == 'waiting':
+            issues.append('waiting')
+        issue_kind = 'permission_required' if 'permission_required' in issues else 'stale' if 'delayed' in issues else 'waiting' if issues else None
+        connection_status = ('paused' if not person['sharing'] else 'current' if current_count else issue_kind
+                             or ('summary' if any(signal['status'] == 'summary' for signal in value['signals'])
+                                 else 'unsupported' if value['signals'] else value['status']))
+        receipts = [row.get('received_at') for row in ([legacy_latest] + list((state or {}).get('latest', {}).values())) if row and row.get('received_at')]
+        value['connection'] = {'status': connection_status, 'current_count': current_count, 'issue_count': len(issues),
+                               'last_received_at': max(receipts, default=None) if person['sharing'] else None,
+                               'issue_kind': issue_kind,
+                               'next_step': 'Check the phone connection and sharing settings.' if issues else None}
+        if organization.get('is_demo') and not person.get('device_ids'):
+            value['connection'] = {'status': 'demo', 'current_count': 0, 'issue_count': 0, 'last_received_at': None,
+                                   'issue_kind': None, 'next_step': 'Illustrative operational profile; no wearable readings.'}
+        allowed = can_view_measurements(actor, person)
+        value['measurements_access'] = value['can_view_measurements'] = allowed
+        if not allowed:
+            value.update(features={key: None for key in FEATURES}, latest=None, signals=[])
         members.append(value)
     own = own_employee(store, org, actor)
     teams = [team for team in store.list(f'organizations/{org}/teams', limit=50, filters={'active': True}) if actor['role'] == 'owner' or team['id'] in actor.get('team_ids', [])]
     accounts = store.list(f'organizations/{org}/members', limit=100, filters={'active': True}) if actor['role'] == 'owner' else [actor]
-    return {'organization': store.get(f'organizations/{org}'), 'me': {**public_member(actor), 'sharing': bool(own and own['active'] and own['sharing'])},
+    return {'organization': {**organization, 'is_demo': organization.get('is_demo', False)}, 'me': {**public_member(actor), 'can_view_measurements': actor.get('can_view_measurements') is True, 'sharing': bool(own and own['active'] and own['sharing'])},
             'teams': teams, 'accounts': [public_member(account) for account in accounts],
             'members': members, 'metric_catalog': catalog(),
             'devices': devices, 'server_time': now,
@@ -326,6 +352,7 @@ def dashboard(org: str, user: User, store: Store):
 def history(org: str, person_id: str, user: User, store: Store):
     actor = member(store, org, user)
     person = require_employee(store, org, actor, person_id)
+    require_measurements(actor, person)
     if not person['sharing']:
         return {'readings': []}
     rows = store.list(f'{employee_data_path(org, person)}/readings', limit=90, order='timestamp')

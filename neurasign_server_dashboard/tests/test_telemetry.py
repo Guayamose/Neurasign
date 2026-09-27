@@ -48,12 +48,12 @@ def snapshot(client, org, user='owner'):
 
 
 def signals(client, org):
-    return next(person for person in snapshot(client, org)['members'] if person['name'] == 'Sam')['signals']
+    return next(person for person in snapshot(client, org, 'employee')['members'] if person['name'] == 'Sam')['signals']
 
 
 def history(client, org, series):
     return client.get(f'/api/v1/organizations/{org}/members/{digest(PEOPLE["employee"].uid)}/observations',
-                      headers=headers(), params={'series_id': series})
+                      headers=headers('employee'), params={'series_id': series})
 
 
 def test_async_metrics_are_normalized_on_server_without_erasing_other_metrics(telemetry):

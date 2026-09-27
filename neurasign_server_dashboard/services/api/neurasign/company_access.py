@@ -90,11 +90,25 @@ def team_at(person, timestamp):
     return None
 
 
-def can_view_measurement(actor, person, row):
+def can_view_capture(actor, person, row):
+    """Team scope for capture metadata, independently of measurement permission."""
     if actor['role'] == 'owner' or is_self(actor, person):
         return True
     measured_team = row.get('team_id') if 'team_id' in row else team_at(person, row['timestamp'])
     return can_manage(actor, person) and measured_team in actor.get('team_ids', [])
+
+
+def can_view_measurements(actor, person):
+    return is_self(actor, person) or (actor.get('can_view_measurements') is True and can_manage(actor, person))
+
+
+def require_measurements(actor, person):
+    if not can_view_measurements(actor, person):
+        raise HTTPException(403, 'Measurement access requires a separate capability; a management role does not grant it.')
+
+
+def can_view_measurement(actor, person, row):
+    return can_view_measurements(actor, person) and can_view_capture(actor, person, row)
 
 
 def set_sharing(person, enabled, now=None):

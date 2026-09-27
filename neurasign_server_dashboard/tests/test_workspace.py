@@ -124,7 +124,7 @@ def test_device_credential_bound_to_member_no_identity_spoofing(workspace):
     assert upload(client, 'invalid-token', [reading()]).status_code == 401
     assert client.post('/api/v1/readings', headers=headers(credential), json={'readings': [reading()], 'worker_id': 'other'}).status_code == 422
     assert upload(client, credential, [reading()]).status_code == 200
-    snapshot = client.get(f'/api/v1/organizations/{org}/dashboard', headers=headers()).json()
+    snapshot = client.get(f'/api/v1/organizations/{org}/dashboard', headers=headers('employee')).json()
     sam = next(person for person in snapshot['members'] if person['name'] == 'Sam')
     assert sam['features']['heart_rate'] == 75 and sam['features']['hrv'] is None
     assert sam['latest']['source'] == 'wearable' and sam['status'] == 'current'
@@ -143,9 +143,9 @@ def test_batch_idempotency_out_of_order_and_stale_history(workspace):
     assert result['accepted'] == 1 and result['duplicates'] == 1
     changed = {**recent, 'features': {'heart_rate': 88}}
     assert upload(client, credential, [changed]).status_code == 409
-    snapshot = client.get(f'/api/v1/organizations/{org}/dashboard', headers=headers()).json()
+    snapshot = client.get(f'/api/v1/organizations/{org}/dashboard', headers=headers('employee')).json()
     assert next(person for person in snapshot['members'] if person['name'] == 'Sam')['features']['heart_rate'] == 82
-    history = client.get(f'/api/v1/organizations/{org}/members/{digest(PEOPLE["employee"].uid)}/history', headers=headers()).json()['readings']
+    history = client.get(f'/api/v1/organizations/{org}/members/{digest(PEOPLE["employee"].uid)}/history', headers=headers('employee')).json()['readings']
     assert [row['features']['heart_rate'] for row in history] == [65, 82]
     assert upload(client, credential, [reading('future-data', age=-20)]).status_code == 422
     assert upload(client, credential, [reading('expired-data', age=8*86400)]).status_code == 422

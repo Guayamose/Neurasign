@@ -20,6 +20,7 @@ load_dotenv(Path(__file__).resolve().parents[3] / ".env", override=False)
 
 from .orchestration import WorkflowOrchestrator  # noqa: E402
 from .identity import production, validate_environment  # noqa: E402
+from .applications import router as applications_router
 from .workspace import router as workspace_router  # noqa: E402
 from .telemetry import router as telemetry_router  # noqa: E402
 from .integrations import router as integrations_router
@@ -146,6 +147,7 @@ app.add_middleware(CORSMiddleware,
     allow_origins=[origin.strip() for origin in os.getenv("CORS_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",") if origin.strip()],
     allow_methods=["GET", "POST", "PATCH", "DELETE"], allow_headers=["Content-Type", "Authorization", "X-Research-Token"], allow_credentials=False)
 app.include_router(workspace_router)
+app.include_router(applications_router)
 app.include_router(telemetry_router)
 app.include_router(onboarding_router)
 app.include_router(integrations_router)

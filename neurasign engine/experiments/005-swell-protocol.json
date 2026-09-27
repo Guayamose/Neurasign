@@ -1,0 +1,275 @@
+{
+  "experiment": "005-swell-physiology",
+  "workbook_name": "Behavioral-features - per minute (1).xlsx",
+  "workbook_sha256": "9ae1fc82569e9b16f363fb8b0106c859422a6a379ac577b4e8268f51cf20a044",
+  "code_sha256": "755bb18f27b5f3b3e113614425fa1a33e0e6d4d01331e820546c77574d3247b4",
+  "split": {
+    "development": [
+      "PP1",
+      "PP10",
+      "PP11",
+      "PP12",
+      "PP13",
+      "PP14",
+      "PP15",
+      "PP17",
+      "PP18",
+      "PP19",
+      "PP2",
+      "PP20",
+      "PP22",
+      "PP23",
+      "PP24",
+      "PP25",
+      "PP3",
+      "PP4",
+      "PP6",
+      "PP7"
+    ],
+    "test": [
+      "PP16",
+      "PP21",
+      "PP5",
+      "PP8",
+      "PP9"
+    ],
+    "seed": 20260926
+  },
+  "development_folds": [
+    [
+      [
+        "PP1",
+        "PP10",
+        "PP11",
+        "PP12",
+        "PP13",
+        "PP14",
+        "PP17",
+        "PP18",
+        "PP2",
+        "PP20",
+        "PP22",
+        "PP24",
+        "PP25",
+        "PP4",
+        "PP6",
+        "PP7"
+      ],
+      [
+        "PP15",
+        "PP19",
+        "PP23",
+        "PP3"
+      ]
+    ],
+    [
+      [
+        "PP1",
+        "PP10",
+        "PP12",
+        "PP13",
+        "PP14",
+        "PP15",
+        "PP17",
+        "PP19",
+        "PP2",
+        "PP20",
+        "PP22",
+        "PP23",
+        "PP3",
+        "PP4",
+        "PP6",
+        "PP7"
+      ],
+      [
+        "PP11",
+        "PP18",
+        "PP24",
+        "PP25"
+      ]
+    ],
+    [
+      [
+        "PP11",
+        "PP12",
+        "PP13",
+        "PP15",
+        "PP17",
+        "PP18",
+        "PP19",
+        "PP20",
+        "PP22",
+        "PP23",
+        "PP24",
+        "PP25",
+        "PP3",
+        "PP4",
+        "PP6",
+        "PP7"
+      ],
+      [
+        "PP1",
+        "PP10",
+        "PP14",
+        "PP2"
+      ]
+    ],
+    [
+      [
+        "PP1",
+        "PP10",
+        "PP11",
+        "PP12",
+        "PP14",
+        "PP15",
+        "PP18",
+        "PP19",
+        "PP2",
+        "PP22",
+        "PP23",
+        "PP24",
+        "PP25",
+        "PP3",
+        "PP6",
+        "PP7"
+      ],
+      [
+        "PP13",
+        "PP17",
+        "PP20",
+        "PP4"
+      ]
+    ],
+    [
+      [
+        "PP1",
+        "PP10",
+        "PP11",
+        "PP13",
+        "PP14",
+        "PP15",
+        "PP17",
+        "PP18",
+        "PP19",
+        "PP2",
+        "PP20",
+        "PP23",
+        "PP24",
+        "PP25",
+        "PP3",
+        "PP4"
+      ],
+      [
+        "PP12",
+        "PP22",
+        "PP6",
+        "PP7"
+      ]
+    ]
+  ],
+  "candidates": [
+    {
+      "name": "constant_mean",
+      "kind": "constant",
+      "profile": "native",
+      "strategy": "mean"
+    },
+    {
+      "name": "constant_median",
+      "kind": "constant",
+      "profile": "native",
+      "strategy": "median"
+    },
+    {
+      "name": "native_ridge_10",
+      "kind": "ridge",
+      "profile": "native",
+      "alpha": 10.0
+    },
+    {
+      "name": "native_ridge_100",
+      "kind": "ridge",
+      "profile": "native",
+      "alpha": 100.0
+    },
+    {
+      "name": "native_svr_1",
+      "kind": "svr",
+      "profile": "native"
+    },
+    {
+      "name": "native_boost_absolute",
+      "kind": "boost",
+      "profile": "native"
+    },
+    {
+      "name": "prior_rest_ridge_10",
+      "kind": "ridge",
+      "profile": "prior_rest",
+      "alpha": 10.0
+    },
+    {
+      "name": "prior_rest_ridge_100",
+      "kind": "ridge",
+      "profile": "prior_rest",
+      "alpha": 100.0
+    },
+    {
+      "name": "prior_rest_svr_1",
+      "kind": "svr",
+      "profile": "prior_rest"
+    },
+    {
+      "name": "prior_rest_boost_absolute",
+      "kind": "boost",
+      "profile": "prior_rest"
+    }
+  ],
+  "profiles": {
+    "native": [
+      "HR",
+      "RMSSD",
+      "SCL"
+    ],
+    "prior_rest": [
+      "HR",
+      "RMSSD",
+      "SCL",
+      "HR_minus_prior_rest",
+      "RMSSD_minus_prior_rest",
+      "SCL_minus_prior_rest"
+    ]
+  },
+  "targets": {
+    "mental_effort": "MentalEffort",
+    "mental_demand": "MentalDemand",
+    "physical_demand": "PhysicalDemand",
+    "temporal_demand": "TemporalDemand",
+    "effort": "Effort",
+    "perceived_performance": "Performance_rc"
+  },
+  "excluded_inputs_targets": [
+    "Stress",
+    "Frustration",
+    "NasaTLX",
+    "Valence_rc",
+    "Arousal_rc",
+    "Dominance",
+    "facial-expression features",
+    "Kinect posture features",
+    "computer-interaction features",
+    "Condition",
+    "Blok",
+    "PP",
+    "timestamp",
+    "other questionnaire ratings"
+  ],
+  "labels": "Repeated condition questionnaire ratings. RSME is not UNIVERSE's five-level target.",
+  "metric": "Per-minute absolute error, averaged within block, then participant, then people.",
+  "agreement": "Absolute error <=1 original workbook point; <=2 also reported as secondary.",
+  "reference": "Median of >=3 valid preceding relaxation minutes per signal within the same person/block; no reference labels or future samples.",
+  "selection": "Five participant-grouped development folds; lowest MAE, constants eligible. All choices fixed before any test scoring.",
+  "evaluation": "Five held-out participants evaluated once after selection. All candidates use the same available minutes.",
+  "scope": "Offline Mobi ECG/finger-sensor research; no claim of wrist transfer, streaming feature equivalence or production validation.",
+  "license": "Publisher lists CC-BY-NC-SA-4.0. Research artifact; commercial deployment is not authorized by this experiment."
+}

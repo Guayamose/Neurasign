@@ -1,0 +1,22 @@
+# Local credentials; examples may contain placeholders only.
+.env*
+*.env
+!.env.example
+
+# Local recordings, derived windows, trained weights and provider responses.
+/data/
+/results/
+/models/
+/artifacts/
+*.log
+
+# User-provided research workbooks kept at the engine root.
+/*.xlsx
+/*.ods
+
+# Python and notebook runtime output.
+.venv/
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+*.py[cod]

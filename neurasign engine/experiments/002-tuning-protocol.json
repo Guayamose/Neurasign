@@ -1,0 +1,403 @@
+{
+  "experiment": "002-development-tuning",
+  "seed": 20260926,
+  "source_pipeline": "universe_published_wrist_features_offline_v1",
+  "pipeline": "universe_complete_interval_summary_offline_v2",
+  "dataset_sha256": "df238914faf302e75690d5847f64d2f63514940fc301e8e086698a912dffe169",
+  "development": [
+    "UN_101",
+    "UN_102",
+    "UN_103",
+    "UN_104",
+    "UN_105",
+    "UN_106",
+    "UN_107",
+    "UN_109",
+    "UN_110",
+    "UN_111",
+    "UN_112",
+    "UN_114",
+    "UN_115",
+    "UN_116",
+    "UN_117",
+    "UN_118",
+    "UN_119",
+    "UN_120",
+    "UN_121"
+  ],
+  "excluded_original_test": [
+    "UN_108",
+    "UN_113",
+    "UN_122",
+    "UN_123",
+    "UN_124"
+  ],
+  "profiles": {
+    "means": [
+      "HRV_MeanNN__mean",
+      "HRV_SDNN__mean",
+      "HRV_RMSSD__mean",
+      "HRV_LFn__mean",
+      "HRV_HFn__mean",
+      "HRV_ratio_LFn_HFn__mean",
+      "SCR_Peaks_N__mean",
+      "SCR_Peaks_Amplitude_Mean__mean",
+      "mean_temp__mean",
+      "std_temp__mean"
+    ],
+    "distribution": [
+      "HRV_MeanNN__mean",
+      "HRV_MeanNN__median",
+      "HRV_MeanNN__std",
+      "HRV_MeanNN__q10",
+      "HRV_MeanNN__q90",
+      "HRV_SDNN__mean",
+      "HRV_SDNN__median",
+      "HRV_SDNN__std",
+      "HRV_SDNN__q10",
+      "HRV_SDNN__q90",
+      "HRV_RMSSD__mean",
+      "HRV_RMSSD__median",
+      "HRV_RMSSD__std",
+      "HRV_RMSSD__q10",
+      "HRV_RMSSD__q90",
+      "HRV_LFn__mean",
+      "HRV_LFn__median",
+      "HRV_LFn__std",
+      "HRV_LFn__q10",
+      "HRV_LFn__q90",
+      "HRV_HFn__mean",
+      "HRV_HFn__median",
+      "HRV_HFn__std",
+      "HRV_HFn__q10",
+      "HRV_HFn__q90",
+      "HRV_ratio_LFn_HFn__mean",
+      "HRV_ratio_LFn_HFn__median",
+      "HRV_ratio_LFn_HFn__std",
+      "HRV_ratio_LFn_HFn__q10",
+      "HRV_ratio_LFn_HFn__q90",
+      "SCR_Peaks_N__mean",
+      "SCR_Peaks_N__median",
+      "SCR_Peaks_N__std",
+      "SCR_Peaks_N__q10",
+      "SCR_Peaks_N__q90",
+      "SCR_Peaks_Amplitude_Mean__mean",
+      "SCR_Peaks_Amplitude_Mean__median",
+      "SCR_Peaks_Amplitude_Mean__std",
+      "SCR_Peaks_Amplitude_Mean__q10",
+      "SCR_Peaks_Amplitude_Mean__q90",
+      "mean_temp__mean",
+      "mean_temp__median",
+      "mean_temp__std",
+      "mean_temp__q10",
+      "mean_temp__q90",
+      "std_temp__mean",
+      "std_temp__median",
+      "std_temp__std",
+      "std_temp__q10",
+      "std_temp__q90"
+    ]
+  },
+  "targets": {
+    "mental_effort": {
+      "column": "Mental effort level",
+      "range": [
+        1,
+        5
+      ],
+      "kind": "ordinal",
+      "meaning": "Self-reported mental effort, very low to very high"
+    },
+    "mental_demand": {
+      "column": "Mental Demand",
+      "range": [
+        0,
+        100
+      ],
+      "kind": "rating",
+      "meaning": "Self-reported mental demand"
+    },
+    "physical_demand": {
+      "column": "Physical Demand",
+      "range": [
+        0,
+        100
+      ],
+      "kind": "rating",
+      "meaning": "Self-reported physical demand; not physical fatigue"
+    },
+    "temporal_demand": {
+      "column": "Temporal Demand",
+      "range": [
+        0,
+        100
+      ],
+      "kind": "rating",
+      "meaning": "Self-reported time pressure"
+    },
+    "perceived_performance": {
+      "column": "Performance",
+      "range": [
+        0,
+        100
+      ],
+      "kind": "rating",
+      "meaning": "Recorded self-rating of task performance; not an objective productivity assessment"
+    },
+    "effort": {
+      "column": "Effort",
+      "range": [
+        0,
+        100
+      ],
+      "kind": "rating",
+      "meaning": "Self-reported effort"
+    }
+  },
+  "excluded_targets": {
+    "Mental stress level": "No workplace biometric inference of mental-health states.",
+    "Frustration": "No workplace biometric inference of emotions.",
+    "Weighted Nasa Score": "Composite includes frustration; not used directly or reconstructed as a proxy.",
+    "PANAS": "Affective questionnaire; no workplace biometric emotion inference.",
+    "Affective Sliders": "Affective questionnaire; no workplace biometric emotion inference."
+  },
+  "candidates": [
+    {
+      "name": "constant_mean",
+      "kind": "constant",
+      "profile": "means",
+      "strategy": "mean"
+    },
+    {
+      "name": "constant_median",
+      "kind": "constant",
+      "profile": "means",
+      "strategy": "median"
+    },
+    {
+      "name": "means_ridge_1",
+      "kind": "ridge",
+      "profile": "means",
+      "alpha": 1.0
+    },
+    {
+      "name": "means_ridge_100",
+      "kind": "ridge",
+      "profile": "means",
+      "alpha": 100.0
+    },
+    {
+      "name": "means_ridge_1000",
+      "kind": "ridge",
+      "profile": "means",
+      "alpha": 1000.0
+    },
+    {
+      "name": "means_svr_1",
+      "kind": "svr",
+      "profile": "means",
+      "C": 1.0
+    },
+    {
+      "name": "means_svr_10",
+      "kind": "svr",
+      "profile": "means",
+      "C": 10.0
+    },
+    {
+      "name": "means_boost_squared_error",
+      "kind": "boost",
+      "profile": "means",
+      "loss": "squared_error"
+    },
+    {
+      "name": "means_boost_absolute_error",
+      "kind": "boost",
+      "profile": "means",
+      "loss": "absolute_error"
+    },
+    {
+      "name": "means_extra_trees",
+      "kind": "extra_trees",
+      "profile": "means"
+    },
+    {
+      "name": "distribution_ridge_1",
+      "kind": "ridge",
+      "profile": "distribution",
+      "alpha": 1.0
+    },
+    {
+      "name": "distribution_ridge_100",
+      "kind": "ridge",
+      "profile": "distribution",
+      "alpha": 100.0
+    },
+    {
+      "name": "distribution_ridge_1000",
+      "kind": "ridge",
+      "profile": "distribution",
+      "alpha": 1000.0
+    },
+    {
+      "name": "distribution_svr_1",
+      "kind": "svr",
+      "profile": "distribution",
+      "C": 1.0
+    },
+    {
+      "name": "distribution_svr_10",
+      "kind": "svr",
+      "profile": "distribution",
+      "C": 10.0
+    },
+    {
+      "name": "distribution_boost_squared_error",
+      "kind": "boost",
+      "profile": "distribution",
+      "loss": "squared_error"
+    },
+    {
+      "name": "distribution_boost_absolute_error",
+      "kind": "boost",
+      "profile": "distribution",
+      "loss": "absolute_error"
+    },
+    {
+      "name": "distribution_extra_trees",
+      "kind": "extra_trees",
+      "profile": "distribution"
+    }
+  ],
+  "outer_folds": [
+    [
+      [
+        "UN_101",
+        "UN_102",
+        "UN_104",
+        "UN_105",
+        "UN_106",
+        "UN_107",
+        "UN_109",
+        "UN_111",
+        "UN_114",
+        "UN_115",
+        "UN_116",
+        "UN_118",
+        "UN_119",
+        "UN_120",
+        "UN_121"
+      ],
+      [
+        "UN_103",
+        "UN_110",
+        "UN_112",
+        "UN_117"
+      ]
+    ],
+    [
+      [
+        "UN_103",
+        "UN_104",
+        "UN_105",
+        "UN_109",
+        "UN_110",
+        "UN_111",
+        "UN_112",
+        "UN_114",
+        "UN_115",
+        "UN_116",
+        "UN_117",
+        "UN_118",
+        "UN_119",
+        "UN_120",
+        "UN_121"
+      ],
+      [
+        "UN_101",
+        "UN_102",
+        "UN_106",
+        "UN_107"
+      ]
+    ],
+    [
+      [
+        "UN_101",
+        "UN_102",
+        "UN_103",
+        "UN_104",
+        "UN_106",
+        "UN_107",
+        "UN_109",
+        "UN_110",
+        "UN_111",
+        "UN_112",
+        "UN_114",
+        "UN_115",
+        "UN_117",
+        "UN_120",
+        "UN_121"
+      ],
+      [
+        "UN_105",
+        "UN_116",
+        "UN_118",
+        "UN_119"
+      ]
+    ],
+    [
+      [
+        "UN_101",
+        "UN_102",
+        "UN_103",
+        "UN_104",
+        "UN_105",
+        "UN_106",
+        "UN_107",
+        "UN_110",
+        "UN_112",
+        "UN_115",
+        "UN_116",
+        "UN_117",
+        "UN_118",
+        "UN_119",
+        "UN_121"
+      ],
+      [
+        "UN_109",
+        "UN_111",
+        "UN_114",
+        "UN_120"
+      ]
+    ],
+    [
+      [
+        "UN_101",
+        "UN_102",
+        "UN_103",
+        "UN_105",
+        "UN_106",
+        "UN_107",
+        "UN_109",
+        "UN_110",
+        "UN_111",
+        "UN_112",
+        "UN_114",
+        "UN_116",
+        "UN_117",
+        "UN_118",
+        "UN_119",
+        "UN_120"
+      ],
+      [
+        "UN_104",
+        "UN_115",
+        "UN_121"
+      ]
+    ]
+  ],
+  "inner_folds": 3,
+  "selection": "Minimum participant-macro interval MAE; constants eligible.",
+  "comparison": "Original two-window-model selection rerun inside the same nested folds.",
+  "scope": "Complete labeled intervals, offline only; not interchangeable with live windows."
+}

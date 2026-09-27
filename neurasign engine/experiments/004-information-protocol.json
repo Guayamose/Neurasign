@@ -1,0 +1,266 @@
+{
+  "version": "information-v4",
+  "seed": 20260926,
+  "dataset_sha256": "f2459d6667e0d2650558045e9a54ff8ba673159e7cc9ea6ea979b7b46ec4fda3",
+  "source_extractor_sha256": "1154975e6ab5619eea892bb0b6807a8f7ef9843a573b9afdd0625f3d101da8c5",
+  "development": [
+    "UN_101",
+    "UN_102",
+    "UN_103",
+    "UN_104",
+    "UN_105",
+    "UN_106",
+    "UN_107",
+    "UN_109",
+    "UN_110",
+    "UN_111",
+    "UN_112",
+    "UN_114",
+    "UN_115",
+    "UN_116",
+    "UN_117",
+    "UN_118",
+    "UN_119",
+    "UN_120",
+    "UN_121"
+  ],
+  "excluded_original_test": [
+    "UN_108",
+    "UN_113",
+    "UN_122",
+    "UN_123",
+    "UN_124"
+  ],
+  "folds": [
+    [
+      [
+        "UN_101",
+        "UN_102",
+        "UN_104",
+        "UN_105",
+        "UN_106",
+        "UN_107",
+        "UN_109",
+        "UN_111",
+        "UN_114",
+        "UN_115",
+        "UN_116",
+        "UN_118",
+        "UN_119",
+        "UN_120",
+        "UN_121"
+      ],
+      [
+        "UN_103",
+        "UN_110",
+        "UN_112",
+        "UN_117"
+      ]
+    ],
+    [
+      [
+        "UN_103",
+        "UN_104",
+        "UN_105",
+        "UN_109",
+        "UN_110",
+        "UN_111",
+        "UN_112",
+        "UN_114",
+        "UN_115",
+        "UN_116",
+        "UN_117",
+        "UN_118",
+        "UN_119",
+        "UN_120",
+        "UN_121"
+      ],
+      [
+        "UN_101",
+        "UN_102",
+        "UN_106",
+        "UN_107"
+      ]
+    ],
+    [
+      [
+        "UN_101",
+        "UN_102",
+        "UN_103",
+        "UN_104",
+        "UN_106",
+        "UN_107",
+        "UN_109",
+        "UN_110",
+        "UN_111",
+        "UN_112",
+        "UN_114",
+        "UN_115",
+        "UN_117",
+        "UN_120",
+        "UN_121"
+      ],
+      [
+        "UN_105",
+        "UN_116",
+        "UN_118",
+        "UN_119"
+      ]
+    ],
+    [
+      [
+        "UN_101",
+        "UN_102",
+        "UN_103",
+        "UN_104",
+        "UN_105",
+        "UN_106",
+        "UN_107",
+        "UN_110",
+        "UN_112",
+        "UN_115",
+        "UN_116",
+        "UN_117",
+        "UN_118",
+        "UN_119",
+        "UN_121"
+      ],
+      [
+        "UN_109",
+        "UN_111",
+        "UN_114",
+        "UN_120"
+      ]
+    ],
+    [
+      [
+        "UN_101",
+        "UN_102",
+        "UN_103",
+        "UN_105",
+        "UN_106",
+        "UN_107",
+        "UN_109",
+        "UN_110",
+        "UN_111",
+        "UN_112",
+        "UN_114",
+        "UN_116",
+        "UN_117",
+        "UN_118",
+        "UN_119",
+        "UN_120"
+      ],
+      [
+        "UN_104",
+        "UN_115",
+        "UN_121"
+      ]
+    ]
+  ],
+  "variants": [
+    "v3_gates",
+    "all_training_windows",
+    "relax_motion",
+    "relax_motion_periodicity",
+    "without_eda",
+    "without_temperature",
+    "without_motion",
+    "without_device_hr",
+    "without_pulse_wave",
+    "without_pulse_intervals"
+  ],
+  "removed_feature_groups": {
+    "eda": [
+      "eda_mean",
+      "eda_median",
+      "eda_std",
+      "eda_range",
+      "eda_slope_per_second",
+      "eda_last20_minus_first20",
+      "eda_positive_derivative",
+      "eda_fast_variation"
+    ],
+    "temperature": [
+      "temperature_mean",
+      "temperature_median",
+      "temperature_std",
+      "temperature_range",
+      "temperature_slope_per_second",
+      "temperature_last20_minus_first20"
+    ],
+    "motion": [
+      "motion_mean",
+      "motion_median",
+      "motion_std",
+      "motion_range",
+      "motion_slope_per_second",
+      "motion_last20_minus_first20",
+      "motion_enmo_mean_g",
+      "motion_jerk_rms_g_s",
+      "acc_x_std_g",
+      "acc_y_std_g",
+      "acc_z_std_g",
+      "acc_clipped_fraction"
+    ],
+    "device_hr": [
+      "heart_rate_mean",
+      "heart_rate_median",
+      "heart_rate_std",
+      "heart_rate_range",
+      "heart_rate_slope_per_second",
+      "heart_rate_last20_minus_first20",
+      "pulse_rate_device_difference_bpm"
+    ],
+    "pulse_wave": [
+      "bvp_std",
+      "bvp_spectral_concentration",
+      "bvp_periodicity",
+      "pulse_rate_bpm",
+      "pulse_interval_mean_ms",
+      "pulse_interval_sdnn_ms",
+      "pulse_interval_rmssd_ms",
+      "pulse_interval_pnn50",
+      "pulse_interval_iqr_ms",
+      "pulse_valid_interval_fraction",
+      "pulse_rate_device_difference_bpm"
+    ],
+    "pulse_intervals": [
+      "pulse_rate_bpm",
+      "pulse_interval_mean_ms",
+      "pulse_interval_sdnn_ms",
+      "pulse_interval_rmssd_ms",
+      "pulse_interval_pnn50",
+      "pulse_interval_iqr_ms",
+      "pulse_rate_device_difference_bpm"
+    ]
+  },
+  "models": [
+    {
+      "name": "constant_mean",
+      "kind": "constant",
+      "strategy": "mean"
+    },
+    {
+      "name": "constant_median",
+      "kind": "constant",
+      "strategy": "median"
+    },
+    {
+      "name": "ridge_100",
+      "kind": "ridge",
+      "alpha": 100.0
+    },
+    {
+      "name": "boost_squared_7",
+      "kind": "boost",
+      "loss": "squared_error",
+      "leaves": 7
+    }
+  ],
+  "reference": "Each window inherits its task questionnaire rating, unchanged from v3.",
+  "metric": "Mean window absolute error within interval, then person, then all people.",
+  "training": "20 evenly spaced windows per interval, except all_training_windows; total sample weight fixed to the thinned count.",
+  "relaxation": "Diagnostic only: ignore motion, then motion plus periodicity; keep >=20 valid intervals and >=80% interval validity.",
+  "scope": "Exploratory development audit. Fixed settings; no best-variant model selected or deployed. No independent test claims."
+}

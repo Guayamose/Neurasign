@@ -23,7 +23,7 @@ export function CompanyLogin({ signup, busy, ready, testAccount, demoAvailable, 
     <section className="co-login-story" aria-label="About NEURASIGN">
       <span className="co-story-label"><span /> HUMAN SIGNALS / CONNECTED</span>
       <h2>Human signals.<br />One clear<br /><em>view.</em></h2>
-      <p>Your team’s wearable measurements.<br />Connected, visible, understood.</p>
+      <p>Wearable measurements for your whole team.<br />See signals, connections and changes in one place.</p>
       <SignalOrb className="co-login-orb" />
       <div className="co-login-story-bottom">
         <div className="co-device-path" aria-label="Wearable connects to phone, which sends measurements to the team dashboard"><span>Wearable</span><ArrowRight size={13} /><span>Phone</span><ArrowRight size={13} /><span>Workspace</span></div>

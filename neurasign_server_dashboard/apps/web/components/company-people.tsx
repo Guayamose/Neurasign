@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { ArrowRight, Building2, Check, ChevronDown, Copy, LockKeyhole, Pause, Plus, QrCode, Search, ShieldCheck, Smartphone, Trash2, UserPlus, Users, X } from "lucide-react";
+import { RosterPagination } from "./roster-pagination";
+import { rosterPage, selectRoster, type RosterSort } from "@/lib/company-roster";
 import "./company-details.css";
 
 export type Team = { id: string; name: string };
@@ -18,6 +20,12 @@ export function CompanyPeople({ org, teams, people, accounts, owner, canManage, 
   const [busy, setBusy] = useState(false), [error, setError] = useState("");
   const [invite, setInvite] = useState(""), [copied, setCopied] = useState("");
   const [query, setQuery] = useState("");
+  const [teamFilter, setTeamFilter] = useState("");
+  const [sharingFilter, setSharingFilter] = useState("");
+  const [sort, setSort] = useState<RosterSort>("name");
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(25);
+  const listRef = useRef<HTMLDivElement>(null);
   const [code, setCode] = useState<ConnectionCode | null>(null);
   const [now, setNow] = useState(Date.now());
   const dialog = useRef<HTMLElement>(null);
@@ -81,7 +89,11 @@ export function CompanyPeople({ org, teams, people, accounts, owner, canManage, 
   const canManagePerson = (person: Person) => canManage && (owner || teams.some(team => team.id === person.team_id));
   const path = `/organizations/${org}`;
   const seconds = code ? Math.min(300, Math.max(0, Math.ceil(code.expires - now / 1000))) : 0;
-  const filteredPeople = people.filter(person => `${person.name} ${teams.find(team => team.id === person.team_id)?.name ?? ""}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const filteredPeople = useMemo(() => selectRoster(people, teams, { query, team: teamFilter, sharing: sharingFilter, sort }), [people, teams, query, teamFilter, sharingFilter, sort]);
+  const page = rosterPage(filteredPeople, pageIndex, pageSize);
+  useEffect(() => { if (page.page !== pageIndex) setPageIndex(page.page); }, [page.page, pageIndex]);
+  function changeFilter(update: () => void) { update(); setPageIndex(0); }
+  function changePage(next: number) { setPageIndex(next); if (listRef.current) listRef.current.scrollTop = 0; }
 
   return <div className="co-people-admin">
     {error && !code && <div className="co-message error" role="alert">{error}<button aria-label="Dismiss error" onClick={() => setError("")}><X size={16} /></button></div>}
@@ -112,13 +124,21 @@ export function CompanyPeople({ org, teams, people, accounts, owner, canManage, 
     </div>
 
     <section className="co-panel co-roster">
-      <div className="co-panel-head"><div><h2>Employees <span className="co-inline-count">{people.length}</span></h2><p>Connect phones and manage team membership.</p></div>{people.length > 0 && <label className="co-roster-search"><Search size={15} /><input type="search" aria-label="Search employees or teams" placeholder="Find a person or team" value={query} onChange={e => setQuery(e.target.value)} /></label>}</div>
-      {!people.length ? <div className="co-empty"><span className="co-empty-detail-icon"><Users size={26} /></span><h3>Your team starts here</h3><p>Add your first employee above. Then select <strong>Connect phone</strong>.</p></div> : !filteredPeople.length ? <div className="co-empty"><Search size={24} /><h3>No matching people</h3><button className="co-text" onClick={() => setQuery("")}>Clear search</button></div> : <div role="list" aria-label="Employees">{filteredPeople.map(person => <div className="co-list-row co-employee-row" role="listitem" key={person.id}>
+      <div className="co-panel-head"><div><h2>Employees <span className="co-inline-count">{people.length}</span></h2><p>Connect phones and manage team membership.</p></div></div>
+      {people.length > 0 && <div className="co-roster-filters co-admin-filters">
+        <label className="co-filter-search">Find a person or team<input type="search" aria-label="Search employees or teams" placeholder="Name or team" value={query} onChange={event => changeFilter(() => setQuery(event.target.value))} /></label>
+        <label>Team<select aria-label="Filter employee team" value={teamFilter} onChange={event => changeFilter(() => setTeamFilter(event.target.value))}><option value="">All teams</option><option value="unassigned">Unassigned</option>{teams.map(team => <option key={team.id} value={team.id}>{team.name}</option>)}</select></label>
+        <label>Sharing<select aria-label="Filter employee sharing" value={sharingFilter} onChange={event => changeFilter(() => setSharingFilter(event.target.value))}><option value="">All sharing states</option><option value="enabled">Sharing enabled</option><option value="paused">Sharing paused</option></select></label>
+        <label>Sort by<select aria-label="Sort employees" value={sort} onChange={event => changeFilter(() => setSort(event.target.value as RosterSort))}><option value="name">Name A–Z</option><option value="name_desc">Name Z–A</option></select></label>
+        {(query || teamFilter || sharingFilter) && <button className="co-secondary" onClick={() => changeFilter(() => { setQuery(""); setTeamFilter(""); setSharingFilter(""); })}>Clear filters</button>}
+      </div>}
+      {!people.length ? <div className="co-empty"><span className="co-empty-detail-icon"><Users size={26} /></span><h3>Your team starts here</h3><p>Add your first employee above. Then select <strong>Connect phone</strong>.</p></div> : !filteredPeople.length ? <div className="co-empty"><Search size={24} /><h3>No matching people</h3><button className="co-text" onClick={() => changeFilter(() => { setQuery(""); setTeamFilter(""); setSharingFilter(""); })}>Clear filters</button></div> : <div ref={listRef} className="co-admin-list" role="list" aria-label="Employees">{page.items.map(person => <div className="co-list-row co-employee-row" role="listitem" key={person.id}>
         <span className="co-avatar">{person.name.split(" ").map(part => part[0]).slice(0, 2).join("")}</span>
         <div className="co-employee-identity"><strong>{person.name}</strong><small className={person.sharing ? "co-sharing-on" : ""}>{person.sharing ? <><span className="co-tiny-dot" />Sharing enabled</> : <><Pause size={10} />Sharing paused</>}</small></div>
         {canManagePerson(person) ? <select aria-label={`Team for ${person.name}`} value={person.team_id ?? ""} disabled={busy} onChange={e => { const teamId = e.target.value; void act(async () => { await api(`${path}/employees/${person.id}`, "PATCH", { name: person.name, team_id: teamId }); }); }}><option value="" disabled>Unassigned</option>{teams.map(team => <option key={team.id} value={team.id}>{team.name}</option>)}</select> : <span className="co-employee-team">{teams.find(team => team.id === person.team_id)?.name ?? "Unassigned"}</span>}
         {canManagePerson(person) && <div className="co-employee-actions"><button className="co-secondary" disabled={busy} onClick={e => { connectionTrigger.current = e.currentTarget; void act(() => createCode(person)); }}><QrCode size={15} />Connect phone</button><button className="co-icon co-remove-person" aria-label={`Remove ${person.name}`} disabled={busy} onClick={() => { if (window.confirm(`Remove ${person.name}? All their phones will lose access.`)) void act(async () => { await api(`${path}/employees/${person.id}`, "DELETE"); }); }}><Trash2 size={15} /></button></div>}
       </div>)}</div>}
+      {people.length > 0 && <RosterPagination {...page} label="Employees" onPage={changePage} onSize={size => { setPageSize(size); changePage(0); }} />}
       <footer className="co-panel-foot"><span><LockKeyhole size={13} />Employees control sharing from their phone.</span><span>Sharing enabled does not mean a device is connected.</span></footer>
     </section>
 

@@ -77,7 +77,7 @@ async def main():
         sam_id = hashlib.sha256(sam['uid'].encode()).hexdigest()
         card = owner.get_by_test_id(f'company-person-{sam_id}')
         await expect(card).to_contain_text('DEMO RECORDING', timeout=15000)
-        await card.click()
+        await card.get_by_role('button', name='View signals for Sam').click()
         await expect(owner.get_by_role('heading', name='Signal detail · Sam')).to_be_visible()
         await expect(card).to_contain_text('Current')
         await owner.get_by_role('button', name='HRV', exact=True).click()
@@ -94,7 +94,7 @@ async def main():
         await owner.screenshot(path=str(artifacts / 'company-mobile.png'), full_page=True)
         assert await owner.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), 'Mobile overflow'
         await employee.get_by_test_id('company-tab-overview').click()
-        await expect(employee.locator('.co-person')).to_have_count(1)
+        await expect(employee.locator('.co-roster-row')).to_have_count(1)
         await employee.get_by_test_id('company-tab-sharing').click()
         await employee.get_by_role('button', name='Pause sharing', exact=True).click()
         await expect(card).to_contain_text('Sharing paused', timeout=15000)

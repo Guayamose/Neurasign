@@ -1,6 +1,21 @@
 name: neurasign
 
 services:
+  models:
+    build:
+      context: .
+      dockerfile: services/models/Dockerfile
+    environment:
+      NEURASIGN_ENV: local
+      MODEL_BUNDLE_DIR: /app/var/model-engine
+    volumes:
+      - ./var/model-engine:/app/var/model-engine:ro
+    # No host port: only the local API can reach this research service.
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8010/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
   emulator:
     build:
       context: .
@@ -24,6 +39,8 @@ services:
     env_file:
       - path: .env
         required: false
+      - path: ./var/model-engine-access.env
+        required: false
     environment:
       NEURASIGN_ENV: local
       FIREBASE_PROJECT_ID: demo-neurasign
@@ -33,6 +50,8 @@ services:
       FIREBASE_AUTH_EMULATOR_URL: http://localhost:9099
       WORKSPACE_STORE: firestore
       FIRESTORE_EMULATOR_HOST: emulator:8080
+      MODEL_ENGINE_ENABLED: "true"
+      MODEL_ENGINE_URL: http://models:8010
     ports:
       - "127.0.0.1:8000:8000"
     volumes:
@@ -40,6 +59,8 @@ services:
     depends_on:
       emulator:
         condition: service_healthy
+      models:
+        condition: service_started
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
       interval: 5s
@@ -49,8 +70,12 @@ services:
     build:
       context: .
       dockerfile: apps/web/Dockerfile
+    env_file:
+      - path: ./var/model-engine-access.env
+        required: false
     environment:
       API_INTERNAL_URL: http://api:8000
+      NEURASIGN_ENV: local
     ports:
       - "127.0.0.1:3000:3000"
     depends_on:

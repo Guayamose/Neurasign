@@ -1,6 +1,6 @@
-.PHONY: setup dev test build smoke phone-setup phone-test contract-check test-all mobile-setup mobile-check mobile-apk onboarding-smoke
+.PHONY: setup dev test build smoke models-prepare phone-setup phone-test contract-check test-all mobile-setup mobile-check mobile-apk onboarding-smoke
 
-setup dev test build smoke:
+setup dev test build smoke models-prepare:
 	$(MAKE) -C neurasign_server_dashboard $@
 
 phone-setup:

@@ -24,6 +24,7 @@ from .workspace import router as workspace_router  # noqa: E402
 from .telemetry import router as telemetry_router  # noqa: E402
 from .integrations import router as integrations_router
 from .onboarding import router as onboarding_router  # noqa: E402
+from .model_engine import router as model_engine_router  # noqa: E402
 
 
 class ControlRequest(BaseModel):
@@ -148,18 +149,33 @@ app.include_router(workspace_router)
 app.include_router(telemetry_router)
 app.include_router(onboarding_router)
 app.include_router(integrations_router)
+app.include_router(model_engine_router)
 
 
 @app.middleware('http')
 async def workspace_boundary(request: Request, call_next):
     if production() and request.url.path != '/api/health' and not request.url.path.startswith('/api/v1/'):
         return JSONResponse({'detail': 'Not found.'}, status_code=404)
-    if request.url.path.startswith('/api/v1/') and request.method in ('POST', 'PATCH', 'PUT'):
+    if request.url.path.startswith(('/api/v1/', '/api/model-engine/')) and request.method in ('POST', 'PATCH', 'PUT'):
+        limit = 2048 if request.url.path.startswith('/api/model-engine/') else 131072
         try:
             length = int(request.headers.get('content-length', '0'))
         except ValueError:
             return JSONResponse({'detail': 'Invalid request length.'}, status_code=400)
-        if length > 131072 or len(await request.body()) > 131072:
+        if length < 0 or length > limit:
+            return JSONResponse({'detail': 'Request body is too large.'}, status_code=413)
+        if request.url.path.startswith('/api/model-engine/'):
+            chunks = []
+            received = 0
+            async for chunk in request.stream():
+                received += len(chunk)
+                if received > limit:
+                    return JSONResponse({'detail': 'Request body is too large.'}, status_code=413)
+                chunks.append(chunk)
+            # Starlette's cached middleware request replays this bounded body
+            # for FastAPI validation without reading the incoming stream twice.
+            request._body = b''.join(chunks)
+        elif len(await request.body()) > limit:
             return JSONResponse({'detail': 'Request body is too large.'}, status_code=413)
     response = await call_next(request)
     response.headers['Cache-Control'] = 'no-store'

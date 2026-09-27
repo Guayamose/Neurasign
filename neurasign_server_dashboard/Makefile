@@ -1,4 +1,4 @@
-.PHONY: setup dev test build smoke
+.PHONY: setup dev test build smoke models-prepare
 
 setup:
 	python3 scripts/setup.py
@@ -15,3 +15,6 @@ build:
 
 smoke:
 	.venv/bin/python scripts/smoke.py
+
+models-prepare:
+	python3 scripts/prepare_model_engine.py

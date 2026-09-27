@@ -1,4 +1,4 @@
-"""Run both services and cleanly stop children on Ctrl+C or service failure."""
+"""Run local services and cleanly stop children on Ctrl+C or service failure."""
 from pathlib import Path
 import os
 import signal
@@ -34,9 +34,24 @@ if __name__ == "__main__":
         'FIREBASE_AUTH_EMULATOR_URL': 'http://localhost:9099', 'FIRESTORE_EMULATOR_HOST': 'localhost:8088',
     }.items():
         env.setdefault(key, value)
+    web_env = dict(os.environ, NEURASIGN_ENV='local')
+    model_python = Path(os.getenv('MODEL_ENGINE_PYTHON', str(ROOT.parent / 'neurasign engine/.venv/bin/python')))
+    model_server = ROOT / 'services/models/server.py'
+    if model_python.is_file() and model_server.is_file():
+        model_env = dict(env, MODEL_BUNDLE_DIR=str(ROOT / 'var/model-engine'))
+        children.append(subprocess.Popen([str(model_python), str(model_server)], cwd=ROOT,
+                                         env=model_env, start_new_session=True))
+        env.update(MODEL_ENGINE_ENABLED='true', MODEL_ENGINE_URL='http://127.0.0.1:8010')
+        # Only this generated server-side token is shared with the Next proxy.
+        access = ROOT / 'var/model-engine-access.env'
+        if access.is_file():
+            for line in access.read_text().splitlines():
+                if line.startswith('MODEL_ENGINE_TOKEN='):
+                    env['MODEL_ENGINE_TOKEN'] = line.split('=', 1)[1]
+                    web_env['MODEL_ENGINE_TOKEN'] = env['MODEL_ENGINE_TOKEN']
     # Do not source .env into the frontend. The API loads it privately.
     children.append(subprocess.Popen([str(ROOT / ".venv/bin/uvicorn"), "neurasign.main:app", "--host", "127.0.0.1", "--port", "8000", "--reload", "--reload-dir", "services/api"], cwd=ROOT, env=env, start_new_session=True))
-    children.append(subprocess.Popen(["npm", "run", "dev", "--", "--hostname", "127.0.0.1"], cwd=ROOT / "apps/web", start_new_session=True))
+    children.append(subprocess.Popen(["npm", "run", "dev", "--", "--hostname", "127.0.0.1"], cwd=ROOT / "apps/web", env=web_env, start_new_session=True))
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
     signal.signal(signal.SIGINT, lambda *_: sys.exit(0))
     print("NEURASIGN → http://localhost:3000  |  API → http://localhost:8000/docs", flush=True)

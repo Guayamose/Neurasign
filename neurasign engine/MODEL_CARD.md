@@ -8,10 +8,31 @@ NEURASIGN has trained research models and reproducible evaluation code. It does 
 | --- | --- | --- |
 | Stress | Actual self-reported stress ratings in UNIVERSE and SWELL; new experiments 012 and 013 evaluate these labels directly | Trained research classifiers; insufficient evidence for general live wrist interpretation |
 | Workload | Separate questionnaire dimensions such as mental, physical and temporal demand and effort | Multiple trained research models; a result for one dimension does not validate general workload |
-| Fatigue | No aligned fatigue reference identified in the acquired/prepared training sources | Demo formula only; physical demand and effort are not relabeled fatigue |
-| Readiness | No defined, aligned readiness outcome in the acquired/prepared training sources | Demo formula only; no measured predictive accuracy |
+| Fatigue | Observed fatigue questionnaires in MEFAR, FatigueSet, the Luo daily wearable study and DailySense | New trained models; no reliable general fatigue detector established |
+| Readiness | Oura's vendor-generated daily readiness score in IFH Affect | Daily score approximation: 3.98-point MAE; this does not validate live employee readiness |
 
 A common feature pipeline or shared neural encoder cannot create missing target answers. Each target needs its own reference definition and evaluation. These outputs cannot share one claimed accuracy number.
+
+## New fatigue and readiness experiments
+
+These experiments acquire actual reference labels and reserve entire people before model selection. All preprocessing and model selection use development people only. A saved, frozen selection precedes each final test. Reported accuracies give people equal weight; the reports also preserve raw confusion counts. The models remain separate from the application and its demo formulas.
+
+| Experiment | Reference / time scale | Reserved evaluation | Main result | Interpretation |
+| --- | --- | --- | --- | --- |
+| [014: MEFAR](experiments/014-mefar-results.md) | Chalder Fatigue Scale, two sessions per person | 5 people | 51.1% ordinary / 46.7% balanced accuracy | Below the 50% balanced constant baseline |
+| [015: FatigueSet physical](experiments/015-fatigueset-results.md) | Physical fatigue VAS ≥50; 60-second wrist evidence | 3 people, 27 answers | 66.7% ordinary / 82.7% balanced accuracy | Only **one** high-fatigue answer and nine false alarms; insufficient evidence |
+| [015: FatigueSet mental](experiments/015-fatigueset-results.md) | Mental fatigue VAS ≥50; 180-second wrist evidence | 3 people, 27 answers | 77.8% ordinary / 43.8% balanced accuracy | Detects none of the three high-fatigue answers |
+| [016: Oura readiness](experiments/016-readiness-oura-results.md) | Vendor daily score, 1–100 | 4 people, 684 days | **3.98-point MAE**, versus 8.71 for the constant | Useful daily vendor-score approximation; not instantaneous readiness validation |
+| [017: daily fatigue](experiments/017-fatigue-daily-results.md) | Overall fatigue VAS, 1–10; previous-day upper-arm wearable signals | 6 people, 117 days | 2.309-point MAE, versus 2.318 for the constant | Less than 1% improvement; physical/mental exhaustion frequency also fails to improve consistently |
+| [018: DailySense fatigue](experiments/018-dailysense-results.md) | Observed daily fatigue VAS ≥50 | 8 people, 96 days | 54.8% person-weighted / 60.6% balanced accuracy | High-fatigue recall 43.0%; within-person balanced accuracy 53.2% |
+
+Readiness reaches **71.7% agreement within ±5 points** and **93.4% within ±10 points** of Oura, with R² = 0.770. These are tolerance agreements, not classification accuracies. The selected ensemble combines SVR and two CatBoost models using completed sleep physiology, sleep summaries, prior activity and past physiological history. It excludes every vendor score, readiness contributor, target history and questionnaire input. Its 95% person-bootstrap MAE interval is 3.11–5.11 points. The original data do not provide the exact publication timestamp of each Oura score; the comparison is offline and daily.
+
+The fatigue experiments compare linear models, RBF support-vector models, ExtraTrees and CatBoost across signal profiles, window lengths or past physiological baselines. The high FatigueSet physical balanced accuracy must not be presented as “82.7% validated fatigue detection”: its positive-class result rests on one answer, and its low-class recall is only 65.4%. None of these fatigue experiments meets its predefined research gate. Combining differently defined questionnaires as if they were the same label would not resolve that limitation.
+
+DailySense adds 453 original fatigue ratings from 36 people. Its selected ExtraTrees classifier uses daily cardiac summaries. The test includes 70 high and 26 low answers, so the weak result cannot be dismissed as a single-positive evaluation. Its person-bootstrap balanced-accuracy interval is 46.1–72.0%. The separate intensity regressor has MAE 20.89/100 versus 20.14 for a constant. Damaged source channels are excluded individually after full-archive publisher checksums; this and daily label timing limit interpretation. The [report](experiments/018-dailysense-results.md) records all exclusions and metrics.
+
+Across experiments 014–018, 468 profile/algorithm configurations were compared, plus development-only ensembles and the declared MEFAR thresholds. Nineteen fitted artifact files are retained locally; their [published fingerprints](experiments/fatigue-readiness-artifacts.json) identify the actual saved models and evaluation records. This inventory does not convert weak evaluation results into validated product outputs.
 
 ## Stress: measured SWELL result
 
@@ -48,11 +69,18 @@ From `neurasign engine/`:
 .venv/bin/python scripts/run_stress_benchmark.py verify
 .venv/bin/python scripts/run_swell_stress.py verify
 .venv/bin/python scripts/run_short_window.py verify
+.venv/bin/python scripts/run_mefar.py verify
+.venv/bin/python scripts/run_fatigueset.py verify --target physical
+.venv/bin/python scripts/run_fatigueset.py verify --target mental
+.venv/bin/python scripts/run_readiness_oura.py verify
+.venv/bin/python scripts/run_fatigue_daily.py verify
+.venv/bin/python scripts/run_dailysense.py verify
+.venv/bin/python scripts/audit_reference_benchmarks.py
 
 # Run the engine's implementation tests.
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
-The experiment 012 and 013 reports document their reproduction commands. Preparation requires the verified source data and prior participant splits described in the engine README. Completed runs refuse replacement. Existing test subjects are not silently recycled into training.
+Each experiment report documents its reproduction commands. The independent reference audit recomputes metrics and training-only constant predictions without importing the benchmark scoring functions. Preparation requires the verified source data and prior participant splits described in the engine README. Completed runs refuse replacement. Existing test subjects are not silently recycled into training.
 
 Artifacts explicitly carry `production_enabled=False`. Research predictions are neither diagnoses nor fitness-for-duty clearance. No trained stress output has been connected to named employees or the manager dashboard.

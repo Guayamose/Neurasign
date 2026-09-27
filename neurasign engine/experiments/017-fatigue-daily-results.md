@@ -26,6 +26,7 @@ Test people: S19, S20, S23, S27, S28, S9.
 **Within-tolerance percentages are regression agreement, not classification accuracy or confidence.** VAS tolerance is one original scale point; frequency tolerance is half a category. MAE is reported in original units, not converted into a fabricated percentage accuracy. The constant predicts the development-person-weighted median. Full fixed-reference results, person-bootstrap intervals, all 198 development comparisons and 12 saved artifact audits are retained in the ignored results directory.
 
 Research gate requires at least 20% test MAE reduction against the constant and positive weighted R². Results:
+
 - previous_day / vas: not reached; MAE improvement 0.4%; MAE 95% person-bootstrap interval 1.252–3.521.
 - previous_day / physical: not reached; MAE improvement -4.3%; MAE 95% person-bootstrap interval 0.628–0.795.
 - previous_day / mental: not reached; MAE improvement -3.6%; MAE 95% person-bootstrap interval 0.488–0.772.

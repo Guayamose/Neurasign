@@ -1,0 +1,192 @@
+{
+  "description": "Fingerprints of actual locally fitted research models. No participant-level data, predictions or credentials are published.",
+  "limitations": "Artifact existence is not evidence of clinical validity, live readiness or cross-device transfer. Read each experiment report.",
+  "experiment_groups": [
+    {
+      "experiment_number": 14,
+      "name": "mefar-v1",
+      "artifacts": [
+        {
+          "path": "models/mefar-v1/fixed-0.joblib",
+          "bytes": 9241,
+          "sha256": "4e93e4c31468920a0ec06ee03632c5dd2098dd100241ecd50a2c2a0989a3d754"
+        },
+        {
+          "path": "models/mefar-v1/selected-0.joblib",
+          "bytes": 293204,
+          "sha256": "f342513a8c784e1177f5761b42d65b988560cecb5b34e5d94de84e6ad609a2c7"
+        }
+      ],
+      "evidence_sha256": {
+        "report.json": "58c237eea190d4f94a1f455ede1dd4e894345825736054fa4cc3179597f954e2",
+        "run-start.json": "d20f9df11337fd22452b888aa7b4013c413948ac314ce7dd7bd47bb3dbcdeba4",
+        "frozen-selection.json": "f1d90c8aedc84e9546472129dbe7d300e557ec51b78180382e61a10c710df27f",
+        "evaluation.json": "73318a38ed6587fec6e70dd53000deff080a463ea66b5ac1a44fed1f6408de3b"
+      },
+      "production_enabled": false
+    },
+    {
+      "experiment_number": 15,
+      "name": "fatigueset-physical-v1",
+      "artifacts": [
+        {
+          "path": "models/fatigueset-physical-v1/selected.joblib",
+          "bytes": 24508,
+          "sha256": "39c4b31b3d034e73d16a200292899f177a437cb3285f0fc1fc491c9b81d70a63"
+        }
+      ],
+      "evidence_sha256": {
+        "report.json": "a1e5907bc39fde025469ae486965a5f47d211f9f52bf01942868cd035c3d0a3e",
+        "run-start.json": "8a196df3ec7b6691a7db10407f62be8701d6ddbf042b259e9cef6d972e96c9e3",
+        "frozen-selection.json": "80718f304028462ea2385b7fa25e339a003f39e61f285383c1c0a52d9ee66599",
+        "evaluation.json": "a169ebedac42bae1c01ac07235a26759f90c7646b18e4710fff86afb67fd80d0"
+      },
+      "production_enabled": false
+    },
+    {
+      "experiment_number": 15,
+      "name": "fatigueset-mental-v1",
+      "artifacts": [
+        {
+          "path": "models/fatigueset-mental-v1/selected.joblib",
+          "bytes": 35016,
+          "sha256": "0b952c4190a01ef1a1697bb85e0f35094ab4b5c1acc140dea7e36b819d90f4af"
+        }
+      ],
+      "evidence_sha256": {
+        "report.json": "a4b4bdb6fdf79e053c58c16b6dc1ae6bf842c9dd1ab2f400a3b94c220fe3db3c",
+        "run-start.json": "30f1d16367b7760d510a558237732475ee2b71f3427a8aea7d72caa4165ebf1d",
+        "frozen-selection.json": "d2c5f13d8824992d42777e3b7ab64754f48f34c87d39c1998c754c17371f8d44",
+        "evaluation.json": "b6cd094c31e472141150692a95569645f6db443db0631efc10587b4a56a9c309"
+      },
+      "production_enabled": false
+    },
+    {
+      "experiment_number": 16,
+      "name": "readiness-oura-v1",
+      "artifacts": [
+        {
+          "path": "models/readiness-oura-v1/selected.joblib",
+          "bytes": 1464195,
+          "sha256": "a3016e4a542085437353dfe3964169a36f16fb3b3e5981f097175ffda09f5bd6"
+        }
+      ],
+      "evidence_sha256": {
+        "report.json": "e60922024dbbb3f027bbdd6e39dc2e368426d62277103d2c7e75313dfcb84585",
+        "run-start.json": "2c5d76a731e4558d10640595f9f2c475237d62b779792ced4a28289a74bae6ae",
+        "frozen-selection.json": "e75fed94be9a1ecc3c0d8048ae2181ff6b345477dd8fa6c94b45502194e4dcce",
+        "evaluation.json": "78df970856673216498db960e46ba00d81edf5dfdabfe644fad5b9f32447d864"
+      },
+      "production_enabled": false
+    },
+    {
+      "experiment_number": 17,
+      "name": "fatigue-daily-v1",
+      "artifacts": [
+        {
+          "path": "models/fatigue-daily-v1/previous_day-mental-fixed.joblib",
+          "bytes": 5982,
+          "sha256": "836e619b0984cf196739f5476b52944a3a7438a5ab150945d68254087e5d7932"
+        },
+        {
+          "path": "models/fatigue-daily-v1/previous_day-mental-selected.joblib",
+          "bytes": 344950,
+          "sha256": "42a79c68a766cefe1136187e878d13ad14138d33ab96fd38a04029c097dbde91"
+        },
+        {
+          "path": "models/fatigue-daily-v1/previous_day-physical-fixed.joblib",
+          "bytes": 5984,
+          "sha256": "d7a586d521c73d46ebc6e5528b0d86b1d100e369ce9f824f48eaa5a10d55ba70"
+        },
+        {
+          "path": "models/fatigue-daily-v1/previous_day-physical-selected.joblib",
+          "bytes": 268704,
+          "sha256": "175a68548bf8a61c11f4e58001ef7e3c17e775cb180b857535c1d42da3db3997"
+        },
+        {
+          "path": "models/fatigue-daily-v1/previous_day-vas-fixed.joblib",
+          "bytes": 5979,
+          "sha256": "ad9395fa3758321af54b89a6cb429777083067684eb13ed1bad16dd5b965d557"
+        },
+        {
+          "path": "models/fatigue-daily-v1/previous_day-vas-selected.joblib",
+          "bytes": 372948,
+          "sha256": "8ef2b9241baffa7a7cd2d1f8981a526d8cbc8f79ebdd0b3b9f1428ffef45526c"
+        },
+        {
+          "path": "models/fatigue-daily-v1/same_day_retrospective-mental-fixed.joblib",
+          "bytes": 6226,
+          "sha256": "e672d024dcd88edab93ec787ffbfc48af1a3c923425b6d92cecb199fc8722f67"
+        },
+        {
+          "path": "models/fatigue-daily-v1/same_day_retrospective-mental-selected.joblib",
+          "bytes": 385644,
+          "sha256": "3b6b02120277785d5d716237533b9c6e633ba38fc02a9376e9f3032b02cc26f9"
+        },
+        {
+          "path": "models/fatigue-daily-v1/same_day_retrospective-physical-fixed.joblib",
+          "bytes": 6228,
+          "sha256": "e3e8e5ad647b5cdeeecbc533cbe4ae0f163486131011861df216188e32f43a65"
+        },
+        {
+          "path": "models/fatigue-daily-v1/same_day_retrospective-physical-selected.joblib",
+          "bytes": 315620,
+          "sha256": "36becd8ac3320f4abe5f9aa76b77e8dcb108e4deab3904bb5d9dd63daee18c55"
+        },
+        {
+          "path": "models/fatigue-daily-v1/same_day_retrospective-vas-fixed.joblib",
+          "bytes": 6223,
+          "sha256": "9d51f65d47ab2e304c18b06c4ff0dd31b486d1bab1b7340afac9b6eff1c4fde3"
+        },
+        {
+          "path": "models/fatigue-daily-v1/same_day_retrospective-vas-selected.joblib",
+          "bytes": 394984,
+          "sha256": "091f08cc5c760f5bf255f64580737ccf4c9b39c2ae6755de37ba03bc9b942206"
+        }
+      ],
+      "evidence_sha256": {
+        "report.json": "163e7b0fff5f580bd45699ccc1c6dd787fff1b7af67f4525d36cbab42312a274",
+        "run-start.json": "f8e8da4176bb409745d37cb7fd50efd2f21c4ba80ab57180c91bfed57cba0052",
+        "frozen-selection.json": "6a21c4331c4c69f1a50a0f86f6baf788864f56a0c9f472a80bbb08278037f978",
+        "evaluation.json": "c7822fa2fbb004a4dfbb4b523c62877a0cd68c518605bf931db1df009350a84b"
+      },
+      "production_enabled": false
+    },
+    {
+      "experiment_number": 18,
+      "name": "dailysense-classification-v1",
+      "artifacts": [
+        {
+          "path": "models/dailysense-classification-v1/selected.joblib",
+          "bytes": 2082742,
+          "sha256": "e5c90db5a4c3f158373fa33a0a4adde2a73a688fc397e0247e6e01cf65d66768"
+        }
+      ],
+      "evidence_sha256": {
+        "report.json": "b32128d763e034eb966dd99c3af3b33cccf094a73e3653bcaa4dfd43cd6f3c24",
+        "run-start.json": "5b9eca3aee6bfe9ba9215db6d4649969cbaa166a9f7da9d3e535bab3bb40a933",
+        "frozen-selection.json": "74f6fc1215a8589a1d088108d07ae3f4f7d86893d89930e225c5944f9051dbfd",
+        "evaluation.json": "32757183e11a4759c039e9f71ee5e6639d065f53203d54560e57e101bfe91fa7"
+      },
+      "production_enabled": false
+    },
+    {
+      "experiment_number": 18,
+      "name": "dailysense-regression-v1",
+      "artifacts": [
+        {
+          "path": "models/dailysense-regression-v1/selected.joblib",
+          "bytes": 1364638,
+          "sha256": "9f573718513853e3907e24b2e72069403f420bd5c086c009f0a11424b2859e70"
+        }
+      ],
+      "evidence_sha256": {
+        "report.json": "3a7d3dfaef7a922c1aff2ec3d0f1419b26b3adcf60fb227eb9e605e60955ac88",
+        "run-start.json": "3d87fe9fedb9f2b9409939bd700058d1752e0f891dd7b7a25f6e40b575c042df",
+        "frozen-selection.json": "5b1ccef7322c57b0dced719d81401131573f8abdfcf27ccbfaf923cf27204f8d",
+        "evaluation.json": "6ee0540c4f048a0d4a66a2d4ae3b593bd1b9c27a53cecd96dae5141e1491a41d"
+      },
+      "production_enabled": false
+    }
+  ]
+}

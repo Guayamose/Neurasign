@@ -13,6 +13,7 @@ NEURASIGN connects supported wearable measurements to company/team monitoring. T
 | Area | Start here |
 | --- | --- |
 | API, company dashboard, Docker and deployment | [Server README](neurasign_server_dashboard/README.md) |
+| Operational tasks, support cases, handovers and manager privacy | [Applications guide](neurasign_server_dashboard/docs/applications.md), [API contract](neurasign_server_dashboard/docs/applications-contract.md) |
 | Tenant/team access and employee-bound phone credentials | [Onboarding contract](neurasign_server_dashboard/docs/phone-onboarding.md) |
 | Measurement format, sources and timestamps | [Telemetry contract](neurasign_server_dashboard/docs/telemetry.md) |
 | Native phone, BLE adapters and vendor routes | [Gateway README](neurasign_phone_app/README.md), [native build](neurasign_phone_app/mobile/README.md), [coverage matrix](neurasign_phone_app/docs/model-coverage.md) |
@@ -23,14 +24,15 @@ NEURASIGN connects supported wearable measurements to company/team monitoring. T
 
 ## Keep these surfaces distinct
 
-- **`/` — company workspace:** authenticated company/team access, employee profiles, enrollment and received observations. Connection attention is about data availability, not validated health-risk classification.
-- **`/demo` — local interactive example:** included synthetic fixture by default; imported UNIVERSE replay when available. Derived indices are illustrative formulas. Jev/Gemini optionally power the incident example, with labeled fallbacks and human review.
+- **`/` — company workspace:** authenticated company/team access, operational overview, employee profiles, phone enrollment and three persisted applications. Owner/manager roles do not grant physiological access. Task eligibility uses confirmed operational context; support cases are human-reported.
+- **`/demo` — local sample company:** enters the same company UI with 36 fictional people across four teams. Edits persist in this isolated local example. Four state indicators are explicitly illustrative, not live model predictions.
+- **`/signals` — local signal explorer:** included synthetic fixture by default; imported UNIVERSE replay when available. Derived indices are illustrative formulas. Jev/Gemini optionally power the incident example with labeled fallbacks and human review. Its Manager preview is presentation only; company privacy is separately enforced by the API.
 - **`/models` — local research execution:** saved fitted estimators on pinned anonymous records. Requires separately prepared ignored artifacts and a server-side token. It does not accept employee features or feed live employee state cards, and is disabled in production.
 - **`demo video/` — animated concept film:** fictional people, scripted values and an illustrated recommendation. This is not captured application behavior or model evaluation evidence.
 
-The demo's Manager preview is browser presentation, not an authorization boundary. Actual company/team access is enforced in the API, but authorized monitoring may include physiological measurements. Do not infer production metric redaction from a preview screenshot.
+Company dashboard payloads redact physiological values for owners/managers and raw-history endpoints reject them. Legacy employee self-access and a separate explicit measurement capability are distinct. Do not infer live physiological diagnosis, AI task matching or regulatory certification from the operational workflows.
 
-`docs/architecture.md` and `docs/api-contract.md` inside the server directory describe the local demo runtime. Use company/onboarding/telemetry documents for the company platform. Read dated verification entries as historical checks, not the current aggregate test count.
+`docs/architecture.md` and `docs/api-contract.md` inside the server directory describe the local Signal explorer runtime. Use company/onboarding/telemetry documents for the company platform. Read dated verification entries as historical checks, not the current aggregate test count.
 
 ## Working conventions
 

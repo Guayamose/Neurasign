@@ -6,7 +6,7 @@ The company is the tenant. Dashboard accounts (`members`) authenticate through F
 
 **People → Create team → Add employee → Connect phone.** The dashboard renders a five-minute single-use QR. NEURASIGN Link scans it, shows company/team/employee and server origin, then asks for confirmation. The phone starts collecting only after the user selects a supported wearable.
 
-Owners can invite manager accounts and grant/revoke teams in **Dashboard access**. Managers see and administer only their assigned teams. An employee moved to another team keeps their identity and phone. New managers cannot read measurements captured for the previous team; delayed uploads are assigned using their original measurement timestamp. Owners retain company-wide access subject to sharing and retention.
+Owners can invite manager accounts and grant/revoke teams in **Dashboard access**. Managers see and administer only their assigned teams. An employee moved to another team keeps their identity and phone. Manager and owner roles alone do not grant physiological access. An explicitly measurement-authorized manager cannot read measurements captured for a previous team; delayed uploads are assigned using their original measurement timestamp. Owners have company-wide operational access, while physiological access requires a separate explicit capability and remains subject to sharing and retention. See the [applications privacy contract](applications-contract.md).
 
 ## Endpoints
 

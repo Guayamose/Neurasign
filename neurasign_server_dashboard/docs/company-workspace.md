@@ -1,6 +1,6 @@
 # Company workspace and gateway contract
 
-The company application at `/` monitors received physiological measurements. It has no preloaded employees, generated physiological readings, automatic work reassignment or uncalibrated mental-state scoring. The separate local `/demo` uses labeled synthetic signals on a fresh checkout, or recorded UNIVERSE features after import. It also offers optional Jev/Gemini incident examples.
+The company application at `/` combines protected wearable ingestion, an operational overview and three applications: Dynamic Task Assignment, Overload Prevention and Shift Handover. New companies start empty. Managers confirm actions using human-reported work context; the application does not silently generate employee health scores or reassign work. `/demo` opens an isolated sample company in the same UI. `/signals` retains recorded/synthetic signal exploration and the optional Jev/Gemini incident example. See [Applications](applications.md).
 
 This document retains the **v1 compatibility contract** for account-backed self-sharing and feature-window uploads. For current onboarding, use **People & teams → Create team → Add employee → Connect phone**; the employee scans the QR in NEURASIGN Link and confirms sharing without needing a dashboard account. Owners invite managers and assign teams under **Dashboard access**. The [phone onboarding contract](phone-onboarding.md) is the canonical reference for that employee/dashboard separation, QR enrollment and scoped phone endpoints. The [telemetry extension](telemetry.md) describes multi-signal source capabilities, independent observations and normalization.
 
@@ -12,13 +12,13 @@ Users authenticate with Firebase email/password and must verify their email. The
 
 | Role | Visibility and actions |
 | --- | --- |
-| Owner | Organization-wide measurements subject to sharing; manage teams/employees and dashboard access; revoke devices |
-| Manager | Measurements and employee administration within granted teams; capture-time team restrictions also apply to history |
+| Owner | Company-wide operational context; manage teams/employees and dashboard access; revoke devices. No physiological access from the role alone. |
+| Manager | Operational context and applications within granted teams. No physiological access from the role alone. |
 | Employee dashboard account (legacy) | Own measurements and own devices only; independent employee profiles need no dashboard login |
 
 Organizations isolate companies; team grants additionally restrict managers inside a company. The server enforces both.
 
-The [Manager preview](manager-preview.md) at `/demo#manager` illustrates an individual interpretation-only experience. It does not change the permissions above: production managers can still access individual measurements within their granted teams. An interpretation-only production role requires backend changes to allow permitted conclusions while denying raw measurements.
+Dashboard responses redact measurements for owners/managers and direct member history/observation endpoints return 403. Legacy employees can access their own shared measurements. A separate explicit `can_view_measurements` capability permits scoped measurement access; there is no grant UI. The [Signal explorer's Manager preview](manager-preview.md) at `/signals#manager` is a separate research presentation. Operational application permissions and workflows are documented in the [applications contract](applications-contract.md).
 
 Employees control their sharing through the phone; existing account-backed employees retain the self-sharing controls. A manager cannot enable another employee’s sharing or authorize a device for them. Sharing is initially off. Pausing rejects new uploads and hides history from the workspace view. Re-enabling makes retained history visible again. Sharing controls are product permissions, not a claim of legal compliance or a determination of an employer’s lawful basis.
 

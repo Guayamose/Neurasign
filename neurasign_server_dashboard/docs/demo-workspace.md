@@ -1,6 +1,6 @@
-# Interactive demo and example workflows
+# Signal explorer and AI example workflows
 
-This document describes `/demo` and the legacy local demo API. These routes are disabled in production. For the company application, see [Company workspace](company-workspace.md).
+This document describes `/signals` and the legacy local demo API. These routes are disabled in production. For the complete company demo at `/demo`, see [Applications](applications.md). For company access, see [Company workspace](company-workspace.md).
 
 Server and dashboard project inside the [NEURASIGN workspace](../../README.md). All commands and paths below are relative to `neurasign_server_dashboard/`. The implemented [NEURASIGN Link native app](../../neurasign_phone_app/mobile/README.md) uses the separate company [QR enrollment and gateway contract](phone-onboarding.md); the legacy `/api/live/readings` example below is not that app's upload endpoint.
 
@@ -17,7 +17,7 @@ make setup
 make dev
 ```
 
-Open **http://localhost:3000/demo**. API docs: http://localhost:8000/docs. `Ctrl+C` stops the development processes; `docker compose stop emulator` stops the emulators. The web app and API bind to loopback for a private local session. If ports 3000/8000 are occupied, stop the conflicting process first.
+Open **http://localhost:3000/signals**. API docs: http://localhost:8000/docs. `Ctrl+C` stops the development processes; `docker compose stop emulator` stops the emulators. The web app and API bind to loopback for a private local session. If ports 3000/8000 are occupied, stop the conflicting process first.
 
 The server workspace's existing `.env` is preserved. **Do not copy `.env.example` over it.** Python loads the existing `JEV_API_key` and `Google_AI_API_key` names without printing them. These keys are optional for the local incident example; the demo starts without them. Jev and Gemini use configured credentials on the server; no API key is passed to Next.js or embedded in a browser bundle. Missing credentials and external failures have visible local fallbacks so the workflow remains usable.
 
@@ -45,7 +45,7 @@ See [dataset processing and chart interpretation](dataset.md) for exact windows,
 
 ## Manager perspective
 
-Choose **Manager preview** next to **Team signals** to see each named employee’s interpreted state and experimental indices, without their physiological measurements. It uses the same replay/manual/live demo interpretations as Team signals. This is a browser presentation filter, not a server permission boundary, and it does not change company manager permissions. Open directly at `/demo#manager`. See [Manager preview](manager-preview.md) for scope and privacy limitations.
+Choose **Manager preview** next to **Team signals** to see each named employee’s interpreted state and experimental indices, without their physiological measurements. It uses the same replay/manual/live demo interpretations as Team signals. This is a browser presentation filter, not a server permission boundary, and it does not change company manager permissions. Open directly at `/signals#manager`. See [Manager preview](manager-preview.md) for scope and privacy limitations.
 
 ## Explore work examples
 

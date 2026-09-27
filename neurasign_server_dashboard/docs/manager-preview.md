@@ -1,35 +1,26 @@
-# Individual manager overview
+# Manager access and signal preview
 
-Open `/demo#manager`, or choose **Manager overview** beside **Team overview**.
+The company workspace now enforces manager privacy on the server. Owners and managers see permitted people, operational context, tasks, support cases and handovers within their company/team scope. Their roles alone do not grant access to physiological measurements.
 
-The manager needs to understand each person's interpreted situation. This view retains each named demo profile, conclusion, experimental workload/fatigue/readiness indices, source and interpretation history. It omits the physiological values, reference baselines and sensor charts displayed in the detailed overview.
+The dashboard response redacts measurements; direct history and observation requests return 403. Legacy employee accounts retain access to their own measurements. A separate explicit `can_view_measurements` capability controls scoped measurement access; there is no grant UI. See the [applications guide](applications.md#manager-privacy-and-access) and [API contract](applications-contract.md).
 
-## Data and interpretation
+In the local sample company at `/demo`, a person's four state indicators are explicitly scripted illustrative estimates. Real company profiles do not receive those example estimates. The trained research models remain separate at `/models`.
 
-`toManagerView` projects the existing demo snapshot into a limited presentation object. It copies selected identity fields, derived indices and derived history; it never spreads worker or signal objects. The component receives this object rather than the physiological snapshot.
+## Research presentation at `/signals#manager`
 
-The values come from the same demo interpretation used in Team overview, including for a team with only one person. These are the existing experimental demo estimates, not a newly trained or validated model.
+**Manager preview** in the Signal explorer retains named fictional profiles, derived indices and interpretation history while omitting the physiological charts displayed in **Team signals**. `toManagerView` builds a limited presentation object rather than spreading the original signal object.
 
-A **Review suggested** flag uses the existing demo thresholds: workload at least 70, fatigue at least 60, or readiness below 45. **No flag** means none of these rules fired; it is not a declaration that an employee is safe or fit for duty. Confidence is used only as an availability gate and is not displayed as a validated accuracy percentage.
+That particular local research tab is still a browser presentation boundary: its containing signal explorer receives the original demo snapshot. Its workload/fatigue/readiness indices are the existing illustrative formulas, not newly trained models. “Review suggested” uses workload ≥70, fatigue ≥60 or readiness <45; “No flag” means no threshold fired, not that a person is safe or fit for duty. Source and unavailable states remain visible. The route is disabled in production.
 
-Disconnected, stale, missing, insufficiently supported or invalid interpretations show **Unavailable**, without displaying previous index values as current. Live inputs also require a recent reading and an established personal reference. Manual mode is explicitly identified as presenter-set values and does not inherit recorded history.
+The company API's new access policy is separate from this legacy research preview. Neither a preview nor measurement redaction establishes legal compliance or clinical/fitness-for-duty validity.
 
-The UI is occupation-neutral. It cannot be used as medical, safety or fitness-for-duty clearance for construction, hospitals or air traffic control. Those contexts require validation and appropriate human procedures beyond this demo.
-
-## Privacy and authorization
-
-Hiding measurements while retaining named conclusions is a product distinction, not automatic anonymisation or GDPR compliance. Conclusions that reveal physical or mental health can themselves be health data. See [GDPR Article 4(15), Article 9 and Recital 35](https://eur-lex.europa.eu/eli/reg/2016/679/oj) and the [EDPB's guidance on lawful processing](https://www.edpb.europa.eu/sme/be-compliant/process-personal-data-lawfully_en).
-
-This tab is a demo presentation boundary only. The containing demo still receives its original snapshot through `/api/state` and the WebSocket. Existing company managers can still access physiological measurements within their granted teams through the dashboard, member history and observation endpoints. `/demo` remains disabled in production.
-
-A production interpretation-only manager role needs an appropriately authorised server response containing permitted identity and conclusion fields, with physiological endpoints denied to that role. The legal basis, sensitive-data conditions, purpose, employee rights, retention and applicable workplace requirements need a separate assessment. Neither the UI nor the current sharing switch establishes these conditions.
-
-## Verification
+## Verify
 
 ```sh
 cd apps/web && npm test
-# From neurasign_server_dashboard/:
+# From neurasign_server_dashboard/ with the local stack running:
 .venv/bin/python scripts/browser_manager_smoke.py
+.venv/bin/python scripts/browser_applications_smoke.py
 ```
 
-Projection tests cover named conclusions, exact demo thresholds, field exclusion, manual provenance and unavailable states. Browser checks cover named profiles, person selection, interpreted charts, filters, source consistency, absence of raw units and responsive navigation. They do not certify production access controls or GDPR compliance.
+The first browser script checks the local signal presentation. The applications script uploads a known test measurement, checks manager payload redaction and direct endpoint denial, exercises real workflow writes and verifies removal of access during an open browser session.

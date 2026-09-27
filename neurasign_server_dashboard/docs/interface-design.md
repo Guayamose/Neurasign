@@ -1,67 +1,45 @@
 # Interface direction
 
-NEURASIGN combines the approved Cobalto identity with a readable operational interface. Company access keeps an editorial cover; everyday monitoring uses compact headings, explicit controls and searchable lists.
+The company workspace prioritizes a manager's next action: understand the team, identify open situations, then coordinate work. It uses the official cobalt brand on a quiet, light operational interface. All product text is English.
 
-## Shared visual system
+## Visual system
 
 | Role | Value |
 | --- | --- |
-| Canvas | `#0D1321` |
-| Raised surface | `#131A2A` |
-| Primary text | `#F5F7FC` |
-| Secondary text | `#B0BCD0` |
-| Dividers | `#38465F` |
-| Control outlines | `#65748F` |
+| Canvas | `#F5F7FB` |
+| Surface | `#FFFFFF` |
+| Primary text | `#172338` |
+| Secondary text | `#5F6D82` |
+| Dividers | `#DFE5EE` |
+| Control outlines | `#BDC8D8` |
 | Primary action | `#2854E8` with white text |
-| Dark-surface accent | `#6C8BFF` |
-| Operational headings | Arial / Helvetica, usually 34–40 px |
-| Main copy | 14–16 px; supporting metadata at least 12 px |
-| Main controls | At least 44 px high |
+| Typography | System sans-serif; operational headings around 28–30 px |
+| Body and controls | Generally 14–16 px; main controls at least 44 px high |
 
-The shared `Brand` component uses the approved horizontal SVG without recoloring or changing its proportions. The original dark and light assets and brand tokens are copied into `public/brand/`; Docker includes this directory in its standalone image. The favicon uses the approved symbol. No external image or font request is required. `SignalOrb` remains a decorative halftone sphere on the access page, not a physiological visualization.
+The `Brand` component selects the supplied dark or light SVG without altering the original logo. No external image/font request is required. Cobalt identifies actions and selection; written labels and icons convey status alongside color. Reduced motion and visible keyboard focus remain supported. Signal explorer and Model engine retain their separate dark research presentation.
 
-Use cobalt for actions, selection and signal lines. Chart series also use labeled neutral tones. Status meanings are written out; users do not need to distinguish colors to understand them. Fine rules and restrained surfaces keep the interface calm. Keyboard focus uses light cobalt and reduced-motion preferences apply globally.
+## Information architecture
 
-## Information hierarchy
+- **Overview:** team-scoped counts, prioritized open situations, then a searchable employee roster. A manager can act on a situation without inspecting every employee. People/Teams grouping, availability filters and 25/50 pagination organize larger lists. The table scrolls within a bounded region, leaving pagination accessible.
+- **Person detail:** availability, active tasks, support, qualifications and clear actions. Measurements are protected at the API. The sample company includes labeled illustrative stress/workload/fatigue/readiness indicators; real accounts do not receive invented estimates.
+- **People & teams:** searchable employee profiles, team creation, phone enrollment and owner-managed dashboard access. Employee profiles do not require dashboard accounts.
+- **Applications:** three entries explain the job and open its working list: Dynamic Task Assignment, Overload Prevention and Shift Handover. Each list has search, team/status filters, pagination, short status labels and a primary creation action. Candidate choices show eligibility reasons; unavailable candidates are optional. Forms progressively reveal only required context.
+- **Connections:** phone access, enrollment and data availability. Connection issues are separate from employee availability or support needs.
+- **My privacy:** secondary self-sharing controls, separate from daily manager work.
+- **Demo & research:** sample workspace, Signal explorer and Model engine. Research inputs never silently enter company workflows.
 
-The workspace answers four questions in order: how much data is arriving, what needs connection help, which teams are affected, and what to do next.
+The sign-in page contains a simple product diagram and a direct sample-workspace action. `/demo` enters the same company UI with 36 fictional profiles across four teams. Its persistent banner identifies the example and offers a return to sign-in.
 
-- **Overview** starts with clickable counts scoped to the chosen team: employees, recent wearable data, connection help and paused sharing. Recent data can include streamed or synced readings; it does not imply every device streams continuously.
-- **Connection attention** groups permissions, delayed feeds and incomplete setup. The count is unique people, including partial failures when another signal remains current. Every affected row explains the next step. Unsupported device capabilities are informational; period summaries and paused sharing alone create no alert.
-- **Your workforce** offers All employees, Connection help, By team and Sharing paused. Name/team search, data-status filters and 25/50 pagination work together. Default ordering puts objective connection issues first, then names; it is not a health or performance ranking. Team rows show coverage and drill into the whole selected team. Counts reflect authorized data and may overlap: a person can have recent heart-rate data and a missing permission for another signal.
-- **Employee details** open only on request in a native modal side panel. Escape, Back to list and the close button restore focus without losing list filters, page or scroll position. Polling retains the same employee; removal from the filtered result closes the panel and returns focus. Paused sharing hides measurements and receipt times.
-- **People & teams** puts the searchable employee roster first. Creation and dashboard-account access expand separately. An overview setup action lands on the exact employee, even when names are duplicated.
-- **Connections** separates authorized access from actual uploads. Search people/phones, filter Allowed/Revoked access and paginate 25/50 records. Upload time is hidden for paused sharing. Personal gateway credentials are an advanced disclosure.
-- **My privacy** is secondary to daily team operations. **Demo & research** contains recorded examples and Model engine, so research demonstrations are distinct from the company workspace.
-- Company access retains a clear sign-in form, password visibility, test-account shortcut and mobile form anchor. Recorded examples and models preserve their source labels, evaluation context and existing interpretation rules.
+## Interaction rules
 
-Pagination organizes records already authorized and returned by the API. It is client-side presentation, not server pagination or a claim of production capacity. The current API still has a 100-employee pilot creation limit. Browser fixtures with 200 employees and 137 connections test layout and interaction; production support for hundreds also needs backend limits, bounded queries and load testing. API access rules, model artifacts, inference, consent and production boundaries are unchanged.
+Use short text to remove ambiguity rather than relying on unexplained icons. A state such as “Support requested” includes a meaning; an action such as “Find a person” describes what happens next. Keep technical source details out of ordinary decisions except when they affect interpretation.
 
-## Self-explanatory demo
+Native dialogs support Escape, focus containment and return to their trigger. Closing details preserves list filters. Deep links identify the application and record. The chosen company survives a refresh within the session. Loading, empty, no-results, missing-context, stale-version and failed-save states each offer an appropriate next action. Temporary network interruptions preserve work in progress and label information as last received; revoked access clears it.
 
-The local `/demo` workspace has three visible sections: **Team signals**, **Manager preview**, and **Use cases**. A persistent source banner distinguishes UNIVERSE recordings, illustrative signals, manually set values, and received device data on every section. Back to login stays visible, including on a 320 px screen; Model engine is a secondary footer link.
+No physiological alert or automatic reassignment is implied by an operational label. Matching uses confirmed work context. The manager confirms an assignment, records support actions and accepts responsibility through explicit handover steps.
 
-- **Team signals** opens with compact person rows and one selected signal chart. Metric names are written out, with a short explanation beside the selected reading and accessible help for details. Changing a person or signal updates this chart. Personal references, experimental formula estimates, recording metadata and the optional comparison chart expand on request.
-- **Presenter controls** contains source, speed and reset. Pause/resume stays visible beside the recording source. **Restart demo** explicitly resets both playback and example progress. Navigating between sections preserves the current source and playback state.
-- **Manager preview** starts with searchable rows and plain-language demo results. Counts also filter the list. No individual estimate panel opens until **View details** is selected; **Back to team** restores focus to that person's button. Existing calculation rules and missing-data suppression are unchanged.
-- **Use cases** offers three named examples with a short description. Break suggestions and check-ins produce local drafts explicitly marked as not sent. The incident walkthrough explains the sample problem, the user's role and one current action; progress is Investigate → Approve → Report. Detailed outputs and provider context expand separately. Existing human approvals and output provenance are preserved.
+## Validation limits
 
-This recorded demonstration has two sample profiles; it does not manufacture a large live workforce. The company workspace above provides the large-team roster. UI simplification does not change model artifacts or validate the demo's experimental interpretations.
+The [applications acceptance](applications.md#interaction-and-verification) checks actual API persistence, permissions, search/filter recovery, first setup, keyboard use and responsive layouts at 1440, 768, 390 and 320 pixels. Source review and rendered screenshots supplement those checks.
 
-## Browser checks
-
-From `neurasign_server_dashboard`, with the local Docker stack running:
-
-```sh
-.venv/bin/python scripts/browser_monitoring_smoke.py
-.venv/bin/python scripts/browser_controls_smoke.py
-.venv/bin/python scripts/browser_manager_smoke.py
-.venv/bin/python scripts/browser_incident_preview_smoke.py
-.venv/bin/python scripts/browser_workspace_smoke.py
-.venv/bin/python scripts/browser_large_team_smoke.py
-.venv/bin/python scripts/browser_connections_smoke.py
-.venv/bin/python scripts/browser_model_engine_smoke.py
-.venv/bin/python scripts/onboarding_smoke.py
-```
-
-Monitoring, control and manager checks share demo state; run those sequentially. The incident-preview check intercepts state, WebSocket messages and controls to verify the review/approval UI without external provider calls; it does not test provider execution. The large-team check intercepts browser responses with 200 synthetic people across eight teams and blocks company writes; it does not seed employee measurements. Screenshots live in ignored `artifacts/`. Frontend tests cover filtering, sorting, pagination, partial-signal attention, independent legacy/canonical feeds, freshness, paused sharing and count/filter consistency alongside existing proxy and research boundaries.
+Automated tasks and our own visual review do not prove that a first-time nontechnical person will understand every step. A separate observed-user session would establish that. Large-roster checks test presentation and scope; they do not remove API pilot bounds or demonstrate backend capacity.

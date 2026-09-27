@@ -1,6 +1,6 @@
 # Local demo architecture and boundaries
 
-This document describes the `/demo` signal, formula and incident runtime. The authenticated company platform and the research model service are separate surfaces. For the current product map, read the [project overview](../../docs/PROJECT_OVERVIEW.md); for company access and real observation ingestion, read [phone onboarding](phone-onboarding.md) and [telemetry](telemetry.md).
+This document describes the `/signals` signal, formula and incident runtime. The authenticated company platform and the research model service are separate surfaces. For the current product map, read the [project overview](../../docs/PROJECT_OVERVIEW.md); for company access and real observation ingestion, read [phone onboarding](phone-onboarding.md) and [telemetry](telemetry.md).
 
 ```mermaid
 flowchart LR
@@ -79,7 +79,7 @@ Saved trained estimators already execute separately in the local [`/models` work
 
 Team-lead snapshots and the WebSocket intentionally include physiological summary features, selected reference values, time-series history, and inferred cognitive state. Full raw sensor waveforms and detailed private research diagnostics are separate. Device buffers remain in process memory; research inspection is disabled by default. Jev receives only allow-listed derived work context and task/candidate attributes. Gemini receives sample operational evidence and prior workflow artifacts. Enabling physiological summaries in the manager interface does not send those measurements or reference baselines to either external provider.
 
-The `/demo` runtime is a single-session local example, disabled in production. Its research flag is an environment gate, not a user authorization system. This runtime must not be exposed as a shared company service; local startup binds services to loopback. Never expose the optional demo research endpoint on an untrusted network. The separate company platform already implements authentication, tenant/team access, scoped phone credentials, sharing and retention controls; see its [workspace contract](company-workspace.md) and [deployment preparation](gcloud-deployment.md).
+The `/signals` runtime is a single-session local example, disabled in production. Its research flag is an environment gate, not a user authorization system. This runtime must not be exposed as a shared company service; local startup binds services to loopback. Never expose the optional demo research endpoint on an untrusted network. The separate company platform already implements authentication, tenant/team access, scoped phone credentials, sharing and retention controls; see its [workspace contract](company-workspace.md) and [deployment preparation](gcloud-deployment.md).
 
 ## Jev boundary
 

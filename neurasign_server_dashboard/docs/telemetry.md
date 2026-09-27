@@ -14,9 +14,9 @@ All paths below start with `/api/v1`. The observation payload uses `schema_versi
 | GET | `/gateway/sources` | Gateway credential; only sources belonging to that credential |
 | POST | `/gateway/sources` | Gateway credential with sharing enabled; register source capabilities |
 | POST | `/observations` | Gateway credential with sharing enabled; upload independent readings |
-| GET | `/organizations/{org}/members/{member}/observations?series_id={series}` | Verified company user with permission to view that person; latest 90 observations in the selected series |
+| GET | `/organizations/{org}/members/{member}/observations?series_id={series}` | Employee self-access or explicit measurement capability, subject to company/team scope and sharing; latest 90 observations. Owner/manager role alone returns 403. |
 
-The existing company dashboard includes `metric_catalog` and a `signals` list for each visible person. Each signal has its own status, source, definition and latest measurement. Legacy window readings remain supported and have their own detail view when present.
+The company dashboard includes the public `metric_catalog`. For an actor with measurement access, each permitted person has a `signals` list with independent status, source, definition and latest measurement; legacy windows remain supported. Owner/manager roles alone receive empty signal lists, null measurements and separate connection metadata. See the [operational privacy contract](applications-contract.md).
 
 An existing revocable device credential acts as the gateway credential. The server derives company, employee and gateway identity from it, then verifies each source belongs to that same gateway. The payload cannot assign company/employee identity. Pausing, removal, revocation and deletion apply to the new observation path. Managers are restricted to granted teams, including capture-time history; QR enrollment binds employee phones without dashboard accounts. See [phone onboarding](phone-onboarding.md).
 

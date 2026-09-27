@@ -1,0 +1,405 @@
+{
+  "experiment": 14,
+  "dataset": "https://data.mendeley.com/datasets/z3g26tphnv/5",
+  "paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10762351/",
+  "archive_sha256": "2de6973d2c9e4595c670dd01f66d592efda1daaea7342eeba518a1913ab8afbc",
+  "target": "Original CFS total >=12 versus <12, independently verified against questionnaire item marks",
+  "window_seconds": [
+    60,
+    180
+  ],
+  "stride_seconds": 60,
+  "first_endpoint_seconds": 180,
+  "split": {
+    "seed": 20260926,
+    "development": [
+      "S1",
+      "S10",
+      "S11",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S17",
+      "S18",
+      "S2",
+      "S20",
+      "S21",
+      "S3",
+      "S4",
+      "S5",
+      "S6",
+      "S7",
+      "S9"
+    ],
+    "test": [
+      "S12",
+      "S19",
+      "S22",
+      "S23",
+      "S8"
+    ],
+    "development_validation_folds": [
+      [
+        "S1",
+        "S10",
+        "S14",
+        "S20",
+        "S9"
+      ],
+      [
+        "S15",
+        "S16",
+        "S17",
+        "S18",
+        "S21"
+      ],
+      [
+        "S13",
+        "S2",
+        "S3",
+        "S5"
+      ],
+      [
+        "S11",
+        "S4",
+        "S6",
+        "S7"
+      ]
+    ]
+  },
+  "selection": "Max pooled person/session-weighted development out-of-fold balanced accuracy; then minimum recall; deterministic order ties.",
+  "candidate_configs": [
+    {
+      "width": 60,
+      "profile": "cardiac",
+      "algorithm": "logit0.1"
+    },
+    {
+      "width": 60,
+      "profile": "cardiac",
+      "algorithm": "logit1"
+    },
+    {
+      "width": 60,
+      "profile": "cardiac",
+      "algorithm": "logit10"
+    },
+    {
+      "width": 60,
+      "profile": "cardiac",
+      "algorithm": "rbf0.1"
+    },
+    {
+      "width": 60,
+      "profile": "cardiac",
+      "algorithm": "rbf1"
+    },
+    {
+      "width": 60,
+      "profile": "cardiac",
+      "algorithm": "rbf10"
+    },
+    {
+      "width": 60,
+      "profile": "cardiac",
+      "algorithm": "extra6"
+    },
+    {
+      "width": 60,
+      "profile": "cardiac",
+      "algorithm": "extraNone"
+    },
+    {
+      "width": 60,
+      "profile": "cardiac",
+      "algorithm": "cat3"
+    },
+    {
+      "width": 60,
+      "profile": "cardiac",
+      "algorithm": "cat5"
+    },
+    {
+      "width": 60,
+      "profile": "autonomic",
+      "algorithm": "logit0.1"
+    },
+    {
+      "width": 60,
+      "profile": "autonomic",
+      "algorithm": "logit1"
+    },
+    {
+      "width": 60,
+      "profile": "autonomic",
+      "algorithm": "logit10"
+    },
+    {
+      "width": 60,
+      "profile": "autonomic",
+      "algorithm": "rbf0.1"
+    },
+    {
+      "width": 60,
+      "profile": "autonomic",
+      "algorithm": "rbf1"
+    },
+    {
+      "width": 60,
+      "profile": "autonomic",
+      "algorithm": "rbf10"
+    },
+    {
+      "width": 60,
+      "profile": "autonomic",
+      "algorithm": "extra6"
+    },
+    {
+      "width": 60,
+      "profile": "autonomic",
+      "algorithm": "extraNone"
+    },
+    {
+      "width": 60,
+      "profile": "autonomic",
+      "algorithm": "cat3"
+    },
+    {
+      "width": 60,
+      "profile": "autonomic",
+      "algorithm": "cat5"
+    },
+    {
+      "width": 60,
+      "profile": "all_wrist",
+      "algorithm": "logit0.1"
+    },
+    {
+      "width": 60,
+      "profile": "all_wrist",
+      "algorithm": "logit1"
+    },
+    {
+      "width": 60,
+      "profile": "all_wrist",
+      "algorithm": "logit10"
+    },
+    {
+      "width": 60,
+      "profile": "all_wrist",
+      "algorithm": "rbf0.1"
+    },
+    {
+      "width": 60,
+      "profile": "all_wrist",
+      "algorithm": "rbf1"
+    },
+    {
+      "width": 60,
+      "profile": "all_wrist",
+      "algorithm": "rbf10"
+    },
+    {
+      "width": 60,
+      "profile": "all_wrist",
+      "algorithm": "extra6"
+    },
+    {
+      "width": 60,
+      "profile": "all_wrist",
+      "algorithm": "extraNone"
+    },
+    {
+      "width": 60,
+      "profile": "all_wrist",
+      "algorithm": "cat3"
+    },
+    {
+      "width": 60,
+      "profile": "all_wrist",
+      "algorithm": "cat5"
+    },
+    {
+      "width": 180,
+      "profile": "cardiac",
+      "algorithm": "logit0.1"
+    },
+    {
+      "width": 180,
+      "profile": "cardiac",
+      "algorithm": "logit1"
+    },
+    {
+      "width": 180,
+      "profile": "cardiac",
+      "algorithm": "logit10"
+    },
+    {
+      "width": 180,
+      "profile": "cardiac",
+      "algorithm": "rbf0.1"
+    },
+    {
+      "width": 180,
+      "profile": "cardiac",
+      "algorithm": "rbf1"
+    },
+    {
+      "width": 180,
+      "profile": "cardiac",
+      "algorithm": "rbf10"
+    },
+    {
+      "width": 180,
+      "profile": "cardiac",
+      "algorithm": "extra6"
+    },
+    {
+      "width": 180,
+      "profile": "cardiac",
+      "algorithm": "extraNone"
+    },
+    {
+      "width": 180,
+      "profile": "cardiac",
+      "algorithm": "cat3"
+    },
+    {
+      "width": 180,
+      "profile": "cardiac",
+      "algorithm": "cat5"
+    },
+    {
+      "width": 180,
+      "profile": "autonomic",
+      "algorithm": "logit0.1"
+    },
+    {
+      "width": 180,
+      "profile": "autonomic",
+      "algorithm": "logit1"
+    },
+    {
+      "width": 180,
+      "profile": "autonomic",
+      "algorithm": "logit10"
+    },
+    {
+      "width": 180,
+      "profile": "autonomic",
+      "algorithm": "rbf0.1"
+    },
+    {
+      "width": 180,
+      "profile": "autonomic",
+      "algorithm": "rbf1"
+    },
+    {
+      "width": 180,
+      "profile": "autonomic",
+      "algorithm": "rbf10"
+    },
+    {
+      "width": 180,
+      "profile": "autonomic",
+      "algorithm": "extra6"
+    },
+    {
+      "width": 180,
+      "profile": "autonomic",
+      "algorithm": "extraNone"
+    },
+    {
+      "width": 180,
+      "profile": "autonomic",
+      "algorithm": "cat3"
+    },
+    {
+      "width": 180,
+      "profile": "autonomic",
+      "algorithm": "cat5"
+    },
+    {
+      "width": 180,
+      "profile": "all_wrist",
+      "algorithm": "logit0.1"
+    },
+    {
+      "width": 180,
+      "profile": "all_wrist",
+      "algorithm": "logit1"
+    },
+    {
+      "width": 180,
+      "profile": "all_wrist",
+      "algorithm": "logit10"
+    },
+    {
+      "width": 180,
+      "profile": "all_wrist",
+      "algorithm": "rbf0.1"
+    },
+    {
+      "width": 180,
+      "profile": "all_wrist",
+      "algorithm": "rbf1"
+    },
+    {
+      "width": 180,
+      "profile": "all_wrist",
+      "algorithm": "rbf10"
+    },
+    {
+      "width": 180,
+      "profile": "all_wrist",
+      "algorithm": "extra6"
+    },
+    {
+      "width": 180,
+      "profile": "all_wrist",
+      "algorithm": "extraNone"
+    },
+    {
+      "width": 180,
+      "profile": "all_wrist",
+      "algorithm": "cat3"
+    },
+    {
+      "width": 180,
+      "profile": "all_wrist",
+      "algorithm": "cat5"
+    }
+  ],
+  "thresholds": [
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65
+  ],
+  "ensemble": "Mean scores of top three distinct configurations ranked at 0.5; compare to each single configuration and all thresholds on development only.",
+  "fixed_reference": {
+    "width": 60,
+    "profile": "all_wrist",
+    "algorithm": "logit1"
+  },
+  "preprocessing": "Training-fold median imputation and RobustScaler; person/session-balanced then class-balanced training weights",
+  "test_policy": "Freeze selected configuration(s)/threshold before a single final holdout evaluation; never select by test results",
+  "gate": {
+    "balanced_accuracy": 0.8,
+    "minimum_each_recall": 0.7
+  },
+  "exclusions": [
+    "EEG",
+    "IBI",
+    "demographics",
+    "identity predictors",
+    "session/time predictors",
+    "author processed tables",
+    "other questionnaire predictors"
+  ],
+  "interpretation": "Session-level self-reported general fatigue, including physical and mental items; not clinical diagnosis or independently labeled live state."
+}

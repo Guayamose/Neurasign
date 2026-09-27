@@ -1,95 +1,168 @@
-<div align="center">
-  <img src="NeuraSign_Cobalto_logos/svg/principal/neurasign-imagotipo.svg" alt="NEURASIGN" width="300" />
-  <h1>Understand your team. Respond with confidence.</h1>
-  <p>Wearable signals, connected to a clearer picture of the team.</p>
-</div>
+<p align="center">
+  <img src="docs/assets/readme/hero.svg" alt="NEURASIGN — Physiological intelligence for work. Understand your team. Respond with confidence." width="100%" />
+</p>
 
-NEURASIGN is a team-monitoring platform for demanding workplaces. It connects supported wearable inputs to a private company workspace where managers understand their teams, assign work, coordinate support and hand over responsibility. Physiological measurements are protected by server-side permissions.
+<p align="center">
+  <strong>Wearable connectivity. Private team monitoring. Clear next actions.</strong>
+</p>
 
-The product is designed around a simple division: **the phone connects the wearable; the server processes and governs the data; the dashboard gives managers context.** Hospitals are one example. Construction sites, industrial operations and control rooms illustrate the wider vision.
+<p align="center">
+  <a href="#see-the-story"><strong>Watch the film ↗</strong></a>
+  &nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="#explore-the-pitch"><strong>Explore the pitch ↗</strong></a>
+  &nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="#try-neurasign"><strong>Try the product ↗</strong></a>
+  &nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="docs/PROJECT_OVERVIEW.md"><strong>Inside the project ↗</strong></a>
+</p>
 
-**[Watch the 76-second film](<demo video/exports/neurasign-hospital-76s-1080p.mp4>) · [4K download](<demo video/exports/neurasign-hospital-76s-4k.mp4>) · [Pitch deck](presentation/NeuraSign_Pitch.pdf) · [Project overview](docs/PROJECT_OVERVIEW.md)**
+---
 
-## What we built
+**Work changes throughout the day. So do the people doing it.** Skills, schedules and task lists provide part of the picture. NEURASIGN is built around the context that is harder to see: how a team is handling the demands of the moment.
 
-| Component | What is implemented | Explore |
-| --- | --- | --- |
-| **Company workspace** | Company accounts, teams, scoped manager access, protected physiological values, employee profiles, phone enrollment, prioritized situations, search, filters and grouping. | [Server and dashboard](neurasign_server_dashboard/README.md) |
-| **Three connected applications** | Dynamic Task Assignment, Overload Prevention and Shift Handover: real persisted workflows, confirmed by managers, using the same company/team permissions. | [Applications guide](neurasign_server_dashboard/docs/applications.md) |
-| **NEURASIGN Link** | Native phone gateway: scan a company QR, connect supported measurement sources, preserve their values and timestamps, queue data securely, and upload it under an employee-scoped credential. | [Phone gateway](neurasign_phone_app/README.md) |
-| **Wearable abstraction** | A shared observation contract for standard BLE, experimental Polar streams, watch companions and vendor import routes. Available channels are discovered and recorded with provenance. | [Coverage and route status](neurasign_phone_app/docs/model-coverage.md) |
-| **Model research and execution** | Reproducible experiments for stress, readiness, fatigue and workload, plus a local workspace that executes selected fitted models on anonymous research records. | [Model evidence](<neurasign engine/MODEL_CARD.md>) |
-| **Interactive demonstration** | The same company UI with 36 fictional people across four teams and editable workflows. Signal exploration and the Jev/Gemini incident example remain separate research tools. | [Demo walkthrough](docs/PROJECT_OVERVIEW.md#try-the-project) |
-| **Presentation assets** | Original narrated animation, editable vector scenes, final 1080p/4K exports, pitch deck and cobalt brand assets. | [Film project](<demo video/README.md>) |
+We bring supported wearable inputs, private team monitoring and manager-confirmed workflows into one platform. Our ambition is to help demanding workplaces understand human capacity—and respond with better-informed decisions.
 
-```mermaid
-flowchart LR
-  W[Supported wearable] --> P[NEURASIGN Link on phone]
-  P --> A[Authenticated company API]
-  A --> D[Manager dashboard]
-  V[Authorized vendor imports] --> A
-```
+## See the story
 
-The company is the tenant. Teams define manager access; each enrolled phone is bound to one company and employee. The phone is a gateway, with connection and sharing controls; team analytics belong in the dashboard. [Read the onboarding and access contract.](neurasign_server_dashboard/docs/phone-onboarding.md)
+**One urgent situation. Three people. A decision that matters.**
 
-## Try it in minutes
+<a href="demo%20video/exports/neurasign-hospital-76s-1080p.mp4">
+  <picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset="demo%20video/review/hospital/poster.png" />
+    <img src="docs/assets/readme/film-preview.gif" alt="Animated preview: a patient arrives at a hospital where three doctors wear wristbands. Open the full NEURASIGN concept film." width="100%" />
+  </picture>
+</a>
 
-**Just watch the story:** open the [included MP4](<demo video/exports/neurasign-hospital-76s-1080p.mp4>), or serve the film player with Python 3:
+<p align="center">
+  <a href="demo%20video/exports/neurasign-hospital-76s-1080p.mp4"><strong>▶ Full film · 76 seconds · 1080p</strong></a>
+  &nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="demo%20video/exports/neurasign-hospital-76s-4k.mp4">4K version</a>
+  &nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="demo%20video/public/audio/hospital-narration.vtt">English captions</a>
+</p>
 
-```sh
-python3 "demo video/scripts/preview-server.py"
-```
+The narrated film uses a hospital to illustrate the vision. Construction, industrial operations and control rooms face related coordination challenges. **The film is a fictional concept scenario:** its physiological values, state estimates and recommendation are scripted.
 
-Open **http://localhost:3101**. This needs no wearable, dataset, cloud account or API key.
+## The whole team. A clear next step.
 
-**Explore the application:** with Docker and Docker Compose **2.24+** installed, run from the repository root:
+Start with the team, find what needs attention, then open the person or situation that matters. Search, team filters, grouping and pagination keep larger rosters manageable. Short status labels explain the situation; explicit actions show what happens next.
+
+[![Actual NEURASIGN team roster: searchable people, reported availability, support requests, active tasks and pagination. Fictional sample workspace.](docs/assets/readme/team-overview.png)](neurasign_server_dashboard/docs/applications.md)
+
+<p align="center"><sub>Actual application UI · fictional sample company · 36 people across 4 teams</sub></p>
+
+**Private by design.** Companies have separate workspaces. Managers see their assigned teams. Physiological measurements require separate permission, enforced by the API.
+
+## Three applications. One connected workspace.
+
+**01 — Dynamic Task Assignment**<br />
+Give work a clear owner. Review qualifications, confirmed availability and existing commitments, choose an eligible person, and track the assignment through completion.
+
+**02 — Overload Prevention**<br />
+Turn a reported concern into follow-through. Record a check-in, break, coverage or work adjustment, then confirm the outcome.
+
+**03 — Shift Handover**<br />
+Keep pending work moving between shifts. Select the tasks and support cases, name the next responsible person, and track their acceptance.
+
+<details>
+<summary><strong>See the applications workspace</strong></summary>
+
+![The three connected applications in the working NEURASIGN sample company](docs/assets/applications-workspace.png)
+
+All three applications save their changes. Assignment checks, version conflicts, retries and recipient permissions are enforced on the server. [Explore the workflows →](neurasign_server_dashboard/docs/applications.md)
+
+</details>
+
+## From the wrist to the workspace
+
+**Wearable → NEURASIGN Link → Company API → Team dashboard**
+
+The phone connects supported sources and securely queues their observations. The server preserves signal identity, units and timestamps while applying company and employee permissions. The dashboard turns permitted information into a shared working view.
+
+A common data contract supports multiple acquisition routes: standard Bluetooth, experimental vendor streams, watch companions and authorized imports. Available signals depend on the device and integration. [Explore wearable routes and coverage →](neurasign_phone_app/docs/model-coverage.md)
+
+## Explore the pitch
+
+**The problem, the product vision, the architecture and the business opportunity.**
+
+[![NEURASIGN pitch cover: Physiological intelligence for work, by Rafael Pradillo and Aoi Sugimoto](docs/assets/readme/pitch-cover.png)](presentation/NeuraSign_Pitch.pdf)
+
+<p align="center">
+  <a href="presentation/NeuraSign_Pitch.pdf"><strong>Read the 18-slide deck · PDF ↗</strong></a>
+  &nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="presentation/NeuraSign_Pitch.pptx"><strong>Download the PowerPoint ↗</strong></a>
+</p>
+
+## Try NEURASIGN
+
+With Docker and Docker Compose **2.24+**, run from the repository root:
 
 ```sh
 docker compose up --build -d
 ```
 
-| Open | What you can inspect |
+Open **[localhost:3000/demo](http://localhost:3000/demo)** to enter the sample company. Assign a task, record support, and accept a handover. Your changes persist within the example.
+
+**No wearable, research dataset, cloud account or provider key is needed for this demo.**
+
+For company sign-in, open **[localhost:3000](http://localhost:3000)** and choose **Sign in with test account**. The public local emulator credentials are `demo@neurasign.test` / `Neurasign2026!`.
+
+<details>
+<summary><strong>More ways to explore: film player, signals and trained models</strong></summary>
+
+| Experience | Open | What it contains |
+| --- | --- | --- |
+| Company workspace | [localhost:3000](http://localhost:3000) | Teams, employees, applications and phone enrollment |
+| Signal explorer | [localhost:3000/signals](http://localhost:3000/signals) | Labeled synthetic signals or imported UNIVERSE recordings; optional Jev/Gemini incident example |
+| Research models | [localhost:3000/models](http://localhost:3000/models) | Saved model execution on anonymous research records; preparation required |
+| Emulator tools | [localhost:4000](http://localhost:4000) | Local Firebase Auth and Firestore |
+
+To watch the film with chapter navigation, captions and a 1080p/4K selector:
+
+```sh
+python3 "demo video/scripts/preview-server.py"
+```
+
+Open **[localhost:3101](http://localhost:3101)**. The player works without Docker or an API key.
+
+Research datasets and fitted binaries stay outside Git. On a prepared research workspace, `make models-prepare` exports the existing verified artifacts and creates a server-only proxy token. The command does not download or train models. The company demo runs without this bundle. [Model setup →](neurasign_server_dashboard/docs/model-engine.md)
+
+</details>
+
+## Built to be inspected
+
+This is a **working hackathon MVP with a research foundation**. The latest recorded verification includes **169 backend tests**, **38 frontend tests**, all three persisted workflows with **80 local employee profiles**, and a **200-profile browser fixture** for layout and navigation. [Read the verification record →](neurasign_server_dashboard/docs/verification.md)
+
+**Working today:** company/team access, protected ingestion, operational monitoring, phone gateway implementations and the three manager-confirmed applications.
+
+**Under development:** reliable physiology-driven interpretation of live employee stress, workload, fatigue and readiness. Current applications use confirmed operational context; sample-company state indicators are illustrative. Research models run separately on dataset-specific records. Physical wearable acceptance, workplace validation and Google Cloud deployment remain outstanding.
+
+<details>
+<summary><strong>Research, AI and implementation details</strong></summary>
+
+We have trained and evaluated models for all four targets with participants separated between training and evaluation. The targets use different inputs, reference labels and time scales. [Results and interpretation →](docs/PROJECT_OVERVIEW.md#research-results) · [Full model card →](neurasign%20engine/MODEL_CARD.md)
+
+Jev and Gemini support the separate local incident example when configured, with visible fallback labels and human review. They do not currently provide validated live employee states. [AI boundaries →](docs/PROJECT_OVERVIEW.md#what-jev-and-gemini-do)
+
+The larger browser fixture tests presentation; the API retains documented pilot limits. Automated task checks and visual inspection do not establish first-time human usability or production capacity. Measurement access controls do not establish legal certification. [Access contract →](neurasign_server_dashboard/docs/applications-contract.md)
+
+| Inside the repository | Start here |
 | --- | --- |
-| **http://localhost:3000** | Company workspace. Select **Sign in with test account**, or use `demo@neurasign.test` / `Neurasign2026!` in the local emulators. |
-| **http://localhost:3000/demo** | One-click sample company: 36 fictional profiles, four teams and all three applications. Changes persist only in this example. |
-| **http://localhost:3000/signals** | Signal explorer: labeled synthetic fixture, or imported UNIVERSE recordings when available, plus the optional AI incident walkthrough. |
-| **http://localhost:3000/models** | Model execution workspace. Predictions require the separately prepared research bundle described below. |
-| **http://localhost:4000** | Local Firebase Auth and Firestore tools. |
+| Server, dashboard and deployment | [Server guide](neurasign_server_dashboard/README.md) |
+| Phone gateway and wearable routes | [NEURASIGN Link](neurasign_phone_app/README.md) |
+| Training, evaluation and model evidence | [Research engine](neurasign%20engine/README.md) |
+| Editable animation, narration and exports | [Film project](demo%20video/README.md) |
+| Product, architecture and current boundaries | [Project overview](docs/PROJECT_OVERVIEW.md) |
+| Source-level contributor orientation | [AGENTS.md](AGENTS.md) |
 
-New company workspaces start empty. Enroll a phone or use the explicitly labeled recording-upload path to exercise ingestion; owner/manager roles do not reveal physiological values. Use **Applications** to create work, confirm operational context, coordinate support and send handovers. The film's patient, doctors, scores and recommendation are a scripted scenario; they are not a recording of the company application.
+Environment files, provider credentials, raw datasets and intermediate artifacts remain excluded from Git. Public emulator credentials are local-only. The presentation and supplied brand originals are preserved.
 
-The model datasets and fitted binaries are not in Git. On a prepared research workspace, run `make models-prepare` before starting the stack to export the bundle and create its server-only proxy token. Without preparation, the model workspace is unavailable; the company app and interactive demo still run. [Setup details](neurasign_server_dashboard/README.md) · [Research bundle preparation](neurasign_server_dashboard/docs/model-engine.md).
+</details>
 
-![The three connected applications in the local sample workspace](docs/assets/applications-workspace.png)
+---
 
-## The AI, in plain English
-
-There are three distinct parts:
-
-- **Physiological research models:** trained estimators evaluated against specific dataset references. The local `/models` workspace runs actual saved models and displays predictions beside those references.
-- **Jev and Gemini:** optional providers for the local incident example. Jev selects among eligible candidates; Gemini analyzes sample incident evidence and drafts artifacts. Results identify provider or fallback execution, and human review remains explicit.
-- **Company operations:** authenticated ingestion, protected measurements and real workflow records. Task matching uses transparent operational rules; support cases use human reports. The sample company labels its four-state indicators as illustrative. Research models are not silently applied to employees.
-
-Selected research results include **94.2% accuracy** for WESAD laboratory condition classification and **3.98-point mean absolute error out of 100** for daily Oura readiness approximation. The first uses three held-out people; the second uses four. Fatigue and workload have weaker or confounded evidence. These are different tasks and time scales, not one accuracy score for live employee monitoring. The [four-target results table](docs/PROJECT_OVERVIEW.md#research-results) includes all four targets, baselines and interpretation; the [model card](<neurasign engine/MODEL_CARD.md>) preserves the complete evidence.
-
-## Current delivery status
-
-The local application, gateway implementations, interactive demo, research pipeline and film are present in this repository. End-to-end application verification uses 80 local profiles, 40 scoped employees, all three saved workflows, blank-company setup and access revocation. Larger UI fixtures and the API retain explicit pilot bounds; these checks are not a backend capacity benchmark or a first-time human usability study. [Verification record](neurasign_server_dashboard/docs/verification.md) · [Pilot limits](neurasign_server_dashboard/docs/phone-onboarding.md).
-
-The remaining deployment work is concrete: validate physical devices and vendor accounts, complete the outstanding native platform checks, deploy to the designated Google Cloud account, and verify operational capacity and interpretation quality for the intended workplace. **No physical wearable has been validated, and no Google Cloud deployment has been completed.** [Deployment preparation](neurasign_server_dashboard/docs/gcloud-deployment.md) uses an explicit target account/project; it does not use the terminal's active account implicitly.
-
-## Repository map
-
-| Path | Purpose |
-| --- | --- |
-| [`neurasign_server_dashboard/`](neurasign_server_dashboard/README.md) | Company API, web app, local demo, model service, deployment and tests. |
-| [`neurasign_phone_app/`](neurasign_phone_app/README.md) | Phone gateway, measurement contracts, BLE decoders and watch companions. |
-| [`neurasign engine/`](<neurasign engine/README.md>) | Dataset preparation, training, evaluation, reports and artifact fingerprints. |
-| [`demo video/`](<demo video/README.md>) | Editable animation, narration, music, player and final films. |
-| [`presentation/`](presentation/NeuraSign_Pitch.pdf) | Final PDF and editable PowerPoint deck. |
-| [`NeuraSign_Cobalto_logos/`](NeuraSign_Cobalto_logos/LEEME.md) | Supplied logo variants and brand tokens. |
-| [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md) | Product brief, walkthrough, implementation status and evidence map. |
-
-For source-level orientation, see [AGENTS.md](AGENTS.md). For local development and the applicable checks, use the [server](neurasign_server_dashboard/README.md), [native app](neurasign_phone_app/mobile/README.md) and [engine](<neurasign engine/README.md>) guides. The [repository timeline](docs/repository-timeline.md) records the original import history.
-
-Environment files, credentials, raw research recordings and intermediate artifacts remain excluded from Git. Reviewed final film exports and narration assets are explicitly included. `.env.example` contains public configuration examples and empty credential fields.
+<p align="center">
+  <strong>NEURASIGN</strong><br />
+  Physiological intelligence for work.<br /><br />
+  Built by Rafael Pradillo &amp; Aoi Sugimoto
+</p>

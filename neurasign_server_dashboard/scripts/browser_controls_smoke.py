@@ -26,6 +26,7 @@ async def main():
         await page.get_by_test_id('monitoring-play').click()
         paused = await state()
         assert not paused['playing']
+        await page.locator('.monitor-examples-nav > summary').click()
         await page.get_by_test_id('tab-focus').click()
         await page.get_by_test_id('tab-monitoring').click()
         await asyncio.sleep(1.1)
@@ -44,6 +45,7 @@ async def main():
         assert next(worker for worker in manual['workers'] if worker['id']=='aoi')['cognitive_state']['readiness']==99
         assert all(value is None for worker in manual['monitoring']['workers'] for value in worker['features'].values())
         for tab, action in [('wellbeing','Draft suggestion'),('focus','Draft agenda')]:
+            await page.locator('.monitor-examples-nav > summary').click()
             await page.get_by_test_id('tab-'+tab).click()
             await page.get_by_role('button',name=action,exact=True).first.click()
             await expect(page.get_by_text('Draft ready · not sent',exact=True)).to_be_visible()
@@ -57,7 +59,7 @@ async def main():
         await page.get_by_test_id('monitoring-source').select_option('live')
         live=await state()
         assert all(worker['status']=='waiting' for worker in live['monitoring']['workers'])
-        await expect(page.get_by_test_id('monitoring-dashboard')).to_contain_text('Signal unavailable')
+        await expect(page.get_by_test_id('monitoring-dashboard')).to_contain_text('Waiting for data')
         payload={'worker_id':'aoi','timestamp':datetime.now(timezone.utc).isoformat(),'ppg':{'heart_rate':75},'quality':.9}
         response=await page.request.post(API+'/api/live/readings',data=payload)
         assert response.ok

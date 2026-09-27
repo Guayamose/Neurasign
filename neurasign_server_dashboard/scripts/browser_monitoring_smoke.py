@@ -52,6 +52,7 @@ async def main():
         await expect(help_dialog).not_to_be_visible()
         await expect(help_button).to_be_focused()
         for tab in ('wellbeing', 'focus', 'incidents'):
+            await page.locator('.monitor-examples-nav > summary').click()
             await page.get_by_test_id('tab-'+tab).click()
             await page.screenshot(path=str(artifacts/('example-'+tab+'.png')), full_page=True)
             current = await (await page.request.get(API+'/api/state')).json()
@@ -63,6 +64,7 @@ async def main():
         await page.set_viewport_size({'width':390, 'height':844})
         await page.screenshot(path=str(artifacts/'monitoring-mobile.png'), full_page=True)
         assert await page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), 'Mobile horizontal overflow'
+        await page.locator('.worker-estimates > summary').first.click()
         await page.locator('[data-testid^="metric-help-readiness"]').first.click()
         await expect(help_dialog).to_contain_text('another task')
         await page.screenshot(path=str(artifacts/'metric-help-mobile.png'), full_page=True)

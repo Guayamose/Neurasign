@@ -12,9 +12,9 @@ const statuses = {
 } as const;
 
 const indices = [
-  { key: "workload", label: "Workload", description: "Estimated demand", color: "#7b61b7", Icon: Activity },
-  { key: "fatigue", label: "Fatigue", description: "Estimated tiredness", color: "#b98232", Icon: Moon },
-  { key: "readiness", label: "Readiness", description: "Experimental capacity", color: "#107c68", Icon: BatteryMedium },
+  { key: "workload", label: "Workload", description: "Estimated demand", color: "#f0eee8", Icon: Activity },
+  { key: "fatigue", label: "Fatigue", description: "Estimated tiredness", color: "#ff6b35", Icon: Moon },
+  { key: "readiness", label: "Readiness", description: "Experimental capacity", color: "#a3a39b", Icon: BatteryMedium },
 ] as const;
 
 function StatusBadge({ status }: { status: ManagerPerson["status"] }) {
@@ -54,10 +54,10 @@ function IndividualTrend({ person, live }: { person: ManagerPerson; live: boolea
     <svg data-testid="manager-trend" viewBox="0 0 708 227" role="img" aria-labelledby={`${chartId}-title ${chartId}-description`}>
       <title id={`${chartId}-title`}>{person.name} · experimental interpretation history</title>
       <desc id={`${chartId}-description`}>Workload, fatigue and readiness indices from 0 to 100 over the visible window. These are experimental estimates, not probabilities or a fitness-for-duty assessment.</desc>
-      {[0, 25, 50, 75, 100].map(value => <g key={value}><line x1={left} x2={right} y1={y(value)} y2={y(value)} stroke="#e4ecef" strokeDasharray="3 5" /><text x={left - 10} y={y(value) + 4} textAnchor="end">{value}</text></g>)}
+      {[0, 25, 50, 75, 100].map(value => <g key={value}><line x1={left} x2={right} y1={y(value)} y2={y(value)} stroke="#30322d" strokeDasharray="3 5" /><text x={left - 10} y={y(value) + 4} textAnchor="end">{value}</text></g>)}
       {indices.map(({ key, color }) => <g key={key}>
         <path d={points.map((point, index) => `${index ? "L" : "M"}${x(point.time)},${y(point[key])}`).join(" ")} fill="none" stroke={color} strokeWidth="2.6" strokeLinejoin="round" strokeLinecap="round" />
-        <circle cx={x(last)} cy={y(points[points.length - 1][key])} r="4.2" fill={color} stroke="#fff" strokeWidth="2" />
+        <circle cx={x(last)} cy={y(points[points.length - 1][key])} r="4.2" fill={color} stroke="#101110" strokeWidth="2" />
       </g>)}
       <text x={left} y="215" textAnchor="start">{timeLabel(first, live)}</text>
       <text x={right} y="215" textAnchor="end">{timeLabel(last, live)}</text>

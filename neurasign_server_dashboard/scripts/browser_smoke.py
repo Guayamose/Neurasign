@@ -25,6 +25,7 @@ async def main(require_live=False):
         await page.request.post(API+'/api/control', data={'action':'reset'})
         await page.goto(WEB+'/demo', wait_until='domcontentloaded')
         await expect(page.get_by_test_id('monitoring-dashboard')).to_be_visible(timeout=30000)
+        await page.locator('.monitor-examples-nav > summary').click()
         await page.get_by_test_id('tab-incidents').click()
         await expect(page.get_by_test_id('start-incident')).to_be_enabled(timeout=10000)
         start_box = await page.get_by_test_id('start-incident').bounding_box()

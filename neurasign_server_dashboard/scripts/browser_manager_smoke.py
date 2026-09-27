@@ -62,7 +62,7 @@ async def main():
         await page.reload(wait_until="domcontentloaded")
         await expect(view).to_be_visible()
         await page.get_by_role("link", name="Back to login").click()
-        await expect(page.get_by_role("heading", name="Welcome to NEURASIGN")).to_be_visible(timeout=15000)
+        await expect(page.get_by_role("heading", name="Sign in.")).to_be_visible(timeout=15000)
 
         # Controlled browser inputs only. No demo controls or employee data are written.
         response = await page.request.get(API + "/api/state")

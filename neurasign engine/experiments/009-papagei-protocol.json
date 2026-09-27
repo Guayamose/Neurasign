@@ -1,0 +1,38 @@
+{
+  "version": "009-papagei-s-raw-ppg",
+  "status": "registered before supervised PaPaGei outcomes",
+  "seed": 20260926,
+  "development": "Only the 19 original UNIVERSE development participants; the same five participant folds as experiment 008. No original UNIVERSE or Mobile held-out records are loaded.",
+  "encoder": {
+    "repository": "https://github.com/Nokia-Bell-Labs/papagei-foundation-model",
+    "commit": "0c537dad4d2850e15b724260de820dd68d77f0b0",
+    "checkpoint": "https://zenodo.org/records/13983110/files/papagei_s.pt?download=1",
+    "md5": "a4cdb32392e2a7b25999128af92813b5",
+    "output_index": 0,
+    "dimensions": 512,
+    "frozen": true,
+    "normalization": "Per completed 10-second chunk z-score before resampling 64 to 125 Hz, matching training normalization order.",
+    "filter": "Fourth-order Chebyshev II, 20 dB stopband attenuation, 0.5-12 Hz. Filter only the completed chunk plus up to 10 seconds of past padding; retain its final 10 seconds. Zero-phase within available past data is causal at the chunk endpoint, not sample by sample. No full-task filtering.",
+    "training_sources": "Authors report VitalDB, MIMIC-III and MESA; no reported UNIVERSE pretraining. This is not a workload-pretrained model."
+  },
+  "features": {
+    "ppg60": "Mean of the latest six 10-second embeddings.",
+    "fused60": "ppg60 plus the existing 28 physiological features and their 28 past-reference deltas.",
+    "fused180": "fused60 plus the mean of all 18 preceding chunks and recent-60-second minus previous-120-second embedding mean.",
+    "engineered": "The same existing 56 physiological/history features without PaPaGei.",
+    "common_population": "Score every configuration on the same original endpoints with at least 180 seconds of within-segment history, six valid recent chunks and at least 16 valid chunks out of 18. Report coverage and excluded tasks. No task names, identity, timestamps, questionnaire fields or coverage values enter predictors.",
+    "quality": "Reject incomplete, nonfinite, flat chunks or gaps above 50 ms. This is availability screening, not validated artifact rejection."
+  },
+  "models": {
+    "profiles": ["ppg60", "fused60", "fused180", "engineered"],
+    "algorithms": ["ridge100", "ridge1000", "cat4"],
+    "constants": ["constant_mean", "constant_median"],
+    "projection": "CatBoost uses 32 PCA components for each 512-dimensional embedding block; PCA and scaling fit only on training participants. Ridge uses all coordinates.",
+    "fitting": "Maximum 20 uniformly sampled windows per task, equal participant/task weights, same frozen model hyperparameters as experiment 008. All eligible validation windows are scored."
+  },
+  "targets": ["mental_effort", "mental_demand", "physical_demand", "temporal_demand", "perceived_performance", "effort"],
+  "scoring": "Person/task macro MAE; ordinal exact agreement; rating agreement within 10 points; fixed three-level balanced accuracy; participant-paired descriptive bootstrap. Repeat prior UNIVERSE winning configurations on the matched population for comparison.",
+  "interpretation": "Development selection only, not independent test accuracy. Ratings describe entire tasks, not instantaneous mental state. Hundreds of prior development comparisons create selection optimism. New independent data are needed for MVP validation.",
+  "excluded": ["EEG", "emotion/stress/frustration inference", "questionnaire total including frustration", "future-sample filtering or normalization", "product integration", "reopening old test sets"],
+  "stop": "Complete these bounded frozen-encoder comparisons and verification. No claim that this exhausts all fine-tuning or temporal architectures."
+}

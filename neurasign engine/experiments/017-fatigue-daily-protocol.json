@@ -1,0 +1,257 @@
+{
+  "experiment": 17,
+  "dataset": "https://zenodo.org/records/4266157",
+  "paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7768149/",
+  "license": "CC BY 4.0",
+  "split": {
+    "seed": 20260926,
+    "development": [
+      "S1",
+      "S10",
+      "S11",
+      "S12",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S17",
+      "S18",
+      "S21",
+      "S22",
+      "S24",
+      "S25",
+      "S26",
+      "S3",
+      "S4",
+      "S5",
+      "S6",
+      "S7",
+      "S8"
+    ],
+    "test": [
+      "S19",
+      "S20",
+      "S23",
+      "S27",
+      "S28",
+      "S9"
+    ],
+    "development_validation_folds": [
+      [
+        "S10",
+        "S17",
+        "S18",
+        "S22",
+        "S3",
+        "S4"
+      ],
+      [
+        "S1",
+        "S13",
+        "S15",
+        "S21",
+        "S5"
+      ],
+      [
+        "S14",
+        "S16",
+        "S24",
+        "S26",
+        "S8"
+      ],
+      [
+        "S11",
+        "S12",
+        "S25",
+        "S6",
+        "S7"
+      ]
+    ]
+  },
+  "targets": {
+    "vas": {
+      "range": [
+        1,
+        10
+      ],
+      "tolerance": 1.0,
+      "description": "Reported overall fatigue severity, 1\u201310 VAS"
+    },
+    "physical": {
+      "range": [
+        1,
+        5
+      ],
+      "tolerance": 0.5,
+      "description": "Physical exhaustion frequency, Never=1 through Always=5"
+    },
+    "mental": {
+      "range": [
+        1,
+        5
+      ],
+      "tolerance": 0.5,
+      "description": "Mental exhaustion frequency, Never=1 through Always=5"
+    }
+  },
+  "tracks": [
+    "previous_day",
+    "same_day_retrospective"
+  ],
+  "candidate_configs": [
+    {
+      "profile": "vitals",
+      "algorithm": "ridge.1"
+    },
+    {
+      "profile": "vitals",
+      "algorithm": "ridge1"
+    },
+    {
+      "profile": "vitals",
+      "algorithm": "ridge10"
+    },
+    {
+      "profile": "vitals",
+      "algorithm": "ridge100"
+    },
+    {
+      "profile": "vitals",
+      "algorithm": "svr1"
+    },
+    {
+      "profile": "vitals",
+      "algorithm": "svr10"
+    },
+    {
+      "profile": "vitals",
+      "algorithm": "svr100"
+    },
+    {
+      "profile": "vitals",
+      "algorithm": "extra4"
+    },
+    {
+      "profile": "vitals",
+      "algorithm": "extraNone"
+    },
+    {
+      "profile": "vitals",
+      "algorithm": "cat3"
+    },
+    {
+      "profile": "vitals",
+      "algorithm": "cat5"
+    },
+    {
+      "profile": "all_wearable",
+      "algorithm": "ridge.1"
+    },
+    {
+      "profile": "all_wearable",
+      "algorithm": "ridge1"
+    },
+    {
+      "profile": "all_wearable",
+      "algorithm": "ridge10"
+    },
+    {
+      "profile": "all_wearable",
+      "algorithm": "ridge100"
+    },
+    {
+      "profile": "all_wearable",
+      "algorithm": "svr1"
+    },
+    {
+      "profile": "all_wearable",
+      "algorithm": "svr10"
+    },
+    {
+      "profile": "all_wearable",
+      "algorithm": "svr100"
+    },
+    {
+      "profile": "all_wearable",
+      "algorithm": "extra4"
+    },
+    {
+      "profile": "all_wearable",
+      "algorithm": "extraNone"
+    },
+    {
+      "profile": "all_wearable",
+      "algorithm": "cat3"
+    },
+    {
+      "profile": "all_wearable",
+      "algorithm": "cat5"
+    },
+    {
+      "profile": "with_history",
+      "algorithm": "ridge.1"
+    },
+    {
+      "profile": "with_history",
+      "algorithm": "ridge1"
+    },
+    {
+      "profile": "with_history",
+      "algorithm": "ridge10"
+    },
+    {
+      "profile": "with_history",
+      "algorithm": "ridge100"
+    },
+    {
+      "profile": "with_history",
+      "algorithm": "svr1"
+    },
+    {
+      "profile": "with_history",
+      "algorithm": "svr10"
+    },
+    {
+      "profile": "with_history",
+      "algorithm": "svr100"
+    },
+    {
+      "profile": "with_history",
+      "algorithm": "extra4"
+    },
+    {
+      "profile": "with_history",
+      "algorithm": "extraNone"
+    },
+    {
+      "profile": "with_history",
+      "algorithm": "cat3"
+    },
+    {
+      "profile": "with_history",
+      "algorithm": "cat5"
+    }
+  ],
+  "fixed_reference": {
+    "profile": "vitals",
+    "algorithm": "ridge10"
+  },
+  "selection": "Minimum person-balanced development out-of-fold MAE independently per target and track; deterministic order breaks ties.",
+  "primary_track": "previous_day: predict current daily fatigue from previous calendar-day sensors only",
+  "secondary_track": "same_day_retrospective: same-day association; contains potentially post-questionnaire readings; never live validation",
+  "preprocessing": "Training-fold median imputation and RobustScaler; person-balanced sample weights; clip predictions to original scale",
+  "history": "Unlabeled sensor baselines from strictly earlier seven calendar days; current and future values excluded",
+  "quality": "At least 288 minutes with HR or activity/day; per-channel features require 30 finite minutes",
+  "labels": "Original VAS 1\u201310; exhaustion frequency Never 1/Sometimes 2/Regularly 3/Often 4/Always 5. Latest daily answer; conflicting simultaneous answers excluded.",
+  "exclusions": [
+    "other PROs",
+    "relative fatigue compared to yesterday",
+    "sport questionnaire",
+    "timezone",
+    "calendar/time",
+    "participant identity",
+    "barometer"
+  ],
+  "evaluation": "Hold out whole people before modeling; freeze all six selections before one test evaluation.",
+  "research_gate": "For each target, >=20% test MAE improvement over training-person-weighted median and positive weighted R2; not a classification-accuracy gate."
+}

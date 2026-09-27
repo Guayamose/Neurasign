@@ -1,5 +1,20 @@
 # Verification record
 
+## Clarity and large-team navigation — 2026-09-26
+
+The company overview now starts with actionable data-availability coverage. Managers can filter from summary counts, review connection issues with next steps, compare teams, and open employee measurements in a modal side panel without losing their list position. Navigation separates daily operations, personal privacy, and demo/research tools. People and phone connections both use bounded searchable lists.
+
+- **33 frontend tests passed**, including ten attention tests covering partial failures, unsupported capabilities, period summaries, paused sharing, independent legacy/canonical feeds, measured versus received time, permitted clock skew, team grouping and count/filter consistency. Final TypeScript compilation and production web image build passed.
+- **200-person / eight-team browser acceptance passed**: scoped counts, permission/delayed issues alongside current channels, unique-person attention counts, informational capability limits, paused privacy, 25/50 paging, combined filters, team drill-down, next-step navigation, selected-person identity through polling, removal, keyboard modal focus/return and mobile layout. These records exist only in intercepted browser responses; company writes are blocked.
+- **137-phone browser acceptance passed** for access/search filters, pagination, paused receipt hiding, duplicate-name exact-person reconnect navigation, progressive setup, immediate selected navigation state, section scroll reset and mobile layout. Again, fixtures do not write company data.
+- **Full local workspace acceptance passed** for signup, verification, invitations, scoped employee access, sharing, device authorization, real recorded uploads, legacy charts/help, privacy changes, revocation and sign-out.
+- **Phone-onboarding acceptance passed** for actual emulator-backed team/employee creation, QR generation, scoped gateway claim/recovery, cross-company isolation, manager access, canonical recorded telemetry, modal display, pause suppression and revocation. No physical wearable validation is claimed.
+- **Model-engine regression passed** for all four unchanged recorded model executions, strict input rejection, artifact/reference display, failure recovery, mobile and navigation through the secondary Demo & research disclosure.
+- Desktop/mobile screenshots were inspected for the roster, side panel, setup and connections. No browser JavaScript errors or page overflow were found in these acceptance runs. This is implementation verification, not a usability study with first-time participants.
+- Credential scanning passed across **449** source/artifact/client-build files; `.env` files remain ignored. The original presentation PDF/PPTX hashes remain unchanged. No backend, model artifact, inference rule, authorization policy or Google Cloud deployment changed.
+
+The interface supports browsing the 200-profile fixture, but the API retains its **100-employee pilot creation limit** and returns full authorized snapshots. Production operation with hundreds still needs backend capacity work and load verification. See [interface direction](interface-design.md). Screenshots remain ignored under `artifacts/`.
+
 ## Cobalto identity and large-team interface — 2026-09-26
 
 The approved logo and favicon now accompany the cobalt/navy palette across access, company monitoring, the recorded demo and Model engine. Main operational headings are compact, body copy is 14–16 px, metadata is at least 12 px and main controls are at least 44 px high. Company overview and People & teams use searchable, filtered and paginated rosters with 25/50 rows per page.

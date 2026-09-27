@@ -24,15 +24,18 @@ Use cobalt for actions, selection and signal lines. Chart series also use labele
 
 ## Information hierarchy
 
-- Company access shows a clear sign-in form, password visibility, a local test-account shortcut and a mobile link directly to the form.
-- Company overview uses a summary strip and a roster. Search by name/team, filter by team or data status, sort by name or arrival, and show 25 or 50 people per page. **View signals** opens the selected person's measurements; **Back to list** restores focus to their button. Selection survives polling, but clears on navigation or when filters exclude the person.
-- Data status describes sharing and signal availability, not a person's wellbeing. Period summaries and permission requirements stay distinct from delayed measurements. Paused sharing hides measurements and arrival times. Recent uploads do not make old measurements current.
-- People & teams has the same search/paging pattern while preserving invitation, phone-pairing, sharing and revocation controls.
-- Recorded monitoring keeps people and physiological signals visible. Formula estimates, reference tables and provenance expand when needed. Secondary examples sit in the **Use cases** menu, with keyboard navigation and Escape.
-- Model engine uses a four-model selector and one selected-model view. Method, input period, evaluation scope and predictions versus recorded references remain explicit. Technical details expand separately.
-- Mobile rosters become labeled rows with full-width actions; narrow charts use start/end time labels to avoid overlap.
+The workspace answers four questions in order: how much data is arriving, what needs connection help, which teams are affected, and what to do next.
 
-Pagination organizes records already authorized and returned by the API. It is client-side presentation, not server pagination or a claim of tested production capacity. API access rules, model artifacts, inference, consent and production boundaries are unchanged.
+- **Overview** starts with clickable counts scoped to the chosen team: employees, recent wearable data, connection help and paused sharing. Recent data can include streamed or synced readings; it does not imply every device streams continuously.
+- **Connection attention** groups permissions, delayed feeds and incomplete setup. The count is unique people, including partial failures when another signal remains current. Every affected row explains the next step. Unsupported device capabilities are informational; period summaries and paused sharing alone create no alert.
+- **Your workforce** offers All employees, Connection help, By team and Sharing paused. Name/team search, data-status filters and 25/50 pagination work together. Default ordering puts objective connection issues first, then names; it is not a health or performance ranking. Team rows show coverage and drill into the whole selected team. Counts reflect authorized data and may overlap: a person can have recent heart-rate data and a missing permission for another signal.
+- **Employee details** open only on request in a native modal side panel. Escape, Back to list and the close button restore focus without losing list filters, page or scroll position. Polling retains the same employee; removal from the filtered result closes the panel and returns focus. Paused sharing hides measurements and receipt times.
+- **People & teams** puts the searchable employee roster first. Creation and dashboard-account access expand separately. An overview setup action lands on the exact employee, even when names are duplicated.
+- **Connections** separates authorized access from actual uploads. Search people/phones, filter Allowed/Revoked access and paginate 25/50 records. Upload time is hidden for paused sharing. Personal gateway credentials are an advanced disclosure.
+- **My privacy** is secondary to daily team operations. **Demo & research** contains recorded examples and Model engine, so research demonstrations are distinct from the company workspace.
+- Company access retains a clear sign-in form, password visibility, test-account shortcut and mobile form anchor. Recorded examples and models preserve their source labels, evaluation context and existing interpretation rules.
+
+Pagination organizes records already authorized and returned by the API. It is client-side presentation, not server pagination or a claim of production capacity. The current API still has a 100-employee pilot creation limit. Browser fixtures with 200 employees and 137 connections test layout and interaction; production support for hundreds also needs backend limits, bounded queries and load testing. API access rules, model artifacts, inference, consent and production boundaries are unchanged.
 
 ## Browser checks
 
@@ -44,7 +47,9 @@ From `neurasign_server_dashboard`, with the local Docker stack running:
 .venv/bin/python scripts/browser_manager_smoke.py
 .venv/bin/python scripts/browser_workspace_smoke.py
 .venv/bin/python scripts/browser_large_team_smoke.py
+.venv/bin/python scripts/browser_connections_smoke.py
 .venv/bin/python scripts/browser_model_engine_smoke.py
+.venv/bin/python scripts/onboarding_smoke.py
 ```
 
-Monitoring and control checks share demo state; run those sequentially. The large-team check intercepts browser responses with 100 synthetic people and blocks company writes; it does not seed employee measurements. Screenshots live in ignored `artifacts/`. Frontend tests cover filtering, stable sorting, pagination and source/freshness edge cases alongside existing proxy and research boundaries.
+Monitoring and control checks share demo state; run those sequentially. The large-team check intercepts browser responses with 200 synthetic people across eight teams and blocks company writes; it does not seed employee measurements. Screenshots live in ignored `artifacts/`. Frontend tests cover filtering, sorting, pagination, partial-signal attention, independent legacy/canonical feeds, freshness, paused sharing and count/filter consistency alongside existing proxy and research boundaries.

@@ -4,7 +4,7 @@ import "./monitoring.css";
 
 export const metadata: Metadata = {
   title: "NEURASIGN — Team monitoring",
-  description: "Your team's wearable measurements, signal freshness and physiological trends in one workspace.",
+  description: "Understand your team, coordinate work and keep handovers connected in one private company workspace.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

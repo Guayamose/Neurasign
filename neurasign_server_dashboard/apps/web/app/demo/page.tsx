@@ -1,9 +1,8 @@
-import { notFound } from "next/navigation";
-import MonitoringDashboard from "@/components/monitoring-dashboard";
+import { notFound, redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export default function DemoPage() {
   if (process.env.NEURASIGN_ENV === "production" || process.env.K_SERVICE) notFound();
-  return <MonitoringDashboard />;
+  redirect("/?demo=1#overview");
 }

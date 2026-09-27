@@ -1,0 +1,98 @@
+/* Shared operational workspace. Official cobalt identity on quiet, readable surfaces. */
+.company-app {
+  --bg:#f5f7fb; --surface:#fff; --ink:#172338; --muted:#5f6d82; --line:#dfe5ee;
+  --control-border:#bdc8d8; --accent:#2854e8; --action:#2854e8; --action-ink:#fff;
+  --co-bg:var(--bg); --co-surface:var(--surface); --co-text:var(--ink);
+  --co-muted:var(--muted); --co-line:var(--line); --co-accent:var(--accent);
+  color-scheme:light; background:var(--bg); color:var(--ink); font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:15px;
+}
+.company-app :is(input,select,textarea){color-scheme:light;background:#fff;color:var(--ink);border:1px solid var(--control-border);border-radius:8px;min-height:44px;font:inherit}
+.company-app input::placeholder,.company-app textarea::placeholder{color:#77849a;opacity:1}
+.company-app :is(button,a,summary,input,select,textarea):focus-visible{outline:3px solid #6c8bff;outline-offset:3px}
+.company-app label{font-size:14px;color:var(--ink);gap:7px}
+.company-app button:disabled{opacity:.5}
+.company-app .co-primary,.company-app .co-secondary{border-radius:8px;font-size:14px;min-height:44px;gap:9px;font-weight:600;padding:11px 16px;line-height:1.4}
+.company-app .co-primary{background:var(--action);border-color:var(--action);color:#fff;box-shadow:0 2px 3px #17388e10}
+.company-app .co-primary:hover:not(:disabled){background:#1e43c5;border-color:#1e43c5;color:#fff}
+.company-app .co-secondary{background:#fff;color:var(--ink);border-color:var(--line)}
+.company-app .co-secondary:hover:not(:disabled){background:#f0f4ff;border-color:#a6b9f7}
+.company-app .co-icon{border-radius:7px;min-width:44px;min-height:44px}
+.company-app .co-icon:hover{background:#eaf0ff;color:var(--accent)}
+.company-app .co-text{font-size:14px;color:var(--accent);min-height:40px}
+.company-app .co-chip{border-radius:5px;text-transform:none;font-family:inherit;font-size:12px;line-height:1.5;letter-spacing:0;background:#f1f4f9;color:var(--muted);padding:4px 9px}
+.company-app .co-header{height:76px;padding:0 30px;background:#fff;border-bottom:1px solid var(--line);gap:16px}
+.company-app .co-logo{gap:20px}.company-app .co-logo .ns-brand{width:168px}
+.company-app .co-logo small{font-size:11px;letter-spacing:.12em;border-color:var(--line);padding-left:20px}
+.company-app .co-header>div{gap:14px}
+.company-app .co-header-access,.company-app .co-demo-link{font-family:inherit;font-size:14px;line-height:1.4;font-weight:600;letter-spacing:0;text-transform:none;min-height:44px}
+.company-app button.co-demo-link{border:0;background:none;color:var(--accent);padding:8px;display:inline-flex;align-items:center;gap:8px}
+.company-app .co-workspace-layout{max-width:none;grid-template-columns:224px minmax(0,1fr);margin:0;min-height:calc(100vh - 76px)}
+.company-app .co-nav{background:#fff;min-height:calc(100vh - 76px);padding:24px 14px;border-right:1px solid var(--line);position:sticky;top:0;max-height:100vh}
+.company-app .co-company-select{border-bottom:1px solid var(--line);padding:0 4px 18px;gap:8px;margin-bottom:18px}
+.company-app .co-company-select select{background:#f5f7fb;border:1px solid var(--line);padding:9px 7px;font-size:13px;min-width:0}
+.company-app .co-primary-nav>button,.company-app .co-secondary-nav>button{font-size:14px;color:#5a6980;min-height:46px;border-radius:8px;padding:11px 12px;border:0;font-weight:500}
+.company-app .co-primary-nav>button[aria-current=page],.company-app .co-secondary-nav>button[aria-current=page]{color:#214bd6;background:#edf2ff;box-shadow:none;font-weight:650;border:0}
+.company-app .co-primary-nav>button:not([aria-current]):hover,.company-app .co-secondary-nav>button:not([aria-current]):hover{background:#f4f6fa;color:var(--ink)}
+.co-app-nav{display:grid;gap:3px;padding:8px 0 0 25px}.company-app .co-app-nav button{border:0;border-left:1px solid var(--line);padding:8px 10px;min-height:40px;background:none;color:var(--muted);text-align:left;font-size:13px}
+.company-app .co-app-nav button[aria-current=page]{color:var(--accent);border-left:2px solid var(--accent);font-weight:600;background:#f7f9ff}
+.company-app .co-secondary-nav{margin-top:22px;padding-top:16px}
+.company-app .co-nav-demo{display:flex;gap:9px;align-items:center;background:transparent;border:0;min-height:44px;color:var(--ink);font-size:13px;text-align:left;padding:6px 0}
+.company-app .co-research-nav a{font-size:13px}
+.company-app .co-nav-bottom{margin-top:26px;padding-top:18px}.company-app .co-nav-bottom p{font-size:12px;margin-bottom:14px}
+.company-app .co-avatar{background:#edf2ff;color:var(--accent);border-radius:50%;border:0}
+.company-app .co-content{padding:30px 36px 0;max-width:1660px;width:100%;margin:0 auto;min-width:0}
+.company-app .co-heading{margin-bottom:25px;align-items:center}.company-app .co-heading h1{font-size:30px;font-weight:650;letter-spacing:-.85px;line-height:1.25;margin-top:5px;outline:none}
+.company-app .co-heading p{font-size:14px;line-height:1.6;margin-top:7px;color:var(--muted)}
+.company-app .co-heading .co-eyebrow{font-size:12px;color:var(--muted);letter-spacing:0}
+.company-app .co-heading-actions{gap:8px}.company-app .co-refresh-status{font-family:inherit;font-size:12px;color:var(--muted);max-width:none;gap:7px}
+.company-app .co-refresh-status i{background:#218364}.company-app .co-refresh-status.offline i{background:#b97018}
+.company-app .co-refresh-status small{display:none}
+.co-example-banner{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#edf2ff;border:1px solid #d4dfff;border-radius:9px;margin-bottom:24px;color:#2549a0;font-size:13px}
+.co-example-banner>div{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}.co-example-banner strong{font-weight:650}.co-example-banner>svg{flex-shrink:0}
+.co-example-banner a{display:inline-flex;align-items:center;gap:7px;margin-left:auto;min-height:32px;white-space:nowrap;font-weight:600}
+.company-app .co-message{background:#fff;border-radius:8px;font-size:14px;margin:16px 30px;color:var(--ink);border-color:var(--line)}
+.company-app .co-message.error{background:#fff5f4;border-color:#f0c8c3;color:#a33b31}
+.company-app .co-panel,.company-app .co-personal-connection,.company-app .co-admin-section,.company-app .co-setup-panel{background:#fff;border:1px solid var(--line);border-radius:10px}
+.company-app .co-panel-head h2,.company-app .co-panel h2{font-size:21px;letter-spacing:-.4px;font-weight:600}
+.company-app .co-panel-head{padding:22px}.company-app .co-panel-head p{font-size:14px}
+.company-app .co-status,.company-app .co-data-status,.company-app .co-access-badge{border-radius:5px;background:#f4f6fa}
+.company-app .co-note{background:#f5f7fb;border-color:var(--line);font-size:13px;border-radius:8px;color:var(--muted)}
+.company-app .co-list-row{border-color:var(--line)}
+.company-app .co-list-row:hover,.company-app .co-team-table tbody tr:hover{background:#f7f9fd}
+.company-app .co-roster-row.selected{background:#edf2ff}
+.company-app .co-footer{padding:24px 0;font-size:12px;color:var(--muted);border-color:var(--line);margin-top:24px}
+.company-app .co-person-dialog,.company-app .co-phone-dialog{color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 90px #1a2c4933;color-scheme:light}
+.company-app dialog::backdrop{background:#15264066;backdrop-filter:blur(2px)}
+.company-app .co-roster-toolbar,.company-app .co-team-table thead,.company-app .co-team-table thead th{background:#f8fafc}
+.company-app .co-pagination{background:#fff;font-size:13px;border-radius:0 0 10px 10px;padding:16px;gap:16px}
+.company-app .co-pagination .co-secondary{font-size:13px}
+.company-app .co-pagination label{font-size:12px}
+.company-app .co-password-input{border-radius:8px;background:#fff;border-color:var(--control-border)}
+.company-app .co-secret{background:#f4f7ff;border-color:#cad8fd;border-radius:8px}
+.company-app .co-secret input{background:#fff;color:var(--ink)}
+.company-app .co-login-layout{max-width:1360px;min-height:calc(100vh - 76px);padding:55px 5vw 65px;gap:7vw;grid-template-columns:minmax(0,1.2fr) minmax(340px,.8fr)}
+.company-app .co-login-story{min-height:0;display:block}.company-app .co-story-label{font-family:inherit;font-size:11px;line-height:1.5;font-weight:600;letter-spacing:.11em;color:var(--muted)}
+.company-app .co-login-story h2{font-size:clamp(42px,4.7vw,66px);line-height:1.08;letter-spacing:-.055em;font-weight:650;margin:26px 0 20px}
+.company-app .co-login-story h2 em{color:var(--accent);font-style:normal}.company-app .co-login-story>p{font-size:17px;line-height:1.65;color:var(--muted)}
+.company-app .co-login-story-bottom{position:static;margin-top:28px;padding:0;display:grid;gap:20px}
+.company-app .co-device-path{display:none}.company-app .co-story-foot{display:flex;flex-wrap:wrap;gap:15px;font-size:12px;letter-spacing:0;font-family:inherit;border:0;padding:0}
+.company-app .co-story-foot span{display:flex;align-items:center;gap:5px}.company-app .co-story-foot svg{color:#218364}
+.company-app .co-try-demo{justify-self:start;min-height:48px;padding:13px 19px}
+.company-app .co-login-form{width:100%;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 48px #16294e06;padding:32px;margin:0;max-width:440px;justify-self:end}
+.company-app .co-login-form h1{font-size:30px;font-weight:650;letter-spacing:-.8px;margin:8px 0}.company-app .co-login-form>p{font-size:14px;margin:0 0 24px}
+.company-app .co-login-form .co-eyebrow{font-family:inherit;font-size:11px;line-height:1.5;font-weight:600;letter-spacing:.11em;color:var(--muted)}
+.company-app .co-login-form form{gap:18px;margin-top:0}.company-app .co-login-form .co-forgot{margin-top:-10px;min-height:28px}
+.company-app .co-login-form footer{font-family:inherit;font-size:12px;line-height:1.6;padding-top:16px;margin-top:22px}
+.company-app .co-test-account{padding:16px;border:1px solid var(--line);background:#f7f9fd;border-radius:9px;margin-top:22px}
+.company-app .co-test-account>div strong{font-size:14px}.company-app .co-test-account details{margin-top:10px}.company-app .co-test-account summary{font-size:12px}.company-app .co-test-account dd{font-size:12px;overflow-wrap:anywhere}
+.co-product-illustration{margin:32px 0 0;max-width:510px;padding:24px;border:1px solid var(--line);background:#fff;border-radius:14px;box-shadow:0 10px 40px #123c8d05}
+.co-product-team{display:flex;gap:12px;align-items:center;background:#f0f4ff;border:1px solid #dce5ff;padding:16px;border-radius:9px}.co-product-team>span{display:flex;align-items:center;justify-content:center;background:#2854e8;width:43px;height:43px;border-radius:10px;color:white}
+.co-product-team strong,.co-product-team small{display:block}.co-product-team strong{font-size:15px}.co-product-team small{font-size:12px;color:var(--muted);margin-top:3px}.co-product-team>svg{margin-left:auto;color:var(--accent)}
+.co-product-path{height:22px;border-left:1px dashed #b2c4f6;width:1px;margin:0 auto}.co-product-modules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.co-product-modules>div{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 5px;background:#f9fafc;border:1px solid var(--line);border-radius:8px;text-align:center}.co-product-modules svg{color:var(--accent)}.co-product-modules strong{font-size:12px}.co-product-modules small{font-size:11px;color:var(--muted)}
+.co-skip-link{position:fixed;left:16px;top:-80px;z-index:1000;padding:12px 18px;background:#fff;border:2px solid var(--accent);border-radius:8px}.co-skip-link:focus{top:12px}
+@media(min-width:1500px){.company-app .co-content{padding:36px 48px 0}}
+@media(max-width:1100px){.company-app .co-workspace-layout{grid-template-columns:205px minmax(0,1fr)}.company-app .co-content{padding:26px 24px 0}.company-app .co-nav{padding:20px 10px}.company-app .co-login-layout{gap:4vw;padding:44px 4vw}.company-app .co-login-form{padding:26px}}
+@media(max-width:900px){.company-app .co-workspace-layout{display:block}.company-app .co-nav{position:relative;min-height:0;max-height:none;display:grid;grid-template-columns:minmax(0,1fr) auto;padding:12px 24px;border-right:0}.company-app .co-company-select{padding:0;margin:0;border:0}.company-app .co-primary-nav{grid-template-columns:repeat(4,minmax(0,1fr));grid-column:1/-1;grid-row:2}.company-app .co-primary-nav>button{justify-content:center;padding:10px 7px}.company-app .co-app-nav{grid-column:1/-1;grid-row:3;display:flex;flex-wrap:wrap;padding:0;gap:8px}.company-app .co-app-nav button{border:0;min-height:36px;padding:7px 10px;border-radius:6px}.company-app .co-secondary-nav{margin:0;padding:0}.company-app .co-research-nav{margin:0;grid-column:1/-1}.company-app .co-nav-bottom{display:none}.company-app .co-login-layout{grid-template-columns:1fr 1fr;gap:25px}.company-app .co-login-story h2{font-size:43px}.company-app .co-login-story>p{font-size:15px}.co-product-illustration{padding:14px}.co-product-team{padding:12px}.co-product-modules{gap:5px}.co-product-modules small{display:none}.co-example-banner>div{gap:2px;flex-direction:column}.company-app .co-nav-demo{display:inline-flex;margin-right:18px}}
+@media(max-width:680px){.company-app .co-header{height:68px;padding:0 18px}.company-app .co-logo .ns-brand{width:137px}.company-app .co-logo small{display:none}.company-app .co-header>div{gap:8px}.company-app .co-header .co-chip{display:none}.company-app .co-header-access{font-size:13px}.company-app .co-header .co-demo-link{display:none}.company-app .co-signout{padding:8px;font-size:13px;border:0}.company-app .co-content{padding:22px 16px 0}.company-app .co-heading{margin-bottom:20px}.company-app .co-heading h1{font-size:28px}.company-app .co-heading p{font-size:14px}.company-app .co-heading-actions{margin-top:14px}.company-app .co-nav{padding:10px 16px;gap:10px}.company-app .co-primary-nav>button{font-size:12px;gap:7px;min-height:58px;flex-direction:column;line-height:1.3;padding:7px 2px}.company-app .co-primary-nav>button svg{width:19px}.company-app .co-company-select select{font-size:13px}.company-app .co-secondary-nav button{font-size:12px}.company-app .co-example-banner{padding:10px 12px;margin-bottom:20px;align-items:flex-start;flex-wrap:wrap;font-size:12px;gap:8px}.co-example-banner>div{flex:1;min-width:180px}.co-example-banner a{margin-left:26px;min-height:26px}.company-app .co-login-layout{display:flex;flex-direction:column;padding:30px 20px;gap:30px}.company-app .co-login-story{width:100%}.company-app .co-login-story h2{font-size:43px;margin-top:20px}.company-app .co-login-story>p{font-size:15px}.company-app .co-login-form{max-width:none;padding:24px}.co-product-illustration{margin-top:24px;padding:16px;max-width:none}.co-product-team strong{font-size:14px}.co-product-modules strong{font-size:12px}.company-app .co-story-foot{gap:8px;flex-direction:column}.company-app .co-login-story-bottom{margin-top:22px}.company-app .co-story-label{font-size:10px;letter-spacing:.06em}.company-app .co-message{margin:12px 16px}.company-app .co-pagination{padding:14px}.company-app .co-try-demo{width:100%}}
+
+.company-app .co-heading-compact{margin-bottom:14px;min-height:24px}.co-heading-compact h1,.co-heading-compact p{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}.company-app .co-heading-compact .co-eyebrow{font-size:12px}.company-app .co-heading-compact .co-heading-actions{margin:0}.company-app .co-heading-compact .co-refresh-status{font-size:11px}

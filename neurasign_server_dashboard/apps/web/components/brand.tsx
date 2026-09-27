@@ -1,8 +1,8 @@
 import Image from "next/image";
 
 /** Official approved artwork; source SVG proportions and colors are preserved. */
-export function Brand({ className = "" }: { className?: string }) {
-  return <Image className={`ns-brand ${className}`} src="/brand/neurasign-dark.svg" alt="NeuraSign" width={956} height={304} unoptimized />;
+export function Brand({ className = "", theme = "dark" }: { className?: string; theme?: "dark" | "light" }) {
+  return <Image className={`ns-brand ${className}`} src={`/brand/neurasign-${theme}.svg`} alt="NeuraSign" width={956} height={304} unoptimized />;
 }
 
 /** Decorative halftone sphere. It represents the identity, never live sensor data. */

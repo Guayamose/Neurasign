@@ -18,6 +18,8 @@ Users authenticate with Firebase email/password and must verify their email. The
 
 Organizations isolate companies; team grants additionally restrict managers inside a company. The server enforces both.
 
+The [Manager overview preview](manager-preview.md) at `/demo#manager` illustrates an individual interpretation-only experience. It does not change the permissions above: production managers can still access individual measurements within their granted teams. An interpretation-only production role requires backend changes to allow permitted conclusions while denying raw measurements.
+
 Employees control their sharing through the phone; existing account-backed employees retain the self-sharing controls. A manager cannot enable another employee’s sharing or authorize a device for them. Sharing is initially off. Pausing rejects new uploads and hides history from the workspace view. Re-enabling makes retained history visible again. Sharing controls are product permissions, not a claim of legal compliance or a determination of an employer’s lawful basis.
 
 Invitations are bound to an email and role, expire after 72 hours and are single-use (a retry by the same account is idempotent). Links use a URL fragment so the invitation token is not part of server request logs. The app does not automatically send invitation messages. Removed members cannot access the company or upload data. Membership reinstatement, role changes and owner transfer do not yet have workflows; removed accounts cannot accept a new invitation to the same company.

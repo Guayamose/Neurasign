@@ -43,13 +43,18 @@ Use the question-mark button beside a metric for its plain-language meaning and 
 
 See [dataset processing and chart interpretation](dataset.md) for exact windows, units, provenance, missing data, and reference calculations.
 
+## Manager perspective
+
+Choose **Manager overview** next to **Team overview** to see each named employee’s interpreted state and experimental indices, without their physiological measurements. It uses the same recorded/manual/live demo interpretations as Team overview; it does not change production manager permissions. Open directly at `/demo#manager`. See [Manager overview preview](manager-preview.md) for scope and privacy limitations.
+
 ## Explore work examples
 
 The tabs keep monitoring first and use the same current worker states in three secondary examples. Switching tabs preserves the signal source and does not start an incident.
 
 | Tab | What it shows or does |
 | --- | --- |
-| **Team overview** | The default team view: physiological summaries, personal references, trends, and estimated capacity |
+| **Team overview** | Detailed demo measurements, personal references, trends, and experimental indices |
+| **Manager overview** | Individual conclusions, experimental indices and their trends; physiological measurements omitted |
 | **Breaks & wellbeing** | Explains an illustrative pause suggestion; **Draft suggestion** creates a downloadable local draft |
 | **Focus & meetings** | Explains whether to protect focus or consider a short meeting; **Draft agenda** creates a downloadable local draft |
 | **Incidents** | Runs a connected workflow with Jev assignments, Gemini artifacts, and explicit human decisions |
